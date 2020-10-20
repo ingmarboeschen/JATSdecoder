@@ -1,0 +1,71 @@
+#' get.abstract
+#'
+#' Extract abstract tag from NISO-JATS coded XML file or text as vector of abstracts
+#' @param x a NISO-JATS coded XML file or text
+#' @param remove.title Logical. If TRUE removes section titles in abstract
+#' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
+#' @param cermine Logical. If TRUE and letter.convert=TRUE performs CERMINE specific text correction
+#' @export
+#' @examples
+#' x<-"Some text <abstract>Some abstract</abstract> some text"
+#' get.abstract(x)
+#' x<-"Some text <abstract>Some abstract</abstract> TEXT <abstract>
+#' Some other abstract</abstract> Some text "
+#' get.abstract(x)
+
+get.abstract<-function(x,remove.title=TRUE,letter.convert=TRUE,cermine=FALSE){
+# readLines if x is file
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+# case 1
+if(length(grep("<abstract",x,value=TRUE))>0) {
+temp<-paste(x,collapse=" ")
+temp<-unlist(strsplit(temp,"<abstract"))[-1]
+# remove behind end of abstract
+temp<-gsub("</abstract.*","",temp)
+# remove start with ">" for <abtract> and till first \"> for abstracts with type and id definition
+ifelse(substr(temp,1,1)==">",temp<-gsub("^>","",temp),temp<-sub(".*?>(.+)","\\1",temp))
+# remove <p> tag 
+temp<-gsub("</p>","",gsub("<p>","",temp))
+# remove <italic> tag 
+temp<-gsub("</italic>","",gsub("<italic>","",temp))
+# if has no </abstract
+ if(length(grep("</abstract",x))==0) temp<-gsub("</sec></sec>.*","",temp)
+# remove abstract section titles
+if(remove.title==T){
+  if(length(grep("<title>",temp))>0) temp<-gsub("<title>.*?.*</title>","",temp)
+  }
+# split abstract sections to vektor (if possible)
+if(remove.title==F){
+  if(length(grep("<title>",temp))>0) 
+  temp<-gsub("</title>",": ",unlist(strsplit(temp,"<title>")))[-1]
+  }  
+# remove everything between <..>
+temp<-gsub("<[/a-z].*?.*[\"a-z]>"," ",temp)
+# remove declaration of interest
+temp<-gsub("None. $|None.$","",temp)
+# remove double white spaces and white space in front and end
+temp<-gsub("^ *|(?<= ) | *$", "", temp, perl = TRUE)
+#OLD: while(length(grep("^ | $",temp))>0) temp<-gsub("^ | $","",temp)
+#OLD: while(length(grep("  ",temp))>0) temp<-gsub("  "," ",temp)
+if(temp[1]==""&!is.na(temp[1])) temp<-NA
+# clean up spaces in front of signs
+temp<-gsub(" \\.",".",gsub(" ,",",",temp))
+temp<-gsub(" [)]",")",gsub("[(] ","(",temp))
+#convert letters
+if(letter.convert==T) temp<-letter.convert(temp,cermine=cermine)
+   }
+# case 2: no abstract
+if(length(grep("<abstract",x))==0) temp<-NA
+if(!exists("temp")) temp<-NA
+
+# clean up
+# Convert figure only to NA
+if(length(grep("^fig. [0-9]|^fig [0-9]|^fig. i|^figs. [0-9]|^figure [0-9]|^figure i|^figures [0-9]|^p\\[|^p[0-9]^plate [0-9]|^plate I",tolower(temp)))>0) temp<-NA
+if(length(grep("^Supplemental Digital Content",temp))>0) temp<-NA
+
+# collapse to one cell
+temp<-paste(temp,collapse=" ")
+if(temp=="NA") temp<-NA
+return(temp)
+}
+

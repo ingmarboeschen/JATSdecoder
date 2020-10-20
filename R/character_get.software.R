@@ -1,0 +1,108 @@
+#' get.software
+#'
+#' Extract mentioned software from text by dictionary search for 63 software names (object: .software_names)
+#' @param x text
+#' @param add.software a text vector with additional software name patterns to search for
+#' @export
+
+#' @examples
+#' get.software(
+#'  x<-"We used the R Software and Excel 4.0 to analyse our data."
+#' )
+
+get.software<-function(x,add.software=NULL){
+# convert / * and - to space
+x<-gsub("[/\\*]|-"," ",unlist(x))
+# remove html
+x<-gsub("<.*?.*>"," ",x)
+# convert double spaces to single space
+x<-gsub("^ *|(?<= ) | *$","",x,perl=TRUE)
+
+## create list with used software
+if(!is.null(add.software)) .software_names<-c(.software_names,add.software)
+x<-which.term(x,.software_names,tolower=FALSE,hits_only=TRUE)
+# remove second and further software name definitions after "|"
+x<-gsub("\\|.*","",x)
+# remove or convert [] in software names
+    x<-gsub("\\[\\^A-Z\\]|\\[\\^a-z\\]| $","",x)
+    x<-gsub("\\[DA\\]\\[AD\\]","DA",gsub("\\[Kk\\]","K",x))
+    x<-gsub("\\[Ss\\]","S",gsub("\\[Ff\\]","F",x))
+    x<-gsub("\\[Nn\\]","n",gsub("\\[Cc\\]","C",x))
+    x<-gsub("\\[Vv\\]","V",gsub("\\[Ll\\]","L",x))
+    x<-gsub("\\[\\^[A-Z][a-z]\\]","",gsub("\\[Pp\\]|\\[pP\\]","P",x))
+    x<-gsub("\\[\\+\\]","+",x)
+    x<-gsub(" \\[1-9\\]","",x)
+    x<-gsub(" Core| Institute","",x)
+    x<-gsub(" \\[1\\-9vV\\]","",x)
+
+return(unique(unlist(x)))
+
+}
+
+
+.software_names<-c("SPSS|Statistical Package for the Social Sciences|PASW"                                        ,
+"R Core|using R[,\\.]| in R[,\\.]|\\.[Rr] [Pp]roject|oftware 'R'|[A-Za-z]R Foundation| with R[,\\.]|R Development Core|[^A-Z0-9] R \\([Vv1-4]| R [0-9]\\.[0-9]| R[0-9]\\.[0-9]|[Ss]oftware R[^a-zA-z]|[^a-zA-Z]R [Ss]oftware|anguage R|R [Ff]oundation|in R [Vv]ersion|with R [Vv]ersion| in R with "     ,
+"[^A-Z]SPM[1-9]|[^A-Z]SPM.[0-9]|^SPM[1-9]|^SPM.[0-9]|Statistical Parametric Mapping|statistical parametric mapping",
+"Stata[^a-z]|STATA[^A-Z]"                                                                                          ,
+"SAS Institute|Statistical Analysis Software|Statistical Analysis System|[\\( ]SAS [Vv]ersion [1-9]|with SAS [Vv]ersion| in SAS [1-9]|with SAS [1-9]|SAS PROC"               ,
+"E [pP]rime|E[pP]rime"                                                                                             ,
+"Statistica |STATISTICA|StatSoft"                                                                                  ,
+"MATLAB|Matlab"                                                                                                    ,
+"N[Vv]ivo|N Vivo"                                                                                                  ,
+"Presentation"                                                                                                     ,
+"Qualtrics|QUALTRICS"                                                                                              ,
+"MAXQ[DA][AD]|MAXqda"                                                                                              ,
+"Acq[Kk]nowledge"                                                                                                  ,
+"AFNI"                                                                                                             ,
+"Free[Ss]urfer|Free Surfer"                                                                                        ,
+"Graph[Pp]ad|Graph Pad"                                                                                            ,
+"Tobii|TOBII"                                                                                                     ,
+"[^A-Z]REST[^A-Z]"                                                                                                 ,
+"Image J|ImageJ"                                                                                                   ,
+"JMP"                                                                                                              ,
+"Excel[^a-z]|[^A-Z]EXCEL|XLSTAT"                                                                                   ,
+"[Ff]MRIB|[^A-Z]FSL[^A-Z]"                                                                                         ,
+"G Power|GPower"                                                                                                   ,
+"[^A-Z]PASS[^A-Z]"                                                                                                 ,
+"[^A-Z]NCSS[^A-Z]"                                                                                                 ,
+"Praat|PRAAT"                                                                                                      ,
+"AMOS|Amos [1-9]"                                                                                                  ,
+"LISREL|Lisrel"                                                                                                    ,
+"M[Pp]lus|[^a-z]mPlus|M Plus|MPLUS"                                                                                ,
+"JASP"                                                                                                             ,
+"Kubios"             ,   # HRV                                                                                     ,
+"Neuroscan"                                                                                                        ,
+"DMDX"                                                                                                             ,
+"Python|PYTHON"                                                                                                    ,
+"EEGLAB"                                                                                                           ,
+"MRI[Cc]ro[Nn]"                                                                                                    ,
+"MRI[Cc]ro[^Nn]"                                                                                                   ,
+"StudSize"                                                                                                         ,
+"Psychtoolbox|PsychToolbox"                                                                                        ,
+"Psy[Ss]cope"                                                                                                      ,
+"Systat|SigmaPlot|SigmaStat|SYSTAT"                                                                                ,
+"MLwiN|ML[wW][Ii][nN]"                                                                                             ,
+"WINanalyze|WinAnalyze|Win Analyze"                                                                                ,
+"C[+][+]"                                                                                                          ,
+"Tanagra"                                                                                                          ,
+"OptoGait"                                                                                                         ,
+"Statgraphics|StatGraphics"                                                                                        ,
+"EQS"                                                                                                              ,
+"Smart PLS|SmartPLS"                                                                                               ,
+"Warp PLS|WarpPLS",
+"Super[Ll]ab|SUPERLAP"                                                                                             ,
+"Winsteps|WinSteps|WINSTEPS"                                                                                       ,
+"MindWare|Mindware|MINDWARE"                                                                                       ,
+"Cartool"                                                                                                          ,
+"RDSAT"                                                                                                            ,
+"PROCESS MACRO|PROCESSmacro|PROCESS [Mm]acro|Process [Mm]acro|PROCESS toolbox|PROCESS mediation tool"              ,
+"FACTOR|oftware Factor|Factor [Ss]oftware|Factor [1-9]\\.[0-9]|Factor [1-9][0-9]\\.[0-9]"                          ,
+"METAWIN",
+"Review Manager|REVIEW MANAGER",
+"HLM [1-9vV]|HLM[Pp]rogram|HLM [Ss]oft|[Hh]ierarchical [Ll]inear [Mm]odeling [Pp]rogram|[Hh]ierarchical [Ll]inear [Mm]odeling [Ss]oft",
+"QtiPlot"                                                                                                          ,
+"Grapher",
+"OpenMX|Open[- ]MX"
+
+)
+
