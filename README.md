@@ -20,8 +20,10 @@ A text extraction and manipulation toolset for NISO-JATS coded XML files
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+JATSdecoder is a function collection to extract meta data and textual content from NISO-JATS coded documents in XML format. It facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of text parts.
+JATSdecoder supplies some convenient helper functions that can be applied to any textual input.
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![JATSdecoder][product-screenshot]](https://example.com)
 
 Here's a blank template to get started:
 **To avoid retyping too much info. Do a search and replace with your text editor for the following:**
