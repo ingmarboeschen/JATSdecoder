@@ -1,4 +1,11 @@
 # JATSdecoder
+<!-- ABOUT THE PROJECT -->
+## About The Project
+JATSdecoder is a function collection to extract meta data and textual content from NISO-JATS coded documents in XML format. It facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of text parts.
+JATSdecoder supplies some convenient helper functions that can be applied to any textual input.
+
+[![JATSdecoder][product-screenshot]](https://example.com)
+
 A text extraction and manipulation toolset for the statistical programming language [R](www.r-project.org)
 Its function JATSdecoder() extracts meta data, sectioned text and reference list from NISO-JATS coded XML files.
 study.character() uses the JATSdecoder result to perform fine tuned extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text. study.character()'s extraction functions can be applied to any textual input.
@@ -11,9 +18,9 @@ Further JATSdecoder supplies some helpfull functions to unify special characters
   - get.journal()    # extracts journal
   - get.vol()        # extracts journal volume as vector
   - get.doi()        # extracts Digital Object Identifier
-  - get.history()    # extracts history as vector
-  - get.country()    # extracts country/countries of origin as vector
-  - get.type()       # extracts type
+  - get.history()    # extracts publishing history as vector with available date stamps
+  - get.country()    # extracts country/countries of origin of affiliation/s as vector
+  - get.type()       # extracts document type
   - get.subject()    # extracts subjects as vector
   - get.keywords()   # extracts keywords as vector
   - get.abstract()   # extracts abstract
@@ -33,30 +40,7 @@ Further JATSdecoder supplies some helpfull functions to unify special characters
   - get.text()    # extracts sections and text as list
   - get.references() # extracts reference list as vector
 
-<!-- TABLE OF CONTENTS -->
-## Table of Contents
 
-* [About the Project](#about-the-project)
-  * [Built With](#built-with)
-* [Getting Started](#getting-started)
-  * [Installation](#installation)
-* [Usage](#usage)
-* [Roadmap](#roadmap)
-* [Contributing](#contributing)
-* [License](#license)
-* [Contact](#contact)
-
-
-
-<!-- ABOUT THE PROJECT -->
-## About The Project
-JATSdecoder is a function collection to extract meta data and textual content from NISO-JATS coded documents in XML format. It facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of text parts.
-JATSdecoder supplies some convenient helper functions that can be applied to any textual input.
-
-[![JATSdecoder][product-screenshot]](https://example.com)
-
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
 
 
 ### Built With
