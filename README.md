@@ -26,7 +26,6 @@ JATSdecoder supplies some convenient helper functions that can be applied to any
 
 Here's a blank template to get started:
 **To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`
 
 
 ### Built With
@@ -54,7 +53,6 @@ install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a
 ```
 
 <!-- USAGE EXAMPLES -->
-Test
 ## Usage for single file
 Here a simple download of a NISO-JATS coded article is performed with *download.file()
 ``` r
@@ -85,7 +83,7 @@ JATS<-lapply(files,JATSdecoder)
 # extract single article content (here: abstract)
 abstract<-lapply(files,get.abstract)
 ```
-3. Working with the *JATSdecoder result list
+3. Working with the *JATSdecoder results
 ``` r
 # first article
 JATS[[1]] 
@@ -117,7 +115,6 @@ lapply(hits,length)
 # unify written numbers, fractions, percentages, potencies and numbers denoted with e+num to digit number
 lapply(text,text2num)
 ``` 
-
 
 # extract study.characteristics
 character<-lapply(files,study.character)
