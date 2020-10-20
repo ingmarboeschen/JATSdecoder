@@ -54,6 +54,7 @@ install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a
 ```
 
 <!-- USAGE EXAMPLES -->
+Test
 ## Usage for single file
 Here a simple download of a NISO-JATS coded article is performed with *download.file()
 ``` r
@@ -62,29 +63,61 @@ URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0
 download.file(URL,"file.xml")
 # convert full article to list with meta data, sectioned text and referenz list
 JATSdecoder("file.xml")
+# extract specific content (here: abstract)
+get.abstract("file.xml")
 # extract study characteristics as list
 study.character("file.xml")
 ```
 
 ## Usage for multiple files with [future.apply](https://github.com/HenrikBengtsson/future.apply) package
-The PubMed Central data base offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](ftp://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/) 
+The PubMed Central data base offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/) 
 
 1. Get file names from working directory
 ``` r
 setwd("/home/PMC")
 files<-list.files(pattern="XML$|xml$",recursive=TRUE)
 ``` 
-2. Apply multi core extraction of article content and study characteristics
+2. Apply extraction of article content (replace lapply() with future.apply() for multi core processing)
 ``` r
 library(JATSdecoder)
-library(future.apply)
-plan(multisession,workers=12)
-JATS<-future_apply(files,JATSdecoder)
-character<-future_apply(files,study.character)
-
+# extract full article content
+JATS<-lapply(files,JATSdecoder)
+# extract single article content (here: abstract)
+abstract<-lapply(files,get.abstract)
 ```
-3. Working with the results
+3. Working with the *JATSdecoder result list
 ``` r
-JATS[1] # first article
-lapply(JATS,"[","abstract") # all abstracts in JATS
+# first article
+JATS[[1]] 
+character[[1]] 
+# names of all extractable elements
+names(JATS[[1]])
+names(character[[1]])
+# extract one element only (here: title, abstract, history)
+lapply(JATS,"[[","title") 
+lapply(JATS,"[[","abstract") 
+lapply(JATS,"[[","history") 
+# extract year of publication from history tag
+unlist(lapply(lapply(JATS,"[[","history") ,"[","pubyear"))
+``` 
+4. Convert and unify text with helper functions
+``` r
+text<-lapply(JATS,"[[","text") 
+# convert floating text to sentences
+sentences<-lapply(text,text2sentences)
+sentences
+# only select sentences with pattern and unlist article wise
+pattern<-"significant"
+hits<-lapply(sentences,function(x) grep(pattern,x,value=T))
+hits<-lapply(hits,unlist)
+hits
+# number of sentences with pattern
+lapply(hits,length)
 
+# unify written numbers, fractions, percentages, potencies and numbers denoted with e+num to digit number
+lapply(text,text2num)
+``` 
+
+
+# extract study.characteristics
+character<-lapply(files,study.character)
