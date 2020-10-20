@@ -41,17 +41,22 @@ Here's a blank template to get started:
 To get a local copy up and running follow these simple steps.
 
 ### Installation
+1. Install and load the [devtools](https://github.com/r-lib/devtools) package
 ``` r
 # Install the devtools package
 install.packages("devtools")
 # Load the devtools package
 library(devtools)
+``` 
+2. Install JATSdecoder from [github](github.com/ingmarboeschen/JATSdecoder)
+``` r
 # Install JATSdecoder from github
 install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a2690e16a699de5dc7")
 ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+
 ``` r
 #' URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
 #' download.file(URL,"file.xml")
