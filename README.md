@@ -14,7 +14,6 @@ A text extraction and manipulation toolset for NISO-JATS coded XML files
 * [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
 
 
 
@@ -48,23 +47,44 @@ install.packages("devtools")
 # Load the devtools package
 library(devtools)
 ``` 
-2. Install JATSdecoder from [github](github.com/ingmarboeschen/JATSdecoder)
+2. Install *JATSdecoder from [github](https://github.com/ingmarboeschen/JATSdecoder)
 ``` r
 # Install JATSdecoder from github
 install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a2690e16a699de5dc7")
 ```
 
 <!-- USAGE EXAMPLES -->
-## Usage
-
+## Usage for single file
+Here a simple download of a NISO-JATS coded article is performed with *download.file()
 ``` r
-#' URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
-#' download.file(URL,"file.xml")
-#' JATSdecoder("file.xml")
-#' study.character("file.xml")
+library(JATSdecoder)
+URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
+download.file(URL,"file.xml")
+# convert full article to list with meta data, sectioned text and referenz list
+JATSdecoder("file.xml")
+# extract study characteristics as list
+study.character("file.xml")
 ```
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+## Usage for multiple files with [future.apply](https://github.com/HenrikBengtsson/future.apply) package
+The PubMed Central data base offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](ftp://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/) 
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+1. Get file names from working directory
+``` r
+setwd("/home/PMC")
+files<-list.files(pattern="XML$|xml$",recursive=TRUE)
+``` 
+2. Apply multi core extraction of article content and study characteristics
+``` r
+library(JATSdecoder)
+library(future.apply)
+plan(multisession,workers=12)
+JATS<-future_apply(files,JATSdecoder)
+character<-future_apply(files,study.character)
+
+```
+3. Working with the results
+``` r
+JATS[1] # first article
+lapply(JATS,"[","abstract") # all abstracts in JATS
 
