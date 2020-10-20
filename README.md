@@ -1,9 +1,37 @@
 # JATSdecoder
-A text extraction and manipulation toolset for NISO-JATS coded XML files. Some extraction and helper functions can be applied to any textual input.
+A text extraction and manipulation toolset for the statistical programming language [R](www.r-project.org)
+Its function JATSdecoder() extracts meta data, sectioned text and reference list from NISO-JATS coded XML files.
+study.character() uses the JATSdecoder result to perform fine tuned extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text. study.character()'s extraction functions can be applied to any textual input.
+Further JATSdecoder supplies some helpfull functions to unify special characters and representations of numbers in text as well as usefull tools ro break and select text parts. Its function text2sentences() is especially design for floating text with scientific content (referenzes, results).
 
-- The function **JATSdecoder() consist of functions that can be used stand alone too:
-  - get.title()
-  - get.journal()
+- JATSdecoders core function **JATSdecoder()** consist of several functions that can also be used stand alone on NISO-JATS doeded XML files or text input:
+  - get.title()      # extracts title
+  - get.author()     # extracts author/s as vector
+  - get.aff()        # extracts involved affiliation as vector
+  - get.journal()    # extracts journal
+  - get.vol()        # extracts vol as vector
+  - get.doi()        # extracts Digital Object Identifier
+  - get.history()    # extracts history as vector
+  - get.country()    # extracts country/countries of origin as vector
+  - get.type()       # extracts type
+  - get.subject()    # extracts subjects as vector
+  - get.keywords()   # extracts keywords as vector
+  - get.abstract()   # extracts abstract
+  - get.text()       # extracts sections and text as list
+  - get.references() # extracts reference list as vector
+
+
+- JATSdecoders core function **study.character()** consist of several functions that are applied to specific text parts of the JATSdecoder() result but can also be used stand alone on any plain text input:
+  - get.n.studies()   # extracts title
+  - get.author() # extracts author/s as vector
+  - get.journal() # extracts journal
+  - get.vol()     # extracts vol as vector
+  - get.history() # extracts history as vector
+  - get.aff()     # extracts involved affiliation as vector
+  - get.country() # extracts country/countries of origin as vector
+  - get.doi()     # extracts Digital Object Identifier
+  - get.text()    # extracts sections and text as list
+  - get.references() # extracts reference list as vector
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
