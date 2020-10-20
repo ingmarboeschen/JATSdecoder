@@ -9,7 +9,7 @@ Further JATSdecoder supplies some helpfull functions to unify special characters
   - get.author()     # extracts author/s as vector
   - get.aff()        # extracts involved affiliation as vector
   - get.journal()    # extracts journal
-  - get.vol()        # extracts vol as vector
+  - get.vol()        # extracts journal volume as vector
   - get.doi()        # extracts Digital Object Identifier
   - get.history()    # extracts history as vector
   - get.country()    # extracts country/countries of origin as vector
