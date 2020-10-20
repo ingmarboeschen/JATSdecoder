@@ -1,15 +1,11 @@
 # JATSdecoder
-<!-- ABOUT THE PROJECT -->
-## About The Project
-JATSdecoder is a function collection to extract meta data and textual content from NISO-JATS coded documents in XML format. It facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of text parts.
-JATSdecoder supplies some convenient helper functions that can be applied to any textual input.
-
-[![JATSdecoder][product-screenshot]](https://example.com)
-
-A text extraction and manipulation toolset for the statistical programming language [R](www.r-project.org)
-Its function JATSdecoder() extracts meta data, sectioned text and reference list from NISO-JATS coded XML files.
-study.character() uses the JATSdecoder result to perform fine tuned extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text. study.character()'s extraction functions can be applied to any textual input.
-Further JATSdecoder supplies some helpfull functions to unify special characters and representations of numbers in text as well as usefull tools ro break and select text parts. Its function text2sentences() is especially design for floating text with scientific content (referenzes, results).
+A text extraction and manipulation toolset for the statistical programming language [R](www.r-project.org). 
+JATSdecoder facilitates text mining projects on scientific reasearch papers by enabeling an individual selection by meta data and text parts. 
+Its function *JATSdecoder()* extracts meta data, sectioned text and reference list from NISO-JATS coded XML files.
+Its function *study.character()* uses the JATSdecoder() result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text. 
+*study.character()*'s extraction functions can be applied to any textual input.
+*JATSdecoder* supplies some helpfull functions to work with textual input. 
+Its function *letter.convert()* unifies hexadecimal to unicode characters and if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed special error correction, which is extremely relevant to its ability to extract statistical results in text. text2num() unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. Its function *text2sentences()* is especially design to break floating text with scientific content (referenzes, results) into sentences.
 
 - JATSdecoders function **JATSdecoder()** consist of several functions that can also be used stand alone on NISO-JATS doeded XML files or text input:
   - get.title()      # extracts title
@@ -28,7 +24,7 @@ Further JATSdecoder supplies some helpfull functions to unify special characters
   - get.references() # extracts reference list as vector
 
 
-- JATSdecoders function **study.character()** consist of several functions that are applied to specific text parts of the JATSdecoder() result but can also be used stand alone on any plain text input:
+- JATSdecoders function **study.character()** consist of several functions that are applied to specific text parts of the *JATSdecoder()* result but can also be used stand alone on any plain text input:
   - get.n.studies()   # extracts title
   - get.author() # extracts author/s as vector
   - get.journal() # extracts journal
@@ -69,7 +65,7 @@ install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a
 
 <!-- USAGE EXAMPLES -->
 ## Usage for single file
-Here a simple download of a NISO-JATS coded XML file is performed with *download.file()
+Here a simple download of a NISO-JATS coded XML file is performed with *download.file()*
 ``` r
 library(JATSdecoder)
 URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
