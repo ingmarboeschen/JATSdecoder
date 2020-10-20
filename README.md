@@ -1,6 +1,9 @@
 # JATSdecoder
-A text extraction and manipulation toolset for NISO-JATS coded XML files 
+A text extraction and manipulation toolset for NISO-JATS coded XML files. Some extraction and helper functions can be applied to any textual input.
 
+- The function **JATSdecoder() consist of functions that can be used stand alone too:
+  - get.title()
+  - get.journal()
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
