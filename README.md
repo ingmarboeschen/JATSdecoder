@@ -29,9 +29,8 @@ Here's a blank template to get started:
 
 
 ### Built With
-
-* [R Core]()
-* [RKWard]()
+* [R Core 3.6](www.r-project.org)
+* [RKWard](https://rkward.kde.org/)
 
 
 <!-- GETTING STARTED -->
@@ -40,7 +39,7 @@ Here's a blank template to get started:
 To get a local copy up and running follow these simple steps.
 
 ### Installation
-```sh
+``` r
 # Install the devtools package
 install.packages("devtools")
 # Load the devtools package
@@ -51,6 +50,12 @@ install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+``` r
+#' URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
+#' download.file(URL,"file.xml")
+#' JATSdecoder("file.xml")
+#' study.character("file.xml")
+```
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
