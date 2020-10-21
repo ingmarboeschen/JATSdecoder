@@ -47,7 +47,7 @@ You can extract adjustable n words around a pattern match in a sentence with **n
   - which.term() # returns hit vector for a set of patterns to search for in text (can be reduced to hits only)
 
 ### Built With
-* [R Core 3.6](www.r-project.org)
+* [R Core 3.6](https://www.r-project.org)
 * [RKWard](https://rkward.kde.org/)
 
 
@@ -142,4 +142,4 @@ lapply(text,text2num)
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-This software is part of a dissertation project about the evolution of methodological characteristics in psychological research and financed by a grant awarded by the Department of Psychological Methods and Statistics, Institute of Psychology, University Hamburg, Germany.  
+This software is part of a dissertation project about the evolution of methodological characteristics in psychological research and financed by a grant awarded by the Department of [Psychological Methods and Statistics](https://www.psy.uni-hamburg.de/arbeitsbereiche/psychologische-methoden-und-statistik.html), Institute of Psychology, [University Hamburg](https://www.uni-hamburg.de/), Germany.  
