@@ -139,11 +139,7 @@ lapply(hits,length)
 lapply(text,text2num)
 ``` 
 
-# extract study.characteristics
-character<-lapply(files,study.character)
-``` r
 
-``` 
-
-
-
+<!-- ACKNOWLEDGEMENTS -->
+## Acknowledgements
+This software is part of a dissertation project about the evolution of methodological characteristics in psychological research and financed by a grant awarded by the Department of Psychological Methods and Statistics, Institute of Psychology, University Hamburg, Germany.  
