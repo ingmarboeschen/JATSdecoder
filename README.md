@@ -1,13 +1,16 @@
 # JATSdecoder
-A text extraction and manipulation toolset for the statistical programming language [R](www.r-project.org). 
-JATSdecoder facilitates text mining projects on scientific reasearch papers by enabeling an individual selection by meta data and text parts. 
-Its function *JATSdecoder()* extracts meta data, sectioned text and reference list from NISO-JATS coded XML files.
-Its function *study.character()* uses the JATSdecoder() result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text. 
-*study.character()*'s extraction functions can be applied to any textual input.
-*JATSdecoder* supplies some helpfull functions to work with textual input. 
-Its function *letter.convert()* unifies hexadecimal to unicode characters and if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed special error correction, which is extremely relevant to its ability to extract statistical results in text. text2num() unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. Its function *text2sentences()* is especially design to break floating text with scientific content (referenzes, results) into sentences.
+A meta data and text extraction and manipulation tool set for the statistical programming language [R](www.r-project.org). 
+JATSdecoder facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of meta data and text parts. 
+Its function *JATSdecoder()* extracts meta data, sectioned text and reference list from NISO-JATS coded XML files. 
+Its function *study.character()* uses the *JATSdecoder()* result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text. 
+*study.character()*'s extraction functions can be applied to any plain textual input. 
+*JATSdecoder* supplies some helpfull functions to work with textual input in general. 
+Its function *letter.convert()* unifies hexadecimal to unicode characters and if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed special error correction, which is extremely relevant to its ability to extract statistical results in text. 
+*text2num()* unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
+Its function *text2sentences()* is especially design to break floating text with scientific content (referenzes, results) into sentences. 
+You can extract adjustable n words around a pattern match in a sentence with ngramaraoundpattern().
 
-- JATSdecoders function **JATSdecoder()** consist of several functions that can also be used stand alone on NISO-JATS doeded XML files or text input:
+- *JATSdecoder*'s function **JATSdecoder()** consist of several functions that can also be used stand alone on NISO-JATS doeded XML files or text input:
   - get.title()      # extracts title
   - get.author()     # extracts author/s as vector
   - get.aff()        # extracts involved affiliation as vector
@@ -24,17 +27,15 @@ Its function *letter.convert()* unifies hexadecimal to unicode characters and if
   - get.references() # extracts reference list as vector
 
 
-- JATSdecoders function **study.character()** consist of several functions that are applied to specific text parts of the *JATSdecoder()* result but can also be used stand alone on any plain text input:
-  - get.n.studies()   # extracts title
-  - get.author() # extracts author/s as vector
-  - get.journal() # extracts journal
-  - get.vol()     # extracts vol as vector
-  - get.history() # extracts history as vector
-  - get.aff()     # extracts involved affiliation as vector
-  - get.country() # extracts country/countries of origin as vector
-  - get.doi()     # extracts Digital Object Identifier
-  - get.text()    # extracts sections and text as list
-  - get.references() # extracts reference list as vector
+- *JATSdecoder*'s function **study.character()** consist of several functions that are applied to specific text parts of the *JATSdecoder()* result but can also be used stand alone on any plain text input:
+  - get.n.studies()   # extracts number of studies from sections or abstract
+  - get.alpha.error()  # extracts alpha error from text 
+  - get.method()  # extracts statistical methods from method and result section 
+  - get.stats()  # extracts statistical results reported in text (abstract and full text, method and result section, result section only) 
+  - get.software()  # extracts software name/s mentioned in method and result section with dictionary search
+  - get.R.package()  # extracts mentioned R package name/sin method and result section with dictionary created with *available.packages()*
+  - get.power()  # extracts power (1-beta-error) if mentuioned in text
+  - get.()  # extracts 
 
 
 
