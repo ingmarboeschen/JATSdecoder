@@ -39,6 +39,12 @@ You can extract adjustable n words around a pattern match in a sentence with **n
   - get.multiple.comparison()  # extracts correction method for multiple testing from method and result section with dictionary search
   - get.sig.adjectives()  # extracts common inadequate adjectives used before *signignificant* and *not significant* 
 
+- **JATSdecoder helper functions** are helpfull for many text mining project and straight forward to use:
+  - text2num() # converts spelled number, fractions, potencies, percentages and numbers denoted with e+num to decimals
+  - ngram # creates n gram of words around a pattern match in text 
+  - strsplit2() # splits text at pattern match with option "before" or "after" and without removing the pattern match 
+  - letter.convert() # converts many hexadecimal and HTML characters to unicode and performs CERMINE specific error correction
+  - which.term() # returns hit vector for a set of patterns to search for in text (can be reduced to hits only)
 
 ### Built With
 * [R Core 3.6](www.r-project.org)
@@ -74,9 +80,12 @@ download.file(URL,"file.xml")
 # convert full article to list with meta data, sectioned text and referenz list
 JATSdecoder("file.xml")
 # extract specific content (here: abstract)
+JATSdecoder("file.xml",output="abstract")
 get.abstract("file.xml")
 # extract study characteristics as list
 study.character("file.xml")
+# extract specific study characteristic (here: statistical results)
+study.character("file.xml",output=c("stats","standardStats"),text.mode=3) # with text.mode=3 results from result section are extracted only
 ```
 
 ## Usage for multiple files with [future.apply](https://github.com/HenrikBengtsson/future.apply) package
@@ -87,17 +96,19 @@ The PubMed Central data base offers more than 3 million documents related to the
 setwd("/home/PMC")
 files<-list.files(pattern="XML$|xml$",recursive=TRUE)
 ``` 
-2. Apply extraction of article content (replace lapply() with future.apply() for multi core processing)
+2. Apply extraction of article content to all files (replace *lapply()* with *future.apply()* from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing)
 ``` r
 library(JATSdecoder)
 # extract full article content
 JATS<-lapply(files,JATSdecoder)
 # extract single article content (here: abstract)
 abstract<-lapply(files,get.abstract)
+# or
+abstract<-lapply(files,JATSdecoder,output="abstract")
 ```
-3. Working with the *JATSdecoder results
+3. Working with a list of **JATSdecoder()** results
 ``` r
-# first article
+# first article content as list
 JATS[[1]] 
 character[[1]] 
 # names of all extractable elements
@@ -110,7 +121,7 @@ lapply(JATS,"[[","history")
 # extract year of publication from history tag
 unlist(lapply(lapply(JATS,"[[","history") ,"[","pubyear"))
 ``` 
-4. Convert and unify text with helper functions
+4. Examples for converting and unifying text with helper functions
 ``` r
 text<-lapply(JATS,"[[","text") 
 # convert floating text to sentences
