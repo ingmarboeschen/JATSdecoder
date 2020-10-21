@@ -7,11 +7,11 @@ Wheras **study.character()** uses the **JATSdecoder()** result to perform fine t
 
 Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
 
-**JATSdecoder** supplies some helpfull functions to work with textual input in general. 
-Its function **letter.convert()** unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed, special error correction and special letter uniformisation which is extremely relevant to its ability to extract statistical results in text. 
-**text2num()** unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
+**JATSdecoder** supplies some convenient functions to work with textual input in general. 
 Its function **text2sentences()** is especially design to break floating text with scientific content (references, results) into sentences. 
+**text2num()** unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
 You can extract adjustable n words around a pattern match in a sentence with **ngram()**.
+Its function **letter.convert()** unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed, special error correction and special letter uniformisation which is extremely relevant to its ability to extract statistical results in text. 
 
 - **JATSdecoder::JATSdecoder()** uses functions that can be applied stand alone on NISO-JATS coded XML files or text input:
   - get.title()      # extracts title
@@ -43,6 +43,7 @@ You can extract adjustable n words around a pattern match in a sentence with **n
   - get.sig.adjectives()  # extracts common inadequate adjectives used before *signignificant* and *not significant* 
 
 - **JATSdecoder helper functions** are helpfull for many text mining project and straight forward to use:
+  - text2sentences() # breaks floating text into sentences
   - text2num() # converts spelled number, fractions, potencies, percentages and numbers denoted with e+num to decimals
   - ngram() # creates n gram of words around a pattern match in text 
   - strsplit2() # splits text at pattern match with option "before" or "after" and without removing the pattern match 
