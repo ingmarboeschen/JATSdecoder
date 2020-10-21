@@ -13,15 +13,15 @@ You can extract adjustable n words around a pattern match in a sentence with **n
 - **JATSdecoder::JATSdecoder()** uses functions that can be applied stand alone on NISO-JATS coded XML files or text input:
   - get.title()      # extracts title
   - get.author()     # extracts author/s as vector
-  - get.aff()        # extracts involved affiliation as vector
+  - get.aff()        # extracts involved affiliation/s as vector
   - get.journal()    # extracts journal
   - get.vol()        # extracts journal volume as vector
   - get.doi()        # extracts Digital Object Identifier
   - get.history()    # extracts publishing history as vector with available date stamps
-  - get.country()    # extracts country/countries of origin of affiliation/s as vector
+  - get.country()    # extracts country/countries of origin as vector with unique countries
   - get.type()       # extracts document type
-  - get.subject()    # extracts subjects as vector
-  - get.keywords()   # extracts keywords as vector
+  - get.subject()    # extracts subject/s as vector
+  - get.keywords()   # extracts keyword/s as vector
   - get.abstract()   # extracts abstract
   - get.text()       # extracts sections and text as list
   - get.references() # extracts reference list as vector
@@ -54,7 +54,7 @@ You can extract adjustable n words around a pattern match in a sentence with **n
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
+To install and use **JATSdecoder** follow these steps:
 
 ### Installation
 1. Install and load the [devtools](https://github.com/r-lib/devtools) package
@@ -71,7 +71,7 @@ install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a
 ```
 
 <!-- USAGE EXAMPLES -->
-## Usage for single file
+## Usage for a single file
 Here a simple download of a NISO-JATS coded XML file is performed with *download.file()*
 ``` r
 library(JATSdecoder)
@@ -88,12 +88,12 @@ study.character("file.xml")
 study.character("file.xml",output=c("stats","standardStats"),text.mode=3) # with text.mode=3 results from result section are extracted only
 ```
 
-## Usage for multiple files with [future.apply](https://github.com/HenrikBengtsson/future.apply) package
-The PubMed Central data base offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/) 
+## Usage for multiple files
+The PubMed Central data base offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/). 
 
 1. Get file names from working directory
 ``` r
-setwd("/home/PMC")
+setwd("/home/PMC") # May be you would like to choose a certain journal folder instead for testing
 files<-list.files(pattern="XML$|xml$",recursive=TRUE)
 ``` 
 2. Apply extraction of article content to all files (replace *lapply()* with *future.apply()* from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing)
@@ -121,8 +121,9 @@ lapply(JATS,"[[","history")
 # extract year of publication from history tag
 unlist(lapply(lapply(JATS,"[[","history") ,"[","pubyear"))
 ``` 
-4. Examples for converting and unifying text with helper functions
+4. Examples for converting, unifying and selecting text with helper functions
 ``` r
+# extract full text from all documents
 text<-lapply(JATS,"[[","text") 
 # convert floating text to sentences
 sentences<-lapply(text,text2sentences)
@@ -134,10 +135,15 @@ hits<-lapply(hits,unlist)
 hits
 # number of sentences with pattern
 lapply(hits,length)
-
 # unify written numbers, fractions, percentages, potencies and numbers denoted with e+num to digit number
 lapply(text,text2num)
 ``` 
 
 # extract study.characteristics
 character<-lapply(files,study.character)
+``` r
+
+``` 
+
+
+
