@@ -52,7 +52,7 @@ You can extract adjustable n words around a pattern match in a sentence with **n
 ### Built With
 * [R Core 3.6](https://www.r-project.org)
 * [RKWard](https://rkward.kde.org/)
-
+* [devtools](https://github.com/r-lib/devtools) package
 
 <!-- GETTING STARTED -->
 ## Getting Started
