@@ -8,9 +8,9 @@ Its function **study.character()** uses the **JATSdecoder()** result to perform 
 Its function **letter.convert()** unifies hexadecimal to unicode characters and if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed special error correction, which is extremely relevant to its ability to extract statistical results in text. 
 **text2num()** unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
 Its function **text2sentences()** is especially design to break floating text with scientific content (referenzes, results) into sentences. 
-You can extract adjustable n words around a pattern match in a sentence with **ngramaraoundpattern()*.
+You can extract adjustable n words around a pattern match in a sentence with **ngramaraoundpattern()**.
 
-- **JATSdecoder::JATSdecoder()** consist of several functions that can also be used stand alone on NISO-JATS doeded XML files or text input:
+- **JATSdecoder::JATSdecoder()** uses functions that can be applied stand alone on NISO-JATS coded XML files or text input:
   - get.title()      # extracts title
   - get.author()     # extracts author/s as vector
   - get.aff()        # extracts involved affiliation as vector
@@ -27,17 +27,17 @@ You can extract adjustable n words around a pattern match in a sentence with **n
   - get.references() # extracts reference list as vector
 
 
-- **JATSdecoder::study.character()** consist of several functions that are applied to specific text parts of the *JATSdecoder()* result but can also be used stand alone on any plain text input:
+- **JATSdecoder::study.character()** applies several functions on specific parts of the **JATSdecoder()** result and can be used stand alone on any plain text input:
   - get.n.studies()   # extracts number of studies from sections or abstract
   - get.alpha.error()  # extracts alpha error from text 
-  - get.method()  # extracts statistical methods from method and result section 
+  - get.method()  # extracts statistical methods from method and result section with *ngramaroundpattern()*
   - get.stats()  # extracts statistical results reported in text (abstract and full text, method and result section, result section only) 
   - get.software()  # extracts software name/s mentioned in method and result section with dictionary search
   - get.R.package()  # extracts mentioned R package name/sin method and result section with dictionary created with *available.packages()*
-  - get.power()  # extracts power (1-beta-error) if mentuioned in text
-  - get.()  # extracts 
-
-
+  - get.power()  # extracts power (1-beta-error) if mentoioned in text
+  - get.assumption()  # extracts mentioned assumptions from method and result section with dictionary search
+  - get.multiple.comparison()  # extracts correction method for multiple testing from method and result section with dictionary search
+  - get.sig.adjectives()  # extracts common inadequate adjectives used before *signignificant* and *not significant* 
 
 
 ### Built With
