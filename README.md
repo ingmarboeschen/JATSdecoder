@@ -5,13 +5,13 @@ A meta data and text extraction and manipulation tool set for the statistical pr
 Its function **JATSdecoder()** extracts meta data, sectioned text and reference list from NISO-JATS coded XML files. 
 Wheras **study.character()** uses the **JATSdecoder()** result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text, its extraction functions can be applied to any plain textual input. 
 
+Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
+
 **JATSdecoder** supplies some helpfull functions to work with textual input in general. 
 Its function **letter.convert()** unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed, special error correction and special letter uniformisation which is extremely relevant to its ability to extract statistical results in text. 
 **text2num()** unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
 Its function **text2sentences()** is especially design to break floating text with scientific content (references, results) into sentences. 
 You can extract adjustable n words around a pattern match in a sentence with **ngram()**.
-
-Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
 
 - **JATSdecoder::JATSdecoder()** uses functions that can be applied stand alone on NISO-JATS coded XML files or text input:
   - get.title()      # extracts title
