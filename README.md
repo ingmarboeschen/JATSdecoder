@@ -151,9 +151,19 @@ lapply(text,text2num)
 
 ## References
 <div id="refs" class="references">
-<div id="JATS">
+<div id="CERMINE">
 National Center for Biotechnology Information ({NCBI}), National Library of Medicine (NLM). 2014. Journal Publishing Tag Library - NISO JATS Draft Version 1.1d2. 
 <https://jats.nlm.nih.gov/publishing/tag-library/1.1d2/index.html}>.
+</div>
+
+
+
+<div id="JATS">
+Dominika Tkaczyk, Pawel Szostek, Mateusz Fedoryszak, Piotr Jan Dendek and Lukasz Bolikowski. 
+CERMINE: automatic extraction of structured metadata from scientific literature. 
+In International Journal on Document Analysis and Recognition (IJDAR), 2015, 
+vol. 18, no. 4, pp. 317-335, doi: 10.1007/s10032-015-0249-8. 
+<https://github.com/CeON/CERMINE/>.
 </div>
 
 
