@@ -12,6 +12,8 @@ Its function **letter.convert()** unifies hexadecimal to unicode characters and 
 Its function **text2sentences()** is especially design to break floating text with scientific content (referenzes, results) into sentences. 
 You can extract adjustable n words around a pattern match in a sentence with **ngramaraoundpattern()**.
 
+Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
+
 - **JATSdecoder::JATSdecoder()** uses functions that can be applied stand alone on NISO-JATS coded XML files or text input:
   - get.title()      # extracts title
   - get.author()     # extracts author/s as vector
@@ -73,7 +75,7 @@ install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a
 ```
 
 <!-- USAGE EXAMPLES -->
-## Usage for a single file
+## Usage for a single XML file
 Here a simple download of a NISO-JATS coded XML file is performed with *download.file()*
 ``` r
 library(JATSdecoder)
@@ -90,7 +92,7 @@ study.character("file.xml")
 study.character("file.xml",output=c("stats","standardStats"),text.mode=3) # with text.mode=3 results from result section are extracted only
 ```
 
-## Usage for multiple files
+## Usage for a collection of XML files
 The PubMed Central data base offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/). 
 
 1. Get file names from working directory
