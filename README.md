@@ -148,6 +148,21 @@ lapply(hits,length)
 lapply(text,text2num)
 ``` 
 
+<div id="refs" class="references">
+
+<div id="ref-allaire_rmarkdown:_2016">
+
+Allaire, J. J., Joe Cheng, Yihui Xie, Jonathan McPherson, Winston Chang,
+Jeff Allen, Hadley Wickham, and Rob Hyndman. 2016. *Rmarkdown: Dynamic
+Documents for R* (version 1.3).
+<https://cran.r-project.org/web/packages/rmarkdown/index.html>.
+
+</div>
+</div>
+
+
+
+
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 This software is part of a dissertation project about the evolution of methodological characteristics in psychological research and financed by a grant awarded by the Department of [Psychological Methods and Statistics](https://www.psy.uni-hamburg.de/arbeitsbereiche/psychologische-methoden-und-statistik.html), [Institute of Psychology](https://www.psy.uni-hamburg.de/), [University Hamburg](https://www.uni-hamburg.de/), Germany.  
