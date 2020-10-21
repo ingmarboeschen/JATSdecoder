@@ -1,5 +1,5 @@
 # JATSdecoder
-A meta data and text extraction and manipulation tool set for the statistical programming language [R](www.r-project.org). 
+A meta data and text extraction and manipulation tool set for the statistical programming language [R](www.r-project.org). \n
 **JATSdecoder** facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of meta data and text parts. 
 Its function **JATSdecoder()** extracts meta data, sectioned text and reference list from NISO-JATS coded XML files. 
 Its function **study.character()** uses the **JATSdecoder()** result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text. 
