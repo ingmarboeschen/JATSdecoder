@@ -8,7 +8,7 @@ Wheras **study.character()** uses the **JATSdecoder()** result to perform fine t
 **JATSdecoder** supplies some helpfull functions to work with textual input in general. 
 Its function **letter.convert()** unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed, special error correction and special letter uniformisation which is extremely relevant to its ability to extract statistical results in text. 
 **text2num()** unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
-Its function **text2sentences()** is especially design to break floating text with scientific content (referenzes, results) into sentences. 
+Its function **text2sentences()** is especially design to break floating text with scientific content (references, results) into sentences. 
 You can extract adjustable n words around a pattern match in a sentence with **ngram()**.
 
 Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
@@ -83,7 +83,7 @@ library(JATSdecoder)
 # download example XML file via URL
 URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
 download.file(URL,"file.xml")
-# convert full article to list with meta data, sectioned text and referenz list
+# convert full article to list with meta data, sectioned text and reference list
 JATSdecoder("file.xml")
 # extract specific content (here: abstract)
 JATSdecoder("file.xml",output="abstract")
@@ -108,9 +108,12 @@ library(JATSdecoder)
 # extract full article content
 JATS<-lapply(files,JATSdecoder)
 # extract single article content (here: abstract)
-abstract<-lapply(files,get.abstract)
-# or
 abstract<-lapply(files,JATSdecoder,output="abstract")
+# or
+abstract<-lapply(files,get.abstract)
+# extract study characteristics
+character<-lapply(files,study.character)
+
 ```
 3. Working with a list of **JATSdecoder()** results
 ``` r
