@@ -13,7 +13,7 @@ Its function **text2sentences()** is especially design to break floating text wi
 You can extract adjustable n words around a pattern match in a sentence with **ngram()**.
 Its function **letter.convert()** unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed, special error correction and special letter uniformisation which is extremely relevant to its ability to extract statistical results in text. 
 
-For a detailed description of each function see the full [documentation]()
+The contained functions are listed below. For a detailed description see the full [manual]().
 
 - **JATSdecoder::JATSdecoder()** uses functions that can be applied stand alone on NISO-JATS coded XML files or text input:
   - get.title()      # extracts title
