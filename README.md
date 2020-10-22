@@ -1,17 +1,17 @@
 # JATSdecoder
 A meta data and text extraction and manipulation tool set for the statistical programming language [R](www.r-project.org). 
 
-`JATSdecoder` facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of meta data and text parts. 
-Its function **JATSdecoder()** extracts meta data, sectioned text and reference list from [NISO-JATS](https://jats.nlm.nih.gov/publishing/tag-library/1.1d2/index.html) coded XML files. 
-Wheras **study.character()** uses the **JATSdecoder()** result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text and others. 
+**JATSdecoder** facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of meta data and text parts. 
+Its function `JATSdecoder()` extracts meta data, sectioned text and reference list from [NISO-JATS](https://jats.nlm.nih.gov/publishing/tag-library/1.1d2/index.html) coded XML files. 
+Wheras `study.character()` uses the `JATSdecoder()` result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text and others. 
 
 Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
 
 **JATSdecoder** supplies some convenient functions to work with textual input in general. 
-Its function **text2sentences()** is especially design to break floating text with scientific content (references, results) into sentences. 
-**text2num()** unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
-You can extract adjustable n words around a pattern match in a sentence with **ngram()**.
-**letter.convert()** unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated CERMXML files are processed, special error correction and special letter uniformisation is performed, which is extremely relevant to **get.stats()** ability to extract statistical results in text. 
+Its function `text2sentences` is especially design to break floating text with scientific content (references, results) into sentences. 
+`text2num()` unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
+You can extract adjustable n words around a pattern match in a sentence with `ngram`
+`letter.convert()` unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated CERMXML files are processed, special error correction and special letter uniformisation is performed, which is extremely relevant to `get.stats()` ability to extract statistical results in text. 
 
 The contained functions are listed below. For a detailed description see the full [manual]().
 
