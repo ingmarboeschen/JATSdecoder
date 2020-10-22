@@ -35,10 +35,10 @@ The contained functions are listed below. For a detailed description see the ful
 - **JATSdecoder::study.character()** applies several functions on specific elements of the `JATSdecoder()` result and can be used stand alone on any plain text input:
   - get.n.studies()   # extracts number of studies from sections or abstract
   - get.alpha.error()  # extracts alpha error from text 
-  - get.method()  # extracts statistical methods from method and result section with *ngramaroundpattern()*
+  - get.method()  # extracts statistical methods from method and result section with `ngram()`
   - get.stats()  # extracts statistical results reported in text (abstract and full text, method and result section, result section only) 
   - get.software()  # extracts software name/s mentioned in method and result section with dictionary search
-  - get.R.package()  # extracts mentioned R package name/sin method and result section with dictionary of all available R packages created with *available.packages()*
+  - get.R.package()  # extracts mentioned R package/s in method and result section with dictionary search on all available R packages created with `available.packages()`
   - get.power()  # extracts power (1-beta-error) if mentoioned in text
   - get.assumption()  # extracts mentioned assumptions from method and result section with dictionary search
   - get.multiple.comparison()  # extracts correction method for multiple testing from method and result section with dictionary search
@@ -46,7 +46,7 @@ The contained functions are listed below. For a detailed description see the ful
 
 - **JATSdecoder helper functions** are helpfull for many text mining project and straight forward to use on any textual input:
   - text2sentences() # breaks floating text into sentences
-  - text2num() # converts spelled number, fractions, potencies, percentages and numbers denoted with e+num to decimals
+  - text2num() # converts spelled out numbers, fractions, potencies, percentages and numbers denoted with e+num to decimals
   - ngram() # creates n gram of words around a pattern match in text 
   - strsplit2() # splits text at pattern match with option "before" or "after" and without removing the pattern match 
   - letter.convert() # converts many hexadecimal and HTML characters to unicode and performs CERMINE specific error correction
