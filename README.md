@@ -16,8 +16,12 @@ You can extract adjustable n words around a pattern match in a sentence with **n
 The contained functions are listed below. For a detailed description see the full [manual]().
 
 - **JATSdecoder::JATSdecoder()** uses functions that can be applied stand alone on NISO-JATS coded XML files or text input:
-  - get.title()      # extracts title
-  - get.author()     # extracts author/s as vector
+| Function Name              | Response distribution  |
+|----------------------------|------------------------|
+| `et.title()`     | extracts title         |
+| `get.author()`   | extracts author/s as vector               |
+  - g      # 
+  -      # 
   - get.aff()        # extracts involved affiliation/s as vector
   - get.journal()    # extracts journal
   - get.vol()        # extracts journal volume as vector
