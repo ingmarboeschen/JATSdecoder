@@ -193,10 +193,11 @@ type<-unlist(lapply(JATS ,"[","type"))
 # increase left margin of grafik output
 par(mar=c(5,12,4,2)+.1)
 # display in barplot
-barplot(sort(table(type),dec=T),horiz=TRUE,las=1)             
+barplot(sort(table(type)),horiz=TRUE,las=1)             
 # set margins back to normal
 par(mar=c(5,4,4,2)+.1)
 ``` 
+![](type.png)
 
 4. Find most frequent authors
 
