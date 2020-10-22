@@ -11,7 +11,7 @@ Note: PDF article collections can be converted to NISO-JATS coded XML files with
 Its function **text2sentences()** is especially design to break floating text with scientific content (references, results) into sentences. 
 **text2num()** unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
 You can extract adjustable n words around a pattern match in a sentence with **ngram()**.
-Its function **letter.convert()** unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated XML files are processed, special error correction and special letter uniformisation which is extremely relevant to its ability to extract statistical results in text. 
+**letter.convert()** unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated CERMXML files are processed, special error correction and special letter uniformisation is performed, which is extremely relevant to **get.stats()** ability to extract statistical results in text. 
 
 The contained functions are listed below. For a detailed description see the full [manual]().
 
@@ -154,14 +154,12 @@ lapply(text,text2num)
 ## References
 <div id="refs" class="references">
 <div id="CERMINE">
-National Center for Biotechnology Information ({NCBI}), National Library of Medicine (NLM). 2014. Journal Publishing Tag Library - NISO JATS Draft Version 1.1d2. 
+- National Center for Biotechnology Information ({NCBI}), National Library of Medicine (NLM). 2014. Journal Publishing Tag Library - NISO JATS Draft Version 1.1d2. 
 <https://jats.nlm.nih.gov/publishing/tag-library/1.1d2/index.html}>.
 </div>
 
-
-
 <div id="JATS">
-Dominika Tkaczyk, Pawel Szostek, Mateusz Fedoryszak, Piotr Jan Dendek and Lukasz Bolikowski. 
+- Dominika Tkaczyk, Pawel Szostek, Mateusz Fedoryszak, Piotr Jan Dendek and Lukasz Bolikowski. 
 CERMINE: automatic extraction of structured metadata from scientific literature. 
 In International Journal on Document Analysis and Recognition (IJDAR), 2015, 
 vol. 18, no. 4, pp. 317-335, doi: 10.1007/s10032-015-0249-8. 
