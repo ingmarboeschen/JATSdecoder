@@ -32,7 +32,7 @@ The contained functions are listed below. For a detailed description see the ful
   - get.references() # extracts reference list as vector
 
 
-- **JATSdecoder::study.character()** applies several functions on specific elements of the **JATSdecoder()** result and can be used stand alone on any plain text input:
+- **JATSdecoder::study.character()** applies several functions on specific elements of the `JATSdecoder()` result and can be used stand alone on any plain text input:
   - get.n.studies()   # extracts number of studies from sections or abstract
   - get.alpha.error()  # extracts alpha error from text 
   - get.method()  # extracts statistical methods from method and result section with *ngramaroundpattern()*
@@ -79,7 +79,7 @@ install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a
 
 <!-- USAGE EXAMPLES -->
 ## Usage for a single XML file
-Here a simple download of a NISO-JATS coded XML file is performed with *download.file()*
+Here a simple download of a NISO-JATS coded XML file is performed with `download.file()`:
 ``` r
 # load package
 library(JATSdecoder)
@@ -105,7 +105,7 @@ The PubMed Central data base offers more than 3 million documents related to the
 setwd("/home/PMC") # May be you would like to choose a certain journal folder instead for testing
 files<-list.files(pattern="XML$|xml$",recursive=TRUE)
 ``` 
-2. Apply extraction of article content to all files (replace *lapply()* with *future.apply()* from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing)
+2. Apply extraction of article content to all files (replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing)
 ``` r
 library(JATSdecoder)
 # extract full article content
@@ -118,7 +118,7 @@ abstract<-lapply(files,get.abstract)
 character<-lapply(files,study.character)
 
 ```
-3. Working with a list of **JATSdecoder()** results
+3. Working with a list of `JATSdecoder()` results
 ``` r
 # first article content as list
 JATS[[1]] 
