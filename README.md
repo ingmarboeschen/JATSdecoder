@@ -220,7 +220,7 @@ par(mar=c(5,4,4,2)+.1)
 library(wordcloud)
 wordcloud(names(tab),tab)
 ``` 
-
+![](author.png)
 
 ## References
 <div id="refs" class="references">
