@@ -8,7 +8,7 @@ Wheras `study.character()` uses the `JATSdecoder()` result to perform fine tuned
 Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
 
 **JATSdecoder** supplies some convenient functions to work with textual input in general. 
-Its function `text2sentences` is especially design to break floating text with scientific content (references, results) into sentences. 
+Its function `text2sentences` is especially designed to break floating text with scientific content (references, results) into sentences. 
 `text2num()` unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
 You can extract adjustable n words around a pattern match in a sentence with `ngram()`. 
 `letter.convert()` unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated CERMXML files are processed, special error correction and special letter uniformisation is performed, which is extremely relevant to `get.stats()` ability to extract statistical results in text. 
