@@ -154,7 +154,8 @@ lapply(text,text2num)
 
 ## Exemplary analysis of some NISO-JATS tags
 Next some example analysis are performed on the full PMC article collection. As each variable is very memory consuming you might reduce your analysis to a smaller amount of articles. 
-* 1. Extract JATS for article collection 
+
+1. Extract JATS for article collection 
 Replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing).
 ```r
 # load package
@@ -167,7 +168,7 @@ files<-list.files(patt="xml$|XML$")
 JATS<-lapply(files,JATSdecoder)
 ```
 
-* 2. Analyser distribution of publishing year
+2. Analyse distribution of publishing year
 ```r
 # extract and numerize year of publication from history tag
 year<-unlist(lapply(lapply(JATS,"[[","history") ,"[","pubyear"))
@@ -183,7 +184,8 @@ barplot(cumsum(table(year)),las=1,xlab="year",main="cummulative number of publis
 
 ``` 
 
-* 3. Analyse distribution of document type
+3. Analyse distribution of document type
+
 ```r
 # extract document type
 type<-unlist(lapply(JATS ,"[","type"))
@@ -195,7 +197,7 @@ barplot(sort(table(type),dec=T),horiz=TRUE,las=1)
 par(mar=c(5,4,4,2)+.1)
 ``` 
 
-* Find most frequent authors
+4. Find most frequent authors
 
 NOTE: author names are not stored fully consistent. Some first and middle names are abbreviated, first names are follwed by last names and vice versa!
 
