@@ -152,6 +152,69 @@ lapply(hits,length)
 lapply(text,text2num)
 ``` 
 
+## Examples for analysis of some NISO-JATS tags
+Next some example analysis are performed on the full PMC article collection. As each variable is very memory consuming you might reduce your analysis to a smaller amount of articles. 
+* Extract JATS for article collection 
+Replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing).
+```r
+# load package
+library(JATSdecoder)
+# set working directory
+setwd("/home/foldername")
+# get XML file names
+files<-list.files(patt="xml$|XML$")
+# extract JATS
+JATS<-lapply(files,JATSdecoder)
+```
+
+* 1. Distribution of publishing year
+```r
+# extract and numerize year of publication from history tag
+year<-unlist(lapply(lapply(JATS,"[[","history") ,"[","pubyear"))
+year<-as.numeric(year)
+# frequency table
+table(year)
+# display absolute number of published documents per year in barplot
+# with factorized year
+year<-factor(year,min(year,na.rm=TRUE):max(year,na.rm=TRUE))
+barplot(table(year),las=1,xlab="year",main="absolute number of published PMC documents per year")
+# display cummulative number of published documents in barplot
+barplot(cumsum(table(year)),las=1,xlab="year",main="cummulative number of published PMC documents")
+
+``` 
+
+* Distribution of document type
+```r
+# extract document type
+type<-unlist(lapply(JATS ,"[","type"))
+# increase left margin of grafik output
+par(mar=c(5,12,4,2)+.1)
+# display in barplot
+barplot(sort(table(type),dec=T),horiz=TRUE,las=1)             
+# set margins back to normal
+par(mar=c(5,4,4,2)+.1)
+``` 
+
+* Most frequently publishing authors and their network
+```r
+# extract author
+author<-lapply(JATS ,"[","author")
+# top 100 most present author names (NOTE: author names are not stored fully consistent. Some first and middle names are abbreviated, first names are follwed by last names and vice versa)
+tab<-sort(table(unlist(author)),dec=T)[1:100]
+# frequency table
+tab
+# display in barplot
+# increase left margin of grafik output
+par(mar=c(5,12,4,2)+.1)
+barplot(tab,horiz=TRUE,las=1)             
+# set margins back to normal
+par(mar=c(5,4,4,2)+.1)
+# display in wordcloud with wordcloud package
+library(wordcloud)
+wordcloud(names(tab),tab)
+``` 
+
+
 ## References
 <div id="refs" class="references">
 <div id="CERMINE">
