@@ -153,10 +153,10 @@ lapply(text,text2num)
 ``` 
 
 ## Exemplary analysis of some NISO-JATS tags
-Next some example analysis are performed on the full PMC article collection. As each variable is very memory consuming you might reduce your analysis to a smaller amount of articles. 
+Next some example analysis are performed on the full PMC article collection. As each variable is very memory consuming you might want to reduce your analysis to a smaller amount of articles. 
 
 1. Extract JATS for article collection 
-Replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing).
+Replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing.
 ```r
 # load package
 library(JATSdecoder)
