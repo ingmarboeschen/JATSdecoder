@@ -183,6 +183,7 @@ barplot(table(year),las=1,xlab="year",main="absolute number of published PMC doc
 barplot(cumsum(table(year)),las=1,xlab="year",main="cummulative number of published PMC documents")
 
 ``` 
+[](numberperyear.png)
 
 3. Analyse distribution of document type
 
