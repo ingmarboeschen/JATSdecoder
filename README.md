@@ -154,7 +154,7 @@ lapply(text,text2num)
 
 ## Examples for analysis of some NISO-JATS tags
 Next some example analysis are performed on the full PMC article collection. As each variable is very memory consuming you might reduce your analysis to a smaller amount of articles. 
-* Extract JATS for article collection 
+* 1. Extract JATS for article collection 
 Replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing).
 ```r
 # load package
@@ -167,7 +167,7 @@ files<-list.files(patt="xml$|XML$")
 JATS<-lapply(files,JATSdecoder)
 ```
 
-* 1. Distribution of publishing year
+* 2. Analyser distribution of publishing year
 ```r
 # extract and numerize year of publication from history tag
 year<-unlist(lapply(lapply(JATS,"[[","history") ,"[","pubyear"))
@@ -183,7 +183,7 @@ barplot(cumsum(table(year)),las=1,xlab="year",main="cummulative number of publis
 
 ``` 
 
-* Distribution of document type
+* 3. Analyse distribution of document type
 ```r
 # extract document type
 type<-unlist(lapply(JATS ,"[","type"))
@@ -195,11 +195,14 @@ barplot(sort(table(type),dec=T),horiz=TRUE,las=1)
 par(mar=c(5,4,4,2)+.1)
 ``` 
 
-* Most frequently publishing authors and their network
+* Find most frequent authors
+
+NOTE: author names are not stored fully consistent. Some first and middle names are abbreviated, first names are follwed by last names and vice versa!
+
 ```r
 # extract author
 author<-lapply(JATS ,"[","author")
-# top 100 most present author names (NOTE: author names are not stored fully consistent. Some first and middle names are abbreviated, first names are follwed by last names and vice versa)
+# top 100 most present author names 
 tab<-sort(table(unlist(author)),dec=T)[1:100]
 # frequency table
 tab
