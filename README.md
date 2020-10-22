@@ -154,7 +154,7 @@ lapply(text,text2num)
 ## References
 <div id="refs" class="references">
 <div id="CERMINE">
-- National Center for Biotechnology Information ({NCBI}), National Library of Medicine (NLM). 2014. Journal Publishing Tag Library - NISO JATS Draft Version 1.1d2. 
+- National Center for Biotechnology Information (NCBI), National Library of Medicine (NLM). 2014. Journal Publishing Tag Library - NISO JATS Draft Version 1.1d2. 
 <https://jats.nlm.nih.gov/publishing/tag-library/1.1d2/index.html}>.
 </div>
 
