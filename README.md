@@ -95,7 +95,7 @@ get.abstract("file.xml")
 study.character("file.xml")
 # extract specific study characteristic (here: statistical results)
 study.character("file.xml",output=c("stats","standardStats"),text.mode=3) 
-# with text.mode=3 statistical results are extracted  from result section only
+# with text.mode=3 statistical results are extracted from result/s section only
 ```
 
 ## Usage for a collection of XML files
