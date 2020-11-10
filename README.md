@@ -94,8 +94,12 @@ get.abstract("file.xml")
 # extract study characteristics as list
 study.character("file.xml")
 # extract specific study characteristic (here: statistical results)
-study.character("file.xml",output=c("stats","standardStats"),text.mode=3) 
-# with text.mode=3 statistical results are extracted from result/s section only
+study.character("file.xml",output=c("stats","standardStats")) 
+# reduce to checkable results only
+study.character("file.xml",output="standardStats",stats.mode="checkable")
+# compare with result of statcheck's function checkHTML() (Epskamp & Nuijten, 2018)
+library(statcheck)
+checkHTML("file.xml")
 ```
 
 ## Usage for a collection of XML files
