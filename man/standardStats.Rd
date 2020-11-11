@@ -11,13 +11,14 @@ standardStats(
   alternative = "undirected",
   estimateZ = FALSE,
   T2t = FALSE,
+  R2r = FALSE,
   rm.na.col = TRUE
 )
 }
 \arguments{
 \item{x}{result of get.stats()}
 
-\item{stats.mode}{Select subset of standard stats. One of: "all", "checkable", "computable", "uncomputable"}
+\item{stats.mode}{Select subset of standard stats. One of: "all", "checkable", "computable", "incomputable"}
 
 \item{recalculate.p}{Logical. If TRUE recalculates p values (for 2 sided test) if possible}
 
@@ -25,7 +26,9 @@ standardStats(
 
 \item{estimateZ}{Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.}
 
-\item{T2t}{Logical. If TRUE capital letter T is treated as small letter t}
+\item{T2t}{Logical. If TRUE capital letter T is treated as t-statistic}
+
+\item{R2r}{Logical. If TRUE capital letter R is treated as correlation}
 
 \item{rm.na.col}{Logical. If TRUE removes all columns with only NA}
 }

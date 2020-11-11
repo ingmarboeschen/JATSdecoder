@@ -18,7 +18,7 @@ ngram(x, pattern, ngram = c(-3, 3), tolower = FALSE, exact = FALSE)
 \item{exact}{Logical. If TRUE only exact word matches will be proceses}
 }
 \description{
-Extract an ngram of words around a pattern match in text
+Extract an ngram of words around a pattern match in a text string
 }
 \examples{
 text<-"One hundred twenty-eight students participated in our Study, 

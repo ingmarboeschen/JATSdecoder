@@ -37,7 +37,7 @@ get.text(
 
 \item{rm.media}{Logical. If TRUE removes <media> tag from text}
 
-\item{rm.graphic}{Logical. If TRUE removes <grapgic> and <fig> tag from text}
+\item{rm.graphic}{Logical. If TRUE removes <graphic> and <fig> tag from text}
 
 \item{rm.ext_link}{Logical. If TRUE removes <ext link> tag from text}
 }

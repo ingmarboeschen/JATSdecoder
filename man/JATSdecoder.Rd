@@ -8,11 +8,12 @@ JATSdecoder(
   x,
   sectionsplit = c("intro", "method", "result", "study", "experiment", "conclu",
     "implica", "discussion"),
+  sentences = FALSE,
   output = "all",
   letter.convert = TRUE,
   unify.country.name = TRUE,
   greek2text = FALSE,
-  warning = FALSE
+  warning = TRUE
 )
 }
 \arguments{
@@ -20,7 +21,9 @@ JATSdecoder(
 
 \item{sectionsplit}{search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")}
 
-\item{output}{selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "references")}
+\item{sentences}{Logical. IF TRUE text is returned as sectioned list with sentences}
+
+\item{output}{selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "captions", "references")}
 
 \item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
 
@@ -32,9 +35,4 @@ JATSdecoder(
 }
 \description{
 Function to extract and structure NISO-JATS coded XML file or text into a list
-}
-\examples{
-URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
-download.file(URL,"file.xml")
-JATSdecoder("file.xml")
 }

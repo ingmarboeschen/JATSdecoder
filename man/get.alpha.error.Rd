@@ -16,6 +16,8 @@ Extract reported alpha error from text
 x<-c("The threshold for significance was adjusted to .05/2",
 "Type 1 error rate was alpha=.05.")
 get.alpha.error(x)
-x<-"We display 95\% CIs and use an alpha error of .05/5."
+x<-c("We used p<.05 as level of significance.",
+     "We display .95 CIs and use an adjusted alpha of .10/3.",
+     "The effect was significant with p<.025.")
 get.alpha.error(x)
 }

@@ -6,12 +6,14 @@
 \usage{
 study.character(
   x,
-  text.mode = 1,
   stats.mode = "all",
   recalculate.p = TRUE,
   alternative = "auto",
   estimateZ = FALSE,
   T2t = FALSE,
+  R2r = FALSE,
+  captions = TRUE,
+  text.mode = 1,
   update.package.list = FALSE,
   add.software = NULL,
   quantileDF = 0.75,
@@ -22,17 +24,21 @@ study.character(
 \arguments{
 \item{x}{JATS coded XML file or JATSdecoder result}
 
-\item{text.mode}{text parts to extract statistical results from (text.mode=1: abstract and full text, text.mode=2: method and result section, text.mode=3: result section only)}
-
 \item{stats.mode}{Character. Select subset of standard stats. One of: "all", "checkable", "computable"}
 
 \item{recalculate.p}{Logical. If TRUE recalculates p values (for 2 sided test) if possible}
 
-\item{alternative}{Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto","undirected","directed","both"). If set to "auto" alternative will be be set to both if get.test.direction() detected one-directional hypotheses/tests. If no directional hypotheses/tests are only "undirected" recomputed p-values will be returned}
+\item{alternative}{Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto","undirected","directed","both"). If set to "auto" 'alternative' will be be set to 'both' if get.test.direction() detects one-directional hypotheses/tests in text. If no directional hypotheses/tests are dtected only "undirected" recomputed p-values will be returned}
 
 \item{estimateZ}{Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.}
 
-\item{T2t}{Logical. If TRUE capital letter T is treated as small letter t}
+\item{T2t}{Logical. If TRUE capital letter T is treated as t-statistic when extracting statistics with get.stats()}
+
+\item{R2r}{Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats()}
+
+\item{captions}{Logical. If TRUE captions text will be scanned for statistical results}
+
+\item{text.mode}{text parts to extract statistical results from (text.mode=1: abstract and full text, text.mode=2: method and result section, text.mode=3: result section only)}
 
 \item{update.package.list}{if TRUE updates available R packages with available.packages() function}
 
@@ -46,12 +52,4 @@ study.character(
 }
 \description{
 extracts study characteristics out of a JATS coded XML file or JATSdecoder result
-}
-\examples{
-URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
-download.file(URL,"file.xml")
-JATSdecoder("file.xml")
-study.character("file.xml")
-study.character(JATSdecoder("file.xml"))
-study.character("file.xml",out=c("stats","standardStats"))
 }

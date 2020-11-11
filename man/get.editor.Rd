@@ -4,18 +4,10 @@
 \alias{get.editor}
 \title{get.editor}
 \usage{
-get.editor(
-  x,
-  cleanup = TRUE,
-  role = FALSE,
-  short.names = FALSE,
-  letter.convert = FALSE
-)
+get.editor(x, role = FALSE, short.names = FALSE, letter.convert = FALSE)
 }
 \arguments{
 \item{x}{a NISO-JATS coded XML file or text}
-
-\item{cleanup}{Logical. If TRUE removes html and badly captured characters}
 
 \item{role}{Logical. If TRUE adds role to editor name, if available}
 

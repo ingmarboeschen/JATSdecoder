@@ -4,10 +4,18 @@
 \alias{get.abstract}
 \title{get.abstract}
 \usage{
-get.abstract(x, remove.title = TRUE, letter.convert = TRUE, cermine = FALSE)
+get.abstract(
+  x,
+  sentences = FALSE,
+  remove.title = TRUE,
+  letter.convert = TRUE,
+  cermine = FALSE
+)
 }
 \arguments{
 \item{x}{a NISO-JATS coded XML file or text}
+
+\item{sentences}{Logical. If TRUE abstract is returned as vector of sentences}
 
 \item{remove.title}{Logical. If TRUE removes section titles in abstract}
 
@@ -21,7 +29,7 @@ Extract abstract tag from NISO-JATS coded XML file or text as vector of abstract
 \examples{
 x<-"Some text <abstract>Some abstract</abstract> some text"
 get.abstract(x)
-x<-"Some text <abstract>Some abstract</abstract> TEXT <abstract>
+x<-"Some text <abstract>Some abstract</abstract> TEXT <abstract with subsettings>
 Some other abstract</abstract> Some text "
 get.abstract(x)
 }

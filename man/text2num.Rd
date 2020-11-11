@@ -2,18 +2,47 @@
 % Please edit documentation in R/helper_text2num.R
 \name{text2num}
 \alias{text2num}
-\title{text2num}
+\title{text2num
+Convert special annotated number and written numbers in a text string to a fully digit representation 
+Can handle numbers with exponent, fraction, percent, e+num, products and written representation (e.g. 'fourtys-one') of all absolut numbers till 99,999 (Note: gives false returns for higher numbers). Process is performed in the same order as its arguments.}
 \usage{
-text2num(x)
+text2num(
+  x,
+  exponent = TRUE,
+  percentage = TRUE,
+  fraction = TRUE,
+  e = TRUE,
+  product = TRUE,
+  words = TRUE
+)
 }
 \arguments{
 \item{x}{text to process}
+
+\item{exponent}{Logical. If TRUE values with exponent are converted to a digit representation}
+
+\item{percentage}{Logical. If TRUE percentages are converted to a digit representation}
+
+\item{fraction}{Logical. If TRUE fractions are converted to a digit representation}
+
+\item{e}{Logical. If TRUE values denoted with num e+num (e.g. '2e+2') are converted to a digit representation}
+
+\item{product}{Logical. If TRUE values products are converted to a digit representation}
+
+\item{words}{Logical. If TRUE written numbers are converted to a digit representation}
 }
 \description{
-Convert written numbers in text to digit number (works up to 99,999)
+text2num
+Convert special annotated number and written numbers in a text string to a fully digit representation 
+Can handle numbers with exponent, fraction, percent, e+num, products and written representation (e.g. 'fourtys-one') of all absolut numbers till 99,999 (Note: gives false returns for higher numbers). Process is performed in the same order as its arguments.
 }
 \examples{
-x<-"Over all one thousand two hundred twenty-eight students 
-participated in our Study, that was administred in thirteen clinics."
+x<-c("numbers with exponent: -2^3, .2^-2, -.3^.2, 49^-.5, 2^10.",
+     "numbers with percentage: 2\%, 15 \%, 25 percent.",
+     "numbers with fractions: 1/100, -2/5, -7/-.1",
+     "numbers with e: 10e+2, -20e3, .2E-2, 2e4",
+     "numbers as products: 100*2, -20*.1, 2*10^3",
+     "written numbers: twenty-two, one hundred fourty five",
+     "mix: one hundred ten is not 1/10 is not 10^2 nor 10\%/5")
 text2num(x)
 }
