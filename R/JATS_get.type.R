@@ -10,7 +10,7 @@ get.type<-function(x){
 if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
 
 if(length(grep("article-type=",x))>0){
-  type<-gsub("^ ","",gsub(" $","",gsub("\\\".*","",gsub("\">.*","",gsub(".*article-type=\"","",grep("article-type=",x,value=TRUE)[1])))))
+  type<-tolower(gsub("^ ","",gsub(" $","",gsub("\\\".*","",gsub("\">.*","",gsub(".*article-type=\"","",grep("article-type=",x,value=TRUE)[1]))))))
  }else type<-NA
 return(type)
 }

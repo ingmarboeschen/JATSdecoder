@@ -27,13 +27,14 @@ if(length(grep("<subject",x,value=TRUE))>0){
  temp<-gsub(".*>","",temp)
  # collapse with "," as seperator
  if(paste!="") temp<-paste(temp,collapse=", ")
- # clean up comas
+ # clean up and split at comas
  while(length(grep(", , ",temp))>0) temp<-gsub(", , ",", ",temp)
  temp<-gsub("/",", ",sub(", $","",sub("^, ","",temp)))
+ temp<-unlist(strsplit(temp," , |, "))
  if(letter.convert==T) temp<-letter.convert(temp)
 # else NA
 } else temp<-NA
-return(temp)
+return(unique(temp))
 }
 
 

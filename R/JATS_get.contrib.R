@@ -7,6 +7,9 @@
 #' @export
 
 get.contrib<-function(x,remove.html=FALSE,letter.convert=FALSE){
+# readLines if x is file
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+
 if(length(grep("<contrib",x))>0){
   x<-paste(x,collapse=" ")
 # split at <contrib and remove after </contrib

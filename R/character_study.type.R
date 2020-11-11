@@ -18,7 +18,7 @@ if(length(text)>0){
 # experimental designs
 rand<-grep("random|experimental",text,value=T)
 pat<-c("placebo","treatment control|control treatment","treatment as usual","[^a-zA-z]rct[^a-z]|[^a-zA-z]rtc[^a-z]","wait list|waiting list","active group")
-has.sentence.with.pattern(rand,pat)
+has.pattern(rand,pat)
 }else text<-NULL
 return(c(title,text))
 }

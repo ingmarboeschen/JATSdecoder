@@ -2,11 +2,12 @@
 #'
 #' Extract and standard statistical results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values
 #' @param x result of get.stats()
-#' @param stats.mode Select subset of standard stats. One of: "all", "checkable", "computable", "uncomputable"
+#' @param stats.mode Select subset of standard stats. One of: "all", "checkable", "computable", "incomputable"
 #' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible
 #' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected","directed","both")
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
-#' @param T2t Logical. If TRUE capital letter T is treated as small letter t
+#' @param T2t Logical. If TRUE capital letter T is treated as t-statistic
+#' @param R2r Logical. If TRUE capital letter R is treated as correlation
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA
 #' @importFrom stats pf pchisq pt pnorm
 #' @export
@@ -16,45 +17,73 @@
 #' BF(01)<=>4","chi=3.2, r(34)<=>-.7, p<.01, R2=76%.")
 #' standardStats(x)
 
-standardStats<-function(x,stats.mode="all",recalculate.p=TRUE,alternative="undirected",estimateZ=FALSE,T2t=FALSE,rm.na.col=TRUE){
+standardStats<-function(x,stats.mode="all",recalculate.p=TRUE,alternative="undirected",estimateZ=FALSE,T2t=FALSE,R2r=FALSE,rm.na.col=TRUE){
 # set warning massages to FALSE
-warn.t<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.d<-FALSE;warn.eta<-FALSE
+warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.d<-FALSE;warn.eta<-FALSE;warn.multi.p<-FALSE
    x<-unlist(x)
 # convert with get.stats() if has " [<=>] [0-9\\.-]"
 if(length(grep(" [<=>] [0-9\\.-]|[<=>] [0-9\\.-]",x))>0) x<-allStats(x)
 if(length(x)>0){
-   # capital T to small t
+
+# remove space between letter and (
+x<-gsub("([A-Za-z]) (\\([0-9Nnd])","\\1\\2",x)
+# remove 'Letter'chi'letter'
+x<-gsub("[A-Za-z]chi[a-z]","",x)
+
+# capital T to small t
    if(T2t==TRUE){
      # need warning for T2t?
-     if(length(grep("T",x))>0) warn.t<-TRUE
-     x<-gsub("T","t",x)
+     if(length(grep("T",x))>0) warn.T2t<-TRUE
+     x<-gsub("T","t",x)  
      }
 
+# capital R to small r
+   if(R2r==TRUE){
+        # need warning for T2t?
+     if(length(grep("^R\\(| R \\(|^R\\(| R\\(|^R[<>=]| R[<>=]",x))>0) warn.R2r<-TRUE
+     x[grep("^R\\(| R\\(|^R[<>=]| R[<>=]",x)]<-gsub("R","r",x[grep("^R\\(| R\\(|^R[<>=]| R[<>=]",x)])  
+     }
+     
+     
+ # remove percent value in brackets
+   x<-gsub(" \\([0-9\\.]*\\%\\)","",x)     
    # remove ")" in "), text...
    x<-gsub("[\\)\\][;,] ([a-zA-Z])",", \\1",x)
    # unify "[]" -> "()" ??
    x<-gsub("\\[","(", x)
    x<-gsub("\\]",")", x)
+
+# remove label from one letter statistic
+   x<-gsub("( [ZtFr]) [a-zA-Z]* (\\([0-9])","\\1\\2",x)
+   x<-gsub("^([ZtFr]) [a-zA-Z]* (\\([0-9])","\\1\\2",x)
    
 # function to convert percent to number   
 percent2number<-function(x){
-x<-gsub(" \\%","%",x)
-   i<-grep("[0-9][%]|[0-9][%]$",x)
-if(length(i)>0){
- stop<-FALSE
-   while(stop!=TRUE){
-   i<-grep("[0-9][%]|[0-9][%]$",x)
-   m <- regexpr("[0-9\\.]*?[%]|[0-9\\.]*?[%]$", x[i])
-   remove<-regmatches(x[i], m)
-   insert<-as.numeric(gsub("%","",remove))/100
-   x[i]<-gsub(remove,insert,x[i])
-   if(length(grep("[0-9][%]|[0-9][%]$",x))==0) stop<-TRUE
-   }
-   }
-return(x)
+if(length(grep("\\%|[0-9] percent",x))>0){
+    x<-gsub("([0-9]) percent","\\1%",x)
+    x<-gsub("([0-9]) \\%","\\1%",x)
+    x<-unlist(strsplit2(x,"[0-9][%]","after"))
+    i<-grep("[0-9][%]|[0-9][%]$",x)
+    if(length(i)>0){
+        stop<-FALSE
+        while(stop!=TRUE){
+            i<-grep("[0-9][%]|[0-9][%]$",x)[1]
+            m <- regexpr("[0-9\\.]*?[%]|[0-9\\.]*?[%]$", x[i])
+            remove<-regmatches(x[i], m)
+            insert<-as.numeric(gsub("%","",remove))/100
+            x[i]<-gsub(remove,insert,x[i])
+            if(length(grep("[0-9][%]|[0-9][%]$",x))==0) stop<-TRUE
+        }
+    }
+# clean up
+    x<-gsub("  "," ",x<-paste(x,collapse=" "))
+    x<-gsub(" , ",", ",x)
+    x<-gsub(" \\.$",".",x)
+    }
+    return(x)
 }
 # use function to convert %
-x<-lapply(x,percent2number)
+x<-unlist(lapply(x,percent2number))
    # remove ^ from "letter^2"
    x<-gsub("([a-zA-Z])[\\^]2","\\12",x)
    # unify p-value
@@ -68,10 +97,12 @@ x<-lapply(x,percent2number)
    x<-gsub("\\| | \\|| \\| |\\|","",x)
    # space clean up
    x<-gsub("^ *|(?<= ) | *$", "", x, perl = TRUE)
+
    # remove " partial " "change"
    x<-gsub(" [pP]artial | [Cc]hange |[pP]artial|[Cc]hange","",x)
    # remove hyphen
    x<-gsub("'","",x)
+   x<-unlist(strsplit(x,"children|child|childrens"))
    # remove " [text]"
    x<-gsub(" \\[[a-zA-Z]*?\\]","",x)
    x<-gsub("\\[[a-zA-Z]*?\\]","",x)
@@ -90,13 +121,11 @@ x<-lapply(x,percent2number)
    x<-gsub("[dD]elta ([^<=>])","\\1",x)
    x<-gsub("[dD]elta([^ <=>])","\\1",x)
    # unify beta
-   # remove lines with child
-   x<-grep("child",x,invert=TRUE,value=TRUE)
    x<-gsub("\u00DF","beta",x) # sharp s
    x<-gsub("\u0392","beta",x) # greek capital BETA
    x<-gsub("[Bb]etas","beta",x) # singular
    # unify chi2s -> chi2
-   x<-gsub("X2|[Cc]hi2s","chi2",x) 
+   x<-gsub("X2|[Cc]hi2s|X 2 ","chi2",x) 
    x<-gsub("[Cc]hi2","chi2",x) 
    x<-gsub("[Cc]hi2 \\(","chi2(",x) 
    x<-gsub("[Cc]hi2","chi2",x) 
@@ -113,7 +142,6 @@ x<-lapply(x,percent2number)
    x<-gsub("([a-z])-([A-Ra-z])","\\1 \\2",x) 
    # remove wrongly set "="
    x<-gsub("=(\\([0-9\\.,]*?\\)=)","\\1",x)
-   #   x<-gsub("coefficient","beta",x)
    # unify eta2(p/g)
    x<-gsub("eta2\\([GgPp]\\)|eta\\([GgPp]\\)|eta\\([GPpg]\\)2|eta2[GPgp]","eta2",x)
    x<-gsub("eta G|eta\\([gG]\\)","eta",x)
@@ -126,7 +154,9 @@ x<-lapply(x,percent2number)
    x<-gsub("([pPtFraid2])[' ]s([<=>])","\\1\\2",x)
    x<-gsub("([pPtFraid2])' s([<=>])","\\1\\2",x)
    x<-gsub("\\)s([<=>])",")\\1",x)
-   
+  # add coma after number followed by letter of satistic
+   x<-gsub("([0-9]) ([a-zA-z])","\\1, \\2",x)
+ 
 # correct f(df1,df2) -> F(df1,df2)
    x<-gsub("([^a-zA-Z])f(\\([0-9]*?,[ 0-9]*?\\))","\\1F\\2",x)
    x<-gsub("([^a-zA-Z])f (\\([0-9]*?,[ 0-9]*?\\))","\\1F\\2",x)
@@ -142,12 +172,14 @@ x<-lapply(x,percent2number)
 # remove space between letter or 2 and "(num"
   x<-gsub("([A-Za-z2]) (\\([0-9])","\\1\\2",x)
 # remove label from "statistic label ([0-9]"
-  x<-gsub("^([rtFQH])[a-z0-9] (\\([0-9])","\\1\\2",x)
-  x<-gsub("^([rtFQH]) [a-z0-9](\\([0-9])","\\1\\2",x)
-  x<-gsub("^([tFQH])[a-z0-9](\\([0-9])","\\1\\2",x)
+  x<-gsub("^([rtFQH])[a-z0-9]*? (\\([0-9])","\\1\\2",x)
+  x<-gsub("^([rtFQH]) [a-z0-9]*?(\\([0-9])","\\1\\2",x)
+  x<-gsub("^([tFQH])[a-z0-9]*?(\\([0-9])","\\1\\2",x)
   x<-gsub("2[a-z0-9](\\([0-9])","2\\1",x)
   x<-gsub("2 [a-z0-9](\\([0-9])","2\\1",x)
-  x<-gsub("([^a-zA-Z][rtFQH]) [a-z0-9](\\([0-9])","\\1\\2",x)
+  x<-gsub("([^a-zA-Z][rtFQH]) [a-z0-9]*?(\\([0-9])","\\1\\2",x)
+  x<-gsub("([^a-zA-Z][tFQH])[a-z0-9]*? (\\([0-9])","\\1\\2",x)
+  x<-gsub("([^a-zA-Z][tFQH])[a-z0-9]*?(\\([0-9])","\\1\\2",x)
   # remove [ in front of letter(
   x<-gsub("\\[([a-zA-z][(][0-9])","\\1",x)
   # remove [ in front of words
@@ -178,36 +210,60 @@ input<-round(1/(v^e),7)
  x<-gsub("([0-9\\.][0-9])[<>=]+[0-9\\./]*","\\1",x)
  x<-gsub("([0-9\\.]/[0-9])[<>=]+[0-9\\./]*","\\1",x)
  
- # define functions to convert ^ to num
+# function to convert e num
 e2num<-function(x){
- # add space to end
- x<-paste0(x," ")
- # if has one e[\\-\\+1-9] convert to number and replace with result
- ind<-(1:length(x))[nchar(x)-nchar(gsub("[0-9]e-[\\.0-9]","",x))==4]
- suppressWarnings(if(length(ind)>0) for(i in ind) x[i]<-gsub("([0-9\\.]*)e(-[0-9\\.]*)",format(round(as.numeric(gsub(".*?([0-9\\.]*)e(-[0-9\\.]*).*","\\1e\\2",x[i])),10),scientific=F),x[i])
- )
- ind<-(1:length(x))[nchar(x)-nchar(gsub("[0-9]e\\+[\\.0-9]","",x))==4]
- suppressWarnings(if(length(ind)>0) for(i in ind) x[i]<-gsub("([0-9\\.]*)e(\\+[0-9\\.]*)",format(as.numeric((gsub(".*?([0-9\\.]*)e(\\+[0-9\\.]*).*","\\1e\\2",x[i]))),scientific=F),x[i]))
- # remove space at end
- x<-gsub(" $","",x)
- return(x)
- }
+if(length(grep("[0-9][Ee][-\\+\\.0-9]",x))>0){
+    x<-gsub("([0-9])[Ee]([0-9])","\\1e+\\2",x)
+    x<-gsub("([0-9])E([-\\+\\.0-9])","\\1e\\2",x)
+    x<-unlist(strsplit2(x," [-\\.0-9]*e[\\-\\+][1-9]","before"))
+    # add space to end
+    x<-paste0(x,"  ")
+    # if has one e[\\-\\+1-9] convert to number and replace with result
+    ind<-(1:length(x))[nchar(x)-nchar(gsub("[0-9]e-[\\.0-9]","",x))==4]
+    suppressWarnings(if(length(ind)>0) for(i in ind) x[i]<-gsub("([-0-9\\.]*)e(-[0-9\\.]*)",format(round(as.numeric(gsub(".*?([-0-9\\.]*)e(-[0-9\\.]*).*","\\1e\\2",x[i])),10),scientific=F),x[i])
+    )
+    ind<-(1:length(x))[nchar(x)-nchar(gsub("[0-9]e\\+[\\.0-9]","",x))==4]
+    suppressWarnings(if(length(ind)>0) for(i in ind) x[i]<-gsub("([-0-9\\.]*)e(\\+[0-9\\.]*)",format(as.numeric((gsub(".*?([-0-9\\.]*)e(\\+[0-9\\.]*).*","\\1e\\2",x[i]))),scientific=F),x[i]) )
+    # collapse and clean up
+    x<-gsub("  "," ",gsub("  "," ",gsub(" $","",paste(x,collapse=" "))))
+    x<-gsub(" , ",", ",x)
+    x<-gsub(" \\.$",".",x)
+}
+    return(x)
+}
 
+# function to convert ^num
 hight2num<-function(x){
- # add space to end
- x<-paste0(x," ")
- # if has num^num calculate and and replace 
- ind<-grep("[^a-zA-Z][0-9]\\^[\\.0-9]",x)
- res<-suppressWarnings(format(as.numeric(gsub(".*[^0-9\\.]","",gsub("(.*[0-9\\.]*)\\^[\\.0-9].*","\\1",x[ind])))^as.numeric(gsub("[^0-9\\.].*","",gsub(".*[0-9\\.]*\\^([\\.0-9]*)","\\1",x[ind]))),scientific=F))
- # clean up white spaces
- res<-gsub("^ *|(?<= ) | *$", "", res, perl = TRUE)
- # remove only zeros at end
- res<-gsub("[0\\.]*$","",res)
- suppressWarnings(if(length(ind)>0) for(i in 1:length(ind)) x[ind[i]]<-gsub("[0-9\\.]*\\^[\\.0-9]*",res[i],x[ind[i]]))
- # remove space at end
- x<-gsub(" $","",x)
- return(x)
- }
+if(length(grep("[0-9]\\^[-\\.0-9]",x))>0){
+x<-unlist(strsplit2(x,"\\.$","before"))
+x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?\\^[-\\.0-9]","before"))
+    # add space to end
+    x<-paste0(x," ")
+    # if has num^num calculate and and replace 
+    ind<-grep("[^a-zA-Z][0-9]\\^[-\\.0-9]|^[0-9]\\^[-\\.0-9]",x)
+    exponent <- function(a, pow) (abs(a)^pow)*sign(a)
+    res<-suppressWarnings(format( exponent(as.numeric(gsub(".*[^-0-9\\.]","\\1",
+                                                 gsub("(.*[-0-9\\.]*)\\^[-\\.0-9].*","\\1",x[ind]))),
+                                       as.numeric(gsub("[^-0-9\\.].*","\\1",gsub(".*[-0-9\\.]*?\\^([-\\.0-9]*)","\\1",x[ind])))),
+                                 scientific=F))
+
+        # clean up white spaces
+    res<-gsub("^ *|(?<= ) | *$", "", res, perl = TRUE)
+    # remove only zeros at end
+    res<-gsub("\\.[0]*$","",res)
+    res<-gsub("(\\.[0-9]*?)0*$","\\1",res)
+    # insert result
+    suppressWarnings(if(length(ind)>0) for(i in 1:length(ind)) x[ind[i]]<-gsub("[-0-9\\.]*\\^[-\\.0-9]*",res[i],x[ind[i]]))
+    # collapse
+    x<-gsub("  "," ",gsub(" $","",paste(x,collapse=" ")))
+    # clean up
+    x<-gsub("  "," ",x)
+    x<-gsub(" , ",", ",x)
+    x<-gsub(" \\.$|,\\.",".",x)
+}
+    return(x)
+}
+
 
 # split and insert results of functions 
 x<-strsplit2(x,"[,;] ","after")
@@ -221,28 +277,38 @@ x<-gsub(", [Nn]=[0-9]*","",x)
 x<-gsub("[Nn]=[0-9]*, ","",x)
 
 # convert fraction to digit number
-# define function
 frac2num<-function(x){
-# get lines with fraction
-ind<-grep("[0-9]/[0-9\\.]",x)
-# lines with only one fraction
-ind<-ind[nchar(x[ind])-nchar(gsub("/","",x[ind]))==1]
-if(length(ind)>0){
-# get num/num
-frac<-regmatches(x[ind],regexpr("[\\.0-9]*/[\\.0-9]*",x[ind]))
-# recompute num=num/num
-num<-sapply(frac, function(x) eval(parse(text=x)))
-num<-as.character(round(num,4))
-# insert num
-for(i in 1:length(ind)) x[ind[i]]<-gsub("([\\.0-9]*/[\\.0-9]*)",num[i],x[ind[i]])
+if(length(grep("/[-\\.0-9]|/ [-\\.0-9]",x))>0){
+    x<-unlist(strsplit2(x,"\\.$","before"))
+    x<-gsub("([0-9]) /([-\\.0-9])","\\1/\\2",x)
+    x<-gsub("([0-9]) / ([-\\.0-9])","\\1/\\2",x)
+    x<-gsub("([0-9])/ ([-\\.0-9])","\\1/\\2",x)
+    x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?/[-\\.0-9]","before"))
+    # get lines with fraction
+    ind<-grep("[0-9]/[-0-9\\.]",x)
+    # lines with only one fraction
+    ind<-ind[nchar(x[ind])-nchar(gsub("/","",x[ind]))==1]
+    if(length(ind)>0){
+        # get num/num
+        frac<-regmatches(x[ind],regexpr("[-\\.0-9]*/[-\\.0-9]*",x[ind]))
+        # recompute num=num/num
+        num<-sapply(frac, function(x) eval(parse(text=x)))
+        num<-as.character(round(num,4))
+        # insert num
+        for(i in 1:length(ind)) x[ind[i]]<-gsub("([-\\.0-9]*/[-\\.0-9]*)",num[i],x[ind[i]])
+    }
+    # collapse and clean up
+    x<-gsub("  "," ",gsub("  "," ",gsub(" $","",paste(x,collapse=" "))))
+    x<-gsub(" , ",", ",x)
+    x<-gsub(" \\.$",".",x)
 }
-return(x)
+    return(x)
 }
 # apply
-x<-frac2num(x)
+x<-unlist(lapply(x,frac2num))
 
 # prepare results colnames
-cnames<-c("Zsign","Zval","Fsign","Fval","eta2","omega2","tsign","tval","d","SE","rsign","r","R2sign","R2","Usign","U","Hsign","H","G2sign","G2","OR","RR","chi2","Qsign","Q","df1","df2","beta","SEbeta","Zest","BFsign","BF10","psign","p","recalculatedP","recalcPless","recalcPgreater")
+cnames<-c("Zsign","Zval","Fsign","Fval","eta2","omega2","tsign","tval","d","SE","rsign","r","R2sign","R2","Usign","U","Hsign","H","G2sign","G2","OR","RR","chi2","Qsign","Q","df1","df2","beta","SEbeta","Zest","BF10sign","BF10","BFsign","BF","psign","p","recalculatedP","recalcPless","recalcPgreater")
 res<-matrix(NA,nrow=length(x),ncol=length(cnames))
 colnames(res)<-cnames
 
@@ -271,8 +337,8 @@ if(length(grep("^b[<=>]| b[<=>]",x))>0){
    
 }
 
-## get d and SE if has d and standard error than calculate Zest
-if(length(grep("^d[<=>]| d[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-9]|t=",x))>0){
+## get d and SE if has d and SE, t or Z error than calculate Zest
+if(length(grep("^d[<=>]| d[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-9]|[Zbzt]=",x))>0){
    index<-grep("^d[<=>]| d[<=>]",x)
    # extract
    d<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* d[<=>]*|^d[<=>]*","",x[index]))))
@@ -293,6 +359,8 @@ if(length(grep(" SE[<=>]",x))>0&length(grep("^b[<=>]| b[<=>]",x))==0&length(grep
 }
 
 ## extract t value and df in t value
+# remove "(" in front of t
+x<-gsub("(\\()t"," t",x)
 # remove number of numbered t-values
 x<-gsub("( )t[0-9]*?\\(([1-9])|^t[0-9]*?\\(([1-9])","\\1t(\\2\\3",x)
 x<-gsub("( )t[a-zA-Z]\\(([1-9])|^t[a-zA-Z]\\(([1-9])","\\1t(\\2\\3",x)
@@ -300,7 +368,6 @@ x<-gsub("( )t[a-zA-Z]\\(([1-9])|^t[a-zA-Z]\\(([1-9])","\\1t(\\2\\3",x)
 index<-grep(" t[(<>=]|^t[(<>=]",x)
 if(length(index>0)){
   tval<-x[index]
-
 # remove till first t value if has 2
   ft<-function(x){lapply(strsplit2(tval,"^t[<>=(]| t[<>=(]","before"),function(x) grep("^t[<>=(]| t[<>=(]",x,value=TRUE)[1])}
   tval<-unlist(ft(tval))
@@ -318,7 +385,7 @@ if(length(index>0)){
   sign<-gsub("[^<>=].*","",sub("[^<>=]*([=<>])", "\\1",sub(".* t([\\(=<>])","\\1",tval)))
   # clean up t value
   tval<-gsub("\\([0-9\\.,;]*\\)|\\]","",tval) # remove df within brackets
-  tval<-suppressWarnings(as.numeric(gsub(".*[=<>]","",gsub("[;,] .*| .*","",gsub(".*t[(<>=]|^t[(<>=]","",tval)))))
+  tval<-suppressWarnings(as.numeric(gsub(".*[=<>]","",gsub("[;,] .*| .*|[;,]$","",gsub(".*t[(<>=]|^t[(<>=]","",tval)))))
   # insert results to res
   res[index,c("tsign","tval","df2")]<-cbind(sign,tval,tdf)
 }
@@ -370,6 +437,21 @@ if(length(ind)>0) df2[ind]<-gsub("[^0-9\\.].*","",gsub(".*df2[=]","",Fval[ind]))
 if(length(grep("[^A-Za-z]F[<=>]*([0-9\\.]*)",Fval))>0) Fval<-(sub(".*F[<=>]*([0-9\\.]*).*","\\1",Fval))
 if(length(grep("^F[<=>]*([0-9\\.]*)",Fval))>0) Fval<-(gsub("^F[<=>]*([0-9\\.]*).*","\\1",Fval))
 Fval<-suppressWarnings(as.numeric(Fval))
+
+# has F value without dfs? than don't compute pF
+# if(length(Fval)==!is.na(df2)) 
+
+# don't overwrite dfs (here copy value if not NA)
+if(length(index)==1){
+df2[which(!is.na(res[index,"df2"]))]<-res[index,"df2"][!is.na(res[index,"df2"])]
+df1[which(!is.na(res[index,"df2"]))]<-res[index,"df1"][!is.na(res[index,"df2"])]
+}
+if(length(index)>1){
+df2[which(!is.na(res[index,"df2"]))]<-res[index,][!is.na(res[index,"df2"]),"df2"]
+df1[which(!is.na(res[index,"df2"]))]<-res[index,][!is.na(res[index,"df2"]),"df1"]
+}
+
+
 # insert results to res
 res[index,c("Fsign","Fval","df1","df2")]<-cbind(sign,Fval,df1,df2)
 }
@@ -452,7 +534,7 @@ chi2<-gsub("[;,] [Nn]=[0-9]*?$","",chi2)
 chi2<-suppressWarnings(as.numeric(gsub("[^0-9\\.].*","",unlist(lapply(strsplit(gsub(".*chi[(]|.* chi|.* [Nn][=]","",chi2),"<=>|=|<=|>=|<|>"),"[",2)))))
 # add to results
 res[index,c("chi2")]<-cbind(chi2)
-# if df 1 has no have entry
+# if df 1 has no entry
 i<-which(is.na(res[index,c("df1")]))
 res[index,c("df1")][i]<-cbind(chidf[i])
 }
@@ -523,7 +605,7 @@ res[index,"H"]<-H
 use<-is.na(res[index,"df1"])
 res[index,"df1"][use]<-Hdf[use]
 }
-
+res
 
 ## extract G2
 # remove [Dd] in front of G2
@@ -627,9 +709,13 @@ res[index,c("p")]<-pval
 }
 
 ## extract BayesFactor
+# unify
+x<-gsub("[bB]ayes [bF]actor","BF",x)
+x<-gsub("BF01|BF 01","BF(01)",x)
+x<-gsub("BF10|BF 10","BF(10)",x)
 index<-grep(" BF[(]|^BF[(]",x)
 if(length(index)>0){
-   BF<-x[index]
+BF<-x[index]
 # remove till "BF("
 BF<-gsub(".*BF[(]|^BF[(]","",BF)
 # check type: BF(01) or BF(10)
@@ -682,8 +768,25 @@ BFsign[(type=="01")&sign==">"]<-"<"
 
 # add BayesFactor values to res
 res[index,c("BF10")]<-BF
-res[index,"BFsign"]<-BFsign
+res[index,"BF10sign"]<-BFsign
 }
+
+## extract Bayes factor without 01 or 10
+# lines with BF value
+index<-grep(" BF[(<>=]|^BF[(<>=]",x)
+if(length(index)>0){
+   BF<-x[index]
+BF<-gsub(".*BF[=]|.*BF\\([0-9]*?\\)[=]","=",BF)
+BF<-gsub(".*BF[>]|.*BF\\([0-9]*?\\)[>]",">",BF)
+BF<-gsub(".*BF[<]|.*BF\\([0-9]*?\\)[<]","<",BF)
+BFsign<-gsub("[^<=>].*","",BF)
+BF<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",BF))))
+# add BF values to res
+res[index,c("BF")]<-BF
+res[index,c("BFsign")]<-BFsign
+}
+
+
 
 ## extract OddsRatio value
 # unify
@@ -798,7 +901,10 @@ if(is.vector(res)){
 if(length(grep("[^0-9\\.]",res[,"df1"]))>0) res[grep("[^0-9\\.]",res[,"df1"]),"df1"]<-NA
 if(length(grep("[^0-9\\.]",res[,"df2"]))>0) res[grep("[^0-9\\.]",res[,"df2"]),"df2"]<-NA
 
+
+#######################
 ## recalculate p-value 
+#####################
 if(dim(res)[1]>0){
 if(recalculate.p==TRUE){
 # for undirected tests
@@ -813,8 +919,9 @@ suppressWarnings({
   recalculatedPZest<-round(2*(1-stats::pnorm(abs(as.numeric(res[,"Zest"])))),5)
   recalculatedPF<-round(1-stats::pf(as.numeric(res[,"Fval"]),as.numeric(res[,"df1"]),as.numeric(res[,"df2"])),5)
 })
-  
-  # for directed tests alternative="directed|both" Z-,t-,r-values 
+
+
+# for directed tests alternative="directed|both" Z-,t-,r-values 
 suppressWarnings({
   recalculatedPrg<-round((1-stats::pt((abs(as.numeric(res[,"r"]))*sqrt(as.numeric(res[,"df2"])))/sqrt(1-as.numeric(res[,"r"])^2),as.numeric(res[,"df2"]))),5)
   recalculatedPtg<-round((1-stats::pt(abs(as.numeric(res[,"tval"])),as.numeric(res[,"df2"]))),5)
@@ -830,30 +937,20 @@ suppressWarnings({
   recalculatedPZlest<-round((stats::pnorm(abs(as.numeric(res[,"Zest"])))),5)
 })
 
-}
-  
 # overwrite empty recalculated PZ with PZest 
 recalculatedPZ[is.na(recalculatedPZ)]<-recalculatedPZest[is.na(recalculatedPZ)]
 recalculatedPZl[is.na(recalculatedPZl)]<-recalculatedPZlest[is.na(recalculatedPZl)]
 recalculatedPZg[is.na(recalculatedPZg)]<-recalculatedPZgest[is.na(recalculatedPZg)]
 
-# for 1 lined matrix (deprecated)
-if(is.null(dim(res))){
-suppressWarnings({
-recalculatedPF<-round(1-stats::pf(as.numeric(res["Fval"]),as.numeric(res["df1"]),as.numeric(res["df2"])),5)
-  recalculatedPchi<-round(1-stats::pchisq(as.numeric(res[,"chi2"]),as.numeric(res["df1"])),5)
-  recalculatedPH<-round(1-stats::pchisq(as.numeric(res[,"H"]),as.numeric(res["df1"])),5)
-  recalculatedPG2<-round(1-stats::pchisq(as.numeric(res[,"G2"]),as.numeric(res["df1"])),5)
-  recalculatedPQ<-round(1-stats::pchisq(as.numeric(res[,"Q"]),as.numeric(res["df1"])),5)
-  recalculatedPt<-round(2*(1-stats::pt(abs(as.numeric(res["tval"])),as.numeric(res["df2"]))),5)
-  recalculatedPZ<-round(2*(1-stats::pnorm(abs(as.numeric(res["Zval"])))),5)
-  recalculatedPr<-round(2*(1-stats::pt((abs(as.numeric(res["r"]))*sqrt(as.numeric(res["df2"])))/sqrt(1-as.numeric(res["r"])^2),as.numeric(res["df2"]))),5)
-})
-  }
+
+
 
 # take the most conservative (highest) p value if 2 or more were calculated
-d<-data.frame(recalculatedPF,recalculatedPr,recalculatedPt,recalculatedPchi,recalculatedPZ,recalculatedPH,recalculatedPG2,recalculatedPQ)
-# get p value by rank F, r, t, chi, Z, H, G2, Q
+d<-data.frame(recalculatedPt,recalculatedPF,recalculatedPr,recalculatedPchi,recalculatedPZ,recalculatedPH,recalculatedPG2,recalculatedPQ)
+# has multiple recomputable p-values
+if(sum(rowSums(!is.na(d))>1)>0) warn.multi.p<-TRUE
+
+# get p value by rank t, F, r, chi, Z, H, G2, Q
 recalculatedP<-NULL
 for(i in 1:dim(d)[1]) recalculatedP[i]<-d[i,][!is.na(d[i,])][1]
 # add to res
@@ -861,8 +958,8 @@ for(i in 1:dim(d)[1]) recalculatedP[i]<-d[i,][!is.na(d[i,])][1]
   if(is.null(dim(res))) res["recalculatedP"]<-recalculatedP
 
 # take the most conservative directed p value if 2 or more were calculated
-d<-data.frame(recalculatedPrl,recalculatedPtl,recalculatedPZl)
-# get p value by rank r, t, Z
+d<-data.frame(recalculatedPtl,recalculatedPrl,recalculatedPZl)
+# get p value by rank t, r, Z
 recalcPless<-NULL
 for(i in 1:dim(d)[1]) recalcPless[i]<-d[i,][!is.na(d[i,])][1]
 # add to res
@@ -877,8 +974,9 @@ for(i in 1:dim(d)[1]) recalcPgreater[i]<-d[i,][!is.na(d[i,])][1]
   if(!is.null(dim(res))) res[,"recalcPgreater"]<-recalcPgreater
   if(is.null(dim(res))) res["recalcPgreater"]<-recalcPgreater
   
-
-# make matrix if is none
+}
+  
+  # make matrix if is none
 if(!is.matrix(res)){
 res<-matrix(res,1)
 colnames(res)<-cnames
@@ -909,13 +1007,11 @@ colnames(res)<-cnames
 }
 
 # only select stats with no recomputable p value
-if(stats.mode=="uncomputable") res<-res[is.na(res[,"recalculatedP"]),]
+if(stats.mode=="incomputable") res<-res[is.na(res[,"recalculatedP"]),]
 if(!is.matrix(res)){
    res<-matrix(res,1)
    colnames(res)<-cnames
 }
-
-
 
 # remove sided test p-values if not requested by alternative and reduce cnames
 if(is.element(alternative,c("undirected"))){
@@ -925,13 +1021,16 @@ if(is.element(alternative,c("undirected"))){
    res<-matrix(res,1)
    colnames(res)<-cnames
    }}
+   
 ## Warning massages:
 # need warning massage for r > 1|r < -1
 if(sum(as.numeric(res[,"r"])>1|as.numeric(res[,"r"])<(-1),na.rm=T)>0) warn.r<-TRUE
 # need warning massage for R2 > 1|R2 < -1
 if(sum(as.numeric(res[,"R2"])>1|as.numeric(res[,"R2"])<(0),na.rm=T)>0) warn.R2<-TRUE   
-# set warn.t to FALSE if has no t value
-if(sum(is.na(res[,"tval"]))==length(res[,"tval"])) warn.t<-FALSE
+# set warn.T2t to FALSE if has no t value
+if(sum(is.na(res[,"tval"]))==length(res[,"tval"])) warn.T2t<-FALSE
+# set warn.R2r to FALSE if has no r value
+if(sum(is.na(res[,"r"]))==length(res[,"r"])) warn.R2r<-FALSE
 # need p warning
 if(sum(as.numeric(res[,"p"])>1|as.numeric(res[,"p"])<0,na.rm=T)>0) warn.p=TRUE
 # need warning massage for |d| > 1
@@ -985,13 +1084,15 @@ if(!is.null(ncol(res))) if(nrow(res)==0) res<-character(0)
 
 ## Warning massages
    report<-NULL
-if(T2t==TRUE&warn.t==TRUE) report<-c(report,"\u2022 Capital T was converted to small t. Maybe T is not t-distributed.\n")
+if(T2t==TRUE&warn.T2t==TRUE) report<-c(report,"\u2022 Capital T was converted to small t. Maybe T is not t-distributed.\n")
+if(R2r==TRUE&warn.R2r==TRUE) report<-c(report,"\u2022 Capital R was converted to small r. Maybe R is not referring to a correlation.\n")
 if(warn.r==TRUE) report<-c(report,"\u2022 One or more detected r-values are out of range for possible correlations [-1, 1].\n")
 if(warn.R2==TRUE) report<-c(report,"\u2022 One or more detected R^2-values are out of range for possible coefficients of determination [0, 1].\n")
 if(warn.p==TRUE) report<-c(report,"\u2022 One or more detected p-values are out of range for possible p-values [0, 1].\n")
 if(warn.d==TRUE) report<-c(report,"\u2022 A huge effect was detected. One or more |d|-values > 1.\n")
 if(warn.eta==TRUE) report<-c(report,"\u2022 A huge effect was detected. One or more eta^2-values > .3.\n")
-   if(!is.null(report)) warning(report)
+if(warn.multi.p==TRUE) report<-c(report,"\u2022 There is lines with more than one recomputable p-value. Please split the result manually and proceed checking.\n")
+if(!is.null(report)) warning(report)
 return(res)
 
 }

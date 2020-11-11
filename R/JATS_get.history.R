@@ -78,6 +78,3 @@ if(remove.na==T) hist<-hist[!is.na(hist)]
 return(hist)
 }
 
-#x<-readLines("articles.C-H.xml/Gates_Open_Res/PMC6266653.nxml" )
-#get.history(x)
-#head(x)

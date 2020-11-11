@@ -2,19 +2,20 @@
 #'
 #' Extract editor tag from NISO-JATS coded XML file or text as vector of editor/s
 #' @param x a NISO-JATS coded XML file or text
-#' @param cleanup Logical. If TRUE removes html and badly captured characters
 #' @param role Logical. If TRUE adds role to editor name, if available
 #' @param short.names Logical. If TRUE reduces fully available first names to one letter abbreviation
 #' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
 #' @export
 
-get.editor<-function(x,cleanup=TRUE,role=FALSE,short.names=FALSE,letter.convert=FALSE){
+get.editor<-function(x,role=FALSE,short.names=FALSE,letter.convert=FALSE){
+cleanup<-TRUE
 # readLines if x is file
 if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
-
-if(length(grep("^contrib",x))==0) x<-get.contrib(x)
-if(length(grep("\"editor",x))>0){
-  temp<-grep("\"editor",unlist(x),value=TRUE)
+# extract contrib tag
+if(length(grep("^contrib",x))!=length(x)) x<-get.contrib(x)
+# extract editor
+if(length(grep("\"editor[^a-z]",x))>0){
+  temp<-grep("\"editor[^a-z]",unlist(x),value=TRUE)
   if(cleanup==T){
    # extract surname and name
    surname<-gsub(".*<surname>","",gsub("</surname.*","",temp))
@@ -49,12 +50,16 @@ if(length(grep("\"editor",x))>0){
    if(length(grep("<surname>NA\\.</surname>",editor))>0)  editor<-NA
   }else editor<-temp
   
-if(letter.convert==T) editor<-letter.convert(editor)
+if(letter.convert==TRUE) editor<-letter.convert(editor)
+editor<-gsub("[Ee]dited by[\\: ]","",editor)
+# correct
+editor<-editor[editor!="NA."]
+editor<-editor[editor!="id-type: doi"]
+editor<-editor[editor!="id-type: pmid"]
+if(length(editor)==0) editor<-NA
+
 }else editor<-NA
 
-return(editor)
+return(unique(editor))
 }
 
-#x<-contrib[i[1]]
-#x<-readLines(file.name[3298])
-#get.editor(x,T)

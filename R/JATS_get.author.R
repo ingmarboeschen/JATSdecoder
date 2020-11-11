@@ -12,13 +12,13 @@ get.author<-function(x,paste="",short.names=FALSE,letter.convert=FALSE){
 # readLines if x is file
 if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
 
-if(length(grep("^contrib",x))==0) x<-get.contrib(x)
+if(length(grep("^contrib",x))!=length(x)) x<-get.contrib(x)
 # collapse x for cases with many spaces (cermine export)
 if(length(grep("^contrib",x))==0) x<-paste(x,collapse=" ")
 # remove double \\
 x<-gsub("\\\\","",x)
 
- if(length(grep("contrib-type=\"author\"",x))>0) {
+ if(length(grep("contrib-type=\"author\"",x))>0){
   # author vector raw
   temp<-grep("contrib-type=\"author\"",x,value=TRUE)
   #temp<-unlist(strsplit(x,"contrib-type=\"author\""))[-1]
@@ -46,7 +46,14 @@ x<-gsub("\\\\","",x)
   surname[index]<-gsub("</coll.*","",gsub(".*<collab>","",temp[index]))
   names[index]<-""
   } 
-
+  
+  # clean up names containing <contrib contrib-type=
+  if(length(grep("<contrib contrib-type=",surname))>0){
+  surname<-gsub("^ *|(?<= ) | *$", "", surname, perl = TRUE)
+  index<-grep("<contrib contrib-type=",surname)
+  surname[index]<-gsub("<contrib contrib-type=","",surname[index])
+  names[index]<-""
+  }
  # convert 2nd and further letters to lower case if only capital letters in name
   if(sum(nchar(names)>1)==length(names)&length(grep("^.[A-Z]",names))>0){
     temp<-NULL;res<-NULL
@@ -84,7 +91,8 @@ x<-gsub("\\\\","",x)
 # clean up (cermine exports)  
   authors<-gsub("^ *|(?<= ) | *$", "", authors, perl = TRUE)  # remove doubled spaces
   authors<-gsub(".*> ", "", authors)  # remove till name
-  authors<-gsub(" $", "", authors)  
+  authors<-gsub(" $", "", authors)  # remove space at end
+  authors<-gsub(" [^a-zA-Z\\.]*$","",authors) # remove numbers at end
   authors<-gsub("\\\"","",authors)
 
 }else authors<-NA
@@ -92,6 +100,3 @@ x<-gsub("\\\\","",x)
 return(authors)
 }
 
-#x<-readLines(file.name[3298])
-#get.author(x,"")
-   

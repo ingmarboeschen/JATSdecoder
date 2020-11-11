@@ -2,39 +2,37 @@
 #'
 #' extracts study characteristics out of a JATS coded XML file or JATSdecoder result
 #' @param x JATS coded XML file or JATSdecoder result
-#' @param output output selection of specific results c("all", "doi", "title", "year", "n.studies", "methods", "alpha.error", "power", "multi.comparison.correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test.direction", "sig.adjectives", "software", "Rpackage", "stats", "standardStats", "estimated.sample.size")
 #' @param text.mode text parts to extract statistical results from (text.mode=1: abstract and full text, text.mode=2: method and result section, text.mode=3: result section only)
+#' @param captions Logical. If TRUE captions text will be scanned for statistical results
 #' @param stats.mode Character. Select subset of standard stats. One of: "all", "checkable", "computable"
 #' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible
-#' @param alternative Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto","undirected","directed","both"). If set to "auto" alternative will be be set to both if get.test.direction() detected one-directional hypotheses/tests. If no directional hypotheses/tests are only "undirected" recomputed p-values will be returned
+#' @param alternative Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto","undirected","directed","both"). If set to "auto" 'alternative' will be be set to 'both' if get.test.direction() detects one-directional hypotheses/tests in text. If no directional hypotheses/tests are dtected only "undirected" recomputed p-values will be returned
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
-#' @param T2t Logical. If TRUE capital letter T is treated as small letter t
+#' @param T2t Logical. If TRUE capital letter T is treated as t-statistic when extracting statistics with get.stats()
+#' @param R2r Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats()
 #' @param update.package.list if TRUE updates available R packages with available.packages() function
 #' @param add.software additional software names to detect as vector
 #' @param quantileDF quantile of (df1+1)+(df2+1) to extract for estimating sample size
 #' @param N.max.only return only maximum of estimated sample sizes
+#' @param output output selection of specific results c("all", "doi", "title", "year", "n.studies", "methods", "alpha.error", "power", "multi.comparison.correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test.direction", "sig.adjectives", "software", "Rpackage", "stats", "standardStats", "estimated.sample.size")
 #' @export
-#' @examples
-#' URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
-#' download.file(URL,"file.xml")
-#' JATSdecoder("file.xml")
-#' study.character("file.xml")
-#' study.character(JATSdecoder("file.xml"))
-#' study.character("file.xml",out=c("stats","standardStats"))
-
 
 study.character<-function(x,
-                  text.mode=1,
                   stats.mode="all",
                   recalculate.p=TRUE,
                   alternative="auto",
                   estimateZ=FALSE,
                   T2t=FALSE,
+                  R2r=FALSE,
+                  captions=TRUE,
+                  text.mode=1,
                   update.package.list=FALSE,
                   add.software=NULL,
                   quantileDF=.75,
                   N.max.only=FALSE,
                   output="all"){
+
+                  caps<-character(0)
 # check if x is xml file or list else stop
 if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0&!is.list(x)) stop("file is not in XML nor NISO-JATS format nor a JATSdecoder result")
 # if x is file readLines else copy to temp
@@ -54,10 +52,12 @@ if(length(grep("!DOCTYPE",temp[1:5]))>0|sum(is.element(c("sections","text"),name
 # for JATS coded xml
 if(length(grep("!DOCTYPE",temp[1:5]))>0){
    t<-get.text(temp,sectionsplit=c("intro|background","data|statistic|method|material|sample|solution|analys|procedure|measures","participants|subjects|animals|patients","experiment|study","result|finding","conclusion","discussion","implication|limitation","conflict of|author contrib|ethic"),letter.convert=TRUE,cermine=cermine,greek2text=TRUE)
+   if(is.element("captions",names(t))) caps<-t$captions
    }
 
 # for JATSdecoder() results
 if(sum(is.element(c("sections","text"),names(temp)))==2){
+   if(is.element("captions",names(t))) caps<-t$captions
    t<-list("section"=unlist(temp["sections"]),"text"=unlist(temp["text"]))
    t<-lapply(t,letter.convert,cermine=TRUE,greek2text=TRUE)
    }
@@ -174,16 +174,20 @@ if(sum(is.element(c("all","software"),output))>0){ software<-get.software(both,a
 if(sum(is.element(c("all","Rpackage"),output))>0){ Rpackage<-get.R.package(both,update.package.list=update.package.list) }else{Rpackage<-NA}
 
 if(sum(is.element(c("all","stats"),output))>0){
-   if(text.mode==1) stats<-allStats(c(abstract,fulltext))
-   if(text.mode==2) stats<-allStats(both)
-   if(text.mode==3) stats<-allStats(result)
-
+   if(text.mode==1) stats<-c("\u2022 Results in abstract and full text:",allStats(c(abstract,fulltext)))
+   if(text.mode==2) stats<-c("\u2022 Results in methods and results sections:",allStats(both))
+   if(text.mode==3) stats<-c("\u2022 Results in results section/s:",allStats(result))
+# add results from captions
+if(captions==TRUE) stats<-c(stats,"\u2022 Results in captions:",allStats(caps))   
+   
+# get standard stats if output is desired
+if(sum(is.element(c("all","standardStats"),output))>0){
 # set direction to "both" for alternative if has one sided hypotheses/tests
-#if(cermine==TRUE) stats<-letter.convert(stats,cermine=cermine)
 if(length(grep("^one ",test.direction))>0){
    direction<-"both"}else{direction<-"undirected"}
-   standardStats<-standardStats(stats,stats.mode=stats.mode,recalculate.p=recalculate.p,alternative=direction,T2t=T2t,estimateZ=estimateZ)
- }else{
+   standardStats<-standardStats(stats,stats.mode=stats.mode,recalculate.p=recalculate.p,alternative=direction,T2t=T2t,R2r=R2r,estimateZ=estimateZ)
+}else standardStats<-NA
+}else{
  stats<-NA;standardStats<-NA}
  
  ifelse(sum(is.element(c("all","sig.adjectives"),output))>0,

@@ -33,8 +33,8 @@ sig<-paste("",words,"sign")
 insig<-paste(paste("",words,"insign"),paste("",words,"not sign"),paste("",words,"non sign"),sep="|")
 
 #c<-lapply(a,get.sentence.with.pattern,"marginal")
-sig<-lapply(a,has.sentence.with.pattern,sig)
-insig<-lapply(a,has.sentence.with.pattern,insig)
+sig<-lapply(a,has.pattern,sig)
+insig<-lapply(a,has.pattern,insig)
 sig<-names(unlist(sig)[unlist(sig)>0])
 insig<-names(unlist(insig)[unlist(insig)>0])
 

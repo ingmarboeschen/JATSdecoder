@@ -96,8 +96,8 @@ if(sum(nchar(method))>4){
     
   }
   ## get ngram around patterns
-  ngram<-method
-  ngram<-unlist(lapply(method,ngramaroundpattern,patterns,c(-7,0)))
+  ngrams<-method
+  ngram<-unlist(lapply(method,ngram,patterns,c(-7,0),tolower=TRUE))
   # clean up
   # remove till prewords and output unique methods
   rm.prewords<-function(x,prewords){ 

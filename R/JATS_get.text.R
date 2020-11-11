@@ -10,7 +10,7 @@
 #' @param rm.table Logical. If TRUE removes <table> tag from text
 #' @param rm.xref Logical. If TRUE removes <xref> tag (citing) from text
 #' @param rm.media Logical. If TRUE removes <media> tag from text
-#' @param rm.graphic Logical. If TRUE removes <grapgic> and <fig> tag from text
+#' @param rm.graphic Logical. If TRUE removes <graphic> and <fig> tag from text
 #' @param rm.ext_link Logical. If TRUE removes <ext link> tag from text
 #' @export
 
@@ -25,17 +25,18 @@ get.text<-function(x,sectionsplit="",
                   rm.graphic=TRUE,
                   rm.ext_link=TRUE
 ){
+captions<-character(0)
 # set cermine if "auto"
 if(cermine=="auto") cermine<-ifelse(length(grep("cermxml$",x[1]))>0,TRUE,FALSE)
 # readLines if x is file
 if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
 # remove strangely converted lines in CERMXML (mostly from tables)
 if(cermine==TRUE){
+# remove lines with at least "num (num), num (num)" or "num (num) num (num)"
+x<-grep("[-0-9\\.] \\([-0-9\\.]*\\). [-0-9\\.]* \\([-0-9\\.]*\\)|[-0-9\\.] \\([-0-9\\.]*\\) [-0-9\\.]* \\([-0-9\\.]*\\)",x,invert=TRUE,value=TRUE)
 i<-NULL
 # lines with no .,; and < nor word with at least 4 letters
 i<-c(i,which(nchar(x)<15)[which(is.element(which(nchar(x)<15),grep("[-\\.,,;<)(]|[a-z]{4}|[a-zA-Z]{2}$",x,invert=TRUE)))])
-# lines with at least two "&"
-#i<-c(i,which(nchar(x)-nchar(gsub("\\&","",x))>1))
 # lines with three dotted numbers in a row
 i<-c(i,grep("\\.[0-9]*? *?\\.[0-9]*? *?\\.[0-9]*?",x))
 i<-c(i,grep("\\.[0-9]*? *?[0-9]\\.[0-9]*? *?[0-9]\\.[0-9]*?",x))
@@ -59,7 +60,7 @@ i<-c(i,grep("<p>[0-9] [a-zA-Z0-9] [a-zA-Z0-9] |<p>[0-9][0-9] [a-zA-Z0-9] [a-zA-Z
 i<-c(i,grep(" - [a-zA-Z] $",x))
 i<-c(i,grep(" -[0-9] [a-zA-Z] $",x))
 i<-c(i,grep(" [^ ] [^ ] [^ ] [^ ] ",x))
-i<-c(i,grep("^[^ ] [^ ] [^ ]",x))
+i<-c(i,grep("^[^ ] [^ ] [^ ] [^ ]",x))
 i<-c(i,grep("^[A-Za-z] -[^ ] [^ ]",x))
 i<-c(i,grep("[a-zA-Z]\\%",x))
 i<-sort(unique(i))
@@ -138,6 +139,21 @@ if(length(sec)>1){
     }
   }else {textred<-txt;section<-sec}
 
+
+# extract captions from tables and figures  
+captions<-character(0)
+if(sum(unlist(grepl("</caption>",textred)))>0){
+# split lines with captions
+temp<-unlist(textred)
+captions<-unlist(strsplit2(temp,"</caption>","after"))
+# select lines with </caption>
+captions<-grep("</caption>",captions,value=TRUE)
+# clean up
+captions<-gsub("</caption>","",gsub(".*<caption>|<caption>|.*<caption.*?.*\"/>|<caption.*?.*\"/>|.*<caption.*?.*\">|<caption.*?.*\">","",captions))
+# remove html
+captions<-gsub("</[a-z]*>|</[a-z]>|<[a-z]*>|<[a-z]>|<caption.*?.*\"/>|<xref.*?.*\"/>|<xref.*?.*\">","",captions)
+} 
+ 
 ## Text clean up after sentencing
 # remove listing definition
 textred<-lapply(textred,function(x) gsub("<list-item>","-",x))
@@ -160,15 +176,21 @@ if(rm.media==T) textred<-lapply(textred,function(x) gsub("<media.*?.*</media>","
 if(rm.ext_link==T) textred<-lapply(textred,function(x) gsub("<ext-link.*?>|</ext-link>","",x))
 # remove <graphic> from text
 if(rm.graphic==T){
-  textred<-lapply(textred,function(x) gsub("<graphic.*?.*</graphic>","",x))
-  textred<-lapply(textred,function(x) gsub("<fig.*?.*</fig>","",x))
+  textred<-lapply(textred,function(x) gsub("<graphic.*?.*</graphic>","removedGRAPHIC",x))
+  textred<-lapply(textred,function(x) gsub("<fig.*?.*</fig>","removedGRAPHIC",x))
   textred<-lapply(textred,function(x) gsub("<object-id.*?.*</object-id>","",x))
-  textred<-lapply(textred,function(x) gsub("<graphic.*?.*</fig>","",x))
-  textred<-lapply(textred,function(x) gsub("<fig.*?.*\">","",x))
+  textred<-lapply(textred,function(x) gsub("<graphic.*?.*</fig>","removedGRAPHIC",x))
+  textred<-lapply(textred,function(x) gsub("<fig.*?.*\">","removedGRAPHIC",x))
   textred<-lapply(textred,function(x) gsub("<label.*?.*</label>","",x))
+  textred<-lapply(textred,function(x) gsub("<graphic.*?.*\"/>","removedGRAPHIC",x))
 }
 
-# remove <caption> from text
+# remove <formula>-tag from text
+  textred<-lapply(textred,function(x) gsub("<disp .*?.*\"/>"," ",x))
+  textred<-lapply(textred,function(x) gsub("</disp .*?.*>"," ",x))
+
+
+# remove <caption> from text if some is left
 textred<-lapply(textred,function(x) gsub("</caption>","",gsub("<caption.*?.*</caption>","",x)))
 # remove <title> and <p> and <sec> <italic> <b> <bold>  <undeline> tag 
 textred<-lapply(textred,function(x) gsub("<title>|</title>|<p>|</p>|<sec>|</sec>|<italic>|</italic>"," ",x))
@@ -243,6 +265,8 @@ textred<-gsub("^ | $","",textred)
 textred<-gsub(" \\(,\\)| \\(\\)","",textred)
 # [ bracket clean up
 textred<-gsub("\\[\\]|\\[[;,-] \\]|\\[[;,-] [;,-] \\]|\\[\\-\\]| \\[ \\]","",textred)
+# superscript clean up
+textred<-gsub(" \\^ | \\^|\\^ ","^",textred)
 
 }else{textred<-"";section<-""}
 if(!exists("section")) section<-""
@@ -259,7 +283,8 @@ if(sum(section==""&textred=="")>0){
  }
 
 if(sentences==TRUE) textred<-lapply(textred,text2sentences) 
+if(sentences==TRUE) captions<-lapply(captions,text2sentences) 
  
-list(section=section,text=textred)
+list(section=section,text=textred,captions=captions)
 }
 

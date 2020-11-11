@@ -31,6 +31,11 @@ x<-gsub("\u2243","=", x)
 # precides to < succeeds to >
 x<-gsub("\u227a|\u27e8","<", x)
 x<-gsub("\u227b",">", x)
+#LESS-THAN OR EQUIVALENT TO
+x<-gsub("\u2272","<=", x)
+# GREATER-THAN OR EQUIVALENT TO
+x<-gsub("\u2273",">=", x)
+
 
 # convert [df] to (df)
 x<-gsub("([a-zA-Z]) \\[([-\\.,;0-9]*)\\]","\\1 (\\2)",x)
@@ -57,16 +62,19 @@ stats<-gsub("([0-9a-zA-Z]) ,","\\1,",stats)
 stats<-gsub(" [\\)]",")",stats)
 # remove_
 stats<-gsub("_","",stats)
-# convert of/was/is + num -> =number
-stats<-gsub(" was ([0-9\\.-])","=\\1",stats)
-stats<-gsub(" is ([0-9\\.-])","=\\1",stats)
-stats<-gsub(" of ([0-9\\.-])","=\\1",stats)
+## convert of/was/is + num -> =number
+#stats<-gsub(" was ([0-9\\.-])","=\\1",stats)
+#stats<-gsub(" is ([0-9\\.-])","=\\1",stats)
+#stats<-gsub(" of ([0-9\\.-])","=\\1",stats)
 # unify CI use
-stats<-gsub("\\[CI: ([0-9\\.])","CI=\\1",stats)
+stats<-gsub("[\\(\\[]CI: ([0-9\\.])","CI=\\1",stats)
 stats<-gsub("([^a-zA-Z])CI:","\\1CI=",stats)
+stats<-gsub(" \\((9.\\%)",", \\1",stats)
+stats<-gsub(",,|;,",",",stats)
+stats<-gsub("\\]\\)","]",stats)
 
 # merge stat and label for rtFQH letter/num (
-  stats<-gsub("([^a-zA-Z][rtFQH]) ([a-z0-9] \\([0-9])","\\1\\2",stats)
+  stats<-gsub("([^a-zA-Z][rtFQHZ]) ([a-z0-9] \\([0-9])","\\1\\2",stats)
 
 # remove () around only letters
 stats<-gsub("\\(([- A-Za-z]*?)\\)","\\1",stats)
@@ -116,6 +124,9 @@ stats<-gsub(" [Cc]hange | [Cc]hange","change",stats)
 # unify coefficients
 stats<-gsub("correlation coefficient","r",stats)
 stats<-gsub("regression coefficient","beta",stats)
+stats<-gsub("contingency coefficient","C",stats)
+stats<-gsub("beta beta","beta",stats)
+
 # convert "(p" to ", p"
 stats<-gsub(" \\(p([<=>\\.0-9 ]*)\\)",", p\\1",stats)
 stats<-gsub(" \\( p([<=>\\.0-9 ]*)\\)",", p\\1",stats)
@@ -266,22 +277,36 @@ if(length(i>1)){
   stats[i]<-gsub("([0-9]*?),([0-9]*{3};[ 0-9])","\\1\\2",stats[i])
 } 
  
+
+# if line has multiple p values with 2 and 3 digits split after "p<=>.num" or p<=>0.num
+while(sum(nchar(stats)-nchar(gsub(" p<=>[.][0-9]| p<=>0[.][0-9]","",stats))>10)>0){
+  ind<-(1:length(stats))[nchar(stats)-nchar(gsub(" p<=>[.][0-9]| p<=>0[.][0-9]","",stats))>10][1]
+  stats<-  c(stats[(1:length(stats))<ind],unlist(strsplit(gsub("( p<=>[.][0-9]*?)([^0-9])|( p<=>0[.][0-9]*?)([^0-9])", "\\1\\3 SPLITs \\2\\4", stats[ind]),"SPLITs")),stats[(1:length(stats))>ind])
+}
+
+# if line has multiple p values with 2 and 3 digits split after "p<=.num" or p=>0.num
+while(sum(nchar(stats)-nchar(gsub(" p[<=>]{2}[.][0-9]| p[<=>]{2}0[.][0-9]","",stats))>9)>0){
+  ind<-(1:length(stats))[nchar(stats)-nchar(gsub(" p[<=>]{2}[.][0-9]| p[<=>]{2}0[.][0-9]","",stats))>9][1]
+  stats<-  c(stats[(1:length(stats))<ind],unlist(strsplit(gsub("( p[<=>]{2}[.][0-9]*?)([^0-9])|( p[<=>]{2}0[.][0-9]*?)([^0-9])", "\\1\\3 SPLITs \\2\\4", stats[ind]),"SPLITs")),stats[(1:length(stats))>ind])
+}
+ 
 # split at ";" if line has two p-values and only one ";"
-while(sum(nchar(stats)-nchar(gsub("p[<>=]","",stats))==4&nchar(stats)-nchar(gsub("[;]","",stats))==1)>0){
-  ind<-(1:length(stats))[nchar(stats)-nchar(gsub("p[<>=]","",stats))==4&nchar(stats)-nchar(gsub("[;]","",stats))==1][1]
-  stats<-c(stats[(1:length(stats))<ind],unlist(strsplit(stats[ind],";")),stats[(1:length(stats))>ind])
-  }
+#while(sum(nchar(stats)-nchar(gsub("p[<>=]","",stats))==4&nchar(stats)-nchar(gsub("[;]","",stats))==1)>0){
+#  ind<-(1:length(stats))[nchar(stats)-nchar(gsub("p[<>=]","",stats))==4&nchar(stats)-nchar(gsub("[;]","",stats))==1][1]
+#  stats<-c(stats[(1:length(stats))<ind],unlist(strsplit(stats[ind],";")),stats[(1:length(stats))>ind])
+#  }
 
 # split at ";" if line has three p-values and only two ";"
-while(sum(nchar(stats)-nchar(gsub("p[<>=]","",stats))==6&nchar(stats)-nchar(gsub("[;]","",stats))==2)>0){
-  ind<-(1:length(stats))[nchar(stats)-nchar(gsub("p[<>=]","",stats))==6&nchar(stats)-nchar(gsub("[;]","",stats))==2][1]
-  stats<-c(stats[(1:length(stats))<ind],unlist(strsplit(stats[ind],";")),stats[(1:length(stats))>ind])
-}
+#while(sum(nchar(stats)-nchar(gsub("p[<>=]","",stats))==6&nchar(stats)-nchar(gsub("[;]","",stats))==2)>0){
+#  ind<-(1:length(stats))[nchar(stats)-nchar(gsub("p[<>=]","",stats))==6&nchar(stats)-nchar(gsub("[;]","",stats))==2][1]
+#  stats<-c(stats[(1:length(stats))<ind],unlist(strsplit(stats[ind],";")),stats[(1:length(stats))>ind])
+#}
+
 # split at ";" if line has four p-values and only three ";"
-while(sum(nchar(stats)-nchar(gsub("p[<>=]","",stats))==8&nchar(stats)-nchar(gsub("[;]","",stats))==3)>0){
-  ind<-(1:length(stats))[nchar(stats)-nchar(gsub("p[<>=]","",stats))==8&nchar(stats)-nchar(gsub("[;]","",stats))==3][1]
-  stats<-c(stats[(1:length(stats))<ind],unlist(strsplit(stats[ind],";")),stats[(1:length(stats))>ind])
-}
+#while(sum(nchar(stats)-nchar(gsub("p[<>=]","",stats))==8&nchar(stats)-nchar(gsub("[;]","",stats))==3)>0){
+#  ind<-(1:length(stats))[nchar(stats)-nchar(gsub("p[<>=]","",stats))==8&nchar(stats)-nchar(gsub("[;]","",stats))==3][1]
+#  stats<-c(stats[(1:length(stats))<ind],unlist(strsplit(stats[ind],";")),stats[(1:length(stats))>ind])
+#}
 
 # if line has multiple F([1-9] values split before F([1-9]
 while(sum(nchar(stats)-nchar(gsub("[( ]F[(][1-9]|^F[(][1-9]","",stats))>4)>0){
@@ -319,28 +344,23 @@ while(sum(nchar(stats)-nchar(gsub(" p[<=>][.][0-9]| p[<=>]0[.][0-9]","",stats))>
 }
 
 
-# if line has multiple p values with 2 and 3 digits split after "p<=>.num" or p<=>0.num
-while(sum(nchar(stats)-nchar(gsub(" p<=>[.][0-9]| p<=>0[.][0-9]","",stats))>10)>0){
-  ind<-(1:length(stats))[nchar(stats)-nchar(gsub(" p<=>[.][0-9]| p<=>0[.][0-9]","",stats))>10][1]
-  stats<-  c(stats[(1:length(stats))<ind],unlist(strsplit(gsub("( p<=>[.][0-9]*?)([^0-9])|( p<=>0[.][0-9]*?)([^0-9])", "\\1\\3 SPLITs \\2\\4", stats[ind]),"SPLITs")),stats[(1:length(stats))>ind])
-}
-
-# if line has multiple p values with 2 and 3 digits split after "p<=.num" or p=>0.num
-while(sum(nchar(stats)-nchar(gsub(" p[<=>]{2}[.][0-9]| p[<=>]{2}0[.][0-9]","",stats))>9)>0){
-  ind<-(1:length(stats))[nchar(stats)-nchar(gsub(" p[<=>]{2}[.][0-9]| p[<=>]{2}0[.][0-9]","",stats))>9][1]
-  stats<-  c(stats[(1:length(stats))<ind],unlist(strsplit(gsub("( p[<=>]{2}[.][0-9]*?)([^0-9])|( p[<=>]{2}0[.][0-9]*?)([^0-9])", "\\1\\3 SPLITs \\2\\4", stats[ind]),"SPLITs")),stats[(1:length(stats))>ind])
+# if line has multiple Z values split before Z[<>=][1-9]
+while(sum(nchar(stats)-nchar(gsub("[( ][zZ][<>=]|^[zZ][<>=]","",stats))>3)>0){
+  ind<-(1:length(stats))[nchar(stats)-nchar(gsub("[( ][zZ][<>=]|^[zZ][<>=]","",stats))>3][1]
+  stats<-  c(stats[(1:length(stats))<ind],unlist(strsplit2(stats[ind],"[( ][zZ][<>=]|^[zZ][<>=]","before")),stats[(1:length(stats))>ind])
 }
 
 # space clean up
 stats<-gsub("^ *|(?<= ) | *$", "", stats, perl = TRUE)
-# delete "(" at start of line
+# delete "(" at start of line and ")" if comes before "("
 stats<-gsub("^ |^[(]|^ [(]","",stats)
+stats<-gsub("^([^\\(]*)\\)","\\1",stats)
 # remove till (F( or (t(
 stats<-gsub(".*[(]F[(]","F(",stats)
 stats<-gsub(".*[(]t[(]|.*[(]t [(]","t(",stats)
 stats<-gsub(".*[(]T[(]|.*[(]T [(]","T(",stats)
 # remove numbers in front of line
-stats<-gsub("^[0-9]*","",stats)
+stats<-gsub("^[-\\.0-9]*","",stats)
 
 # only select lines with number and "="
 stats<-get.sentence.with.pattern(stats,"[0-9]")
@@ -528,7 +548,7 @@ stats<-gsub(",F",", F",stats)
 stats<-gsub("\\(\\)","",stats)
 stats<-gsub("  "," ",stats)
 # remove lines with web content
-stats<-grep("www\\.|http",stats,invert=TRUE,value=TRUE)
+stats<-grep("www\\.|http|href[=]|[a-z]{3}\\.[a-z]{2}",stats,invert=TRUE,value=TRUE)
 
 # select lines with "letter[<=>]" or ")[<=>]"  or "2[<=>]" only
 stats<-grep("[2a-zA-Z\\)][<=>]",stats,value=TRUE)
@@ -582,13 +602,13 @@ if(length(x)>0){
 if(sum(!is.na(x))>0){
 x<-x[!is.na(x)]
 # select text before and behind [=<>]
-y<-unlist(lapply(strsplit(x,"[=<>0-9(]"),"[",1))
-z<-unlist(lapply(lapply(strsplit2(x,"[=<>0-9(]","before"),"[",-1),paste,collapse=""))
+y<-unlist(lapply(strsplit(x,"[=<>0-9(]| [=<>0-9(]"),"[",1))
+z<-unlist(lapply(lapply(strsplit2(x,"[=<>0-9(]| [=<>0-9(]","before"),"[",-1),paste,collapse=""))
 # remove first word until n left and than till ,
 # if y is not NA
 if(sum(!is.na(y))>0){
 y[is.na(y)]<-""
-while(sum(nchar(y)-nchar(gsub(" ","",y))>n)>0) {
+while(sum(nchar(y)-nchar(gsub(" ","",y))>=n)>0) {
  i<-(1:length(y))[nchar(y)-nchar(gsub(" ","",y))>=n]
  y[i]<-sub(".*? ","",y[i])
 }
