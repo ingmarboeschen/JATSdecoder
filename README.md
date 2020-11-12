@@ -73,7 +73,7 @@ library(devtools)
 2. Install *JATSdecoder from [github](https://github.com/ingmarboeschen/JATSdecoder)
 ``` r
 # Install JATSdecoder from github
-install_github("ingmarboeschen/JATSdecoder",auth_token=" 2d0c4be462585f84b38817a2690e16a699de5dc7")
+install_github("ingmarboeschen/JATSdecoder")
 ```
 
 
