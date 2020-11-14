@@ -136,7 +136,7 @@ lapply(JATS,"[[","title")
 lapply(JATS,"[[","abstract") 
 lapply(JATS,"[[","history") 
 # extract year of publication from history tag
-unlist(lapply(lapply(JATS,"[[","history") ,"[","pubyear"))
+unlist(lapply(JATS,"[[","history") ,"[","pubyear")
 ``` 
 4. Examples for converting, unifying and selecting text with helper functions
 ``` r
