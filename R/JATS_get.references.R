@@ -42,6 +42,11 @@ if(remove.html==T){
   temp<-gsub(",,",",",gsub(", \\& |, \\&amp; ","; ",temp))
   temp<-gsub("[\\.],",".;",temp)
   }
+  
+# remove ^Revision recieved
+temp<-grep("^Revision received",temp,invert=TRUE,value=TRUE)  
+# remove ^Recieved|^Accepted if is last line
+if(length(grep("^Received |^Accepted ",temp[length(temp)]))>0) temp<-temp[-1*length(temp)]
 if(letter.convert==T) temp<-letter.convert(temp)
 }else temp<-NA
 return(temp)
