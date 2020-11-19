@@ -275,20 +275,16 @@ x<-gsub("&#x00151;","\u00F6 ",x) # small ö &odblac;
 }
 
 ## convert all other hexadecimals to unicode at once
-if(FALSE){
 if(length(grep("&#x0",x))>0){
-x<-gsub("[']","\\\\'",x)
-x<-as.character(parse(text=
-        paste0("'",gsub("(\\u....);","\\1",gsub("&#x0","\\u",x,fixed=T)),"'")
-      ))
+x<-gsub("(\\u....);","\\1",gsub("&#x0","\\u",x,fixed=T))
+x<-unlist(lapply(x,udecode))
 }
+        
 if(length(grep("&#x1",x))>0){
-x<-gsub("[']","\\\\'",x)
-x<-as.character(parse(text=
-        paste0("'",gsub("(\\u....);","\\1",gsub("&#x1","\\u",x,fixed=T)),"'")
-      ))
+x<-gsub("(\\u....);","\\1",gsub("&#x1","\\u",x,fixed=T))
+x<-unlist(lapply(x,udecode))
 }
-}
+
 ## OLD: manual conversion
 if(length(grep("&#",x))>0){
 x<-gsub("&#x00102;","\u0102",x) # Ă, LATIN CAPITAL LETTER A WITH BREVE 
@@ -1364,4 +1360,18 @@ x<-gsub("^ *|(?<= ) | *$", "", x, perl = TRUE)
 #x<-gsub("—|–","-",x)
 
 return(x)
+}
+
+udecode <- function(string){
+  uconv <- function(chars) intToUtf8(strtoi(chars, 16L))
+  ufilter <- function(string) {
+    if (substr(string, 1, 1)=="|") uconv(substr(string, 2, 5)) else string
+  }
+  string <- gsub("\\\\u([a-zA-z0-9]{4})", "|\\1", string, perl=TRUE)
+  strings <- unlist(strsplit2(unlist(strsplit2(string, "[|]....","after")), "[|]....","before"))
+  i<-which(is.na(sapply(strings, ufilter)))
+  replacement<-sapply(strings, ufilter)
+  replacement[i]<-names(replacement)[i]
+  string <- paste(replacement, collapse='')
+  return(string)
 }
