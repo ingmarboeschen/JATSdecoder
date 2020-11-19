@@ -275,6 +275,7 @@ x<-gsub("&#x00151;","\u00F6 ",x) # small ö &odblac;
 }
 
 ## convert all other hexadecimals to unicode at once
+if(FALSE){
 if(length(grep("&#x0",x))>0){
 x<-gsub("[']","\\\\'",x)
 x<-as.character(parse(text=
@@ -286,6 +287,7 @@ x<-gsub("[']","\\\\'",x)
 x<-as.character(parse(text=
         paste0("'",gsub("(\\u....);","\\1",gsub("&#x1","\\u",x,fixed=T)),"'")
       ))
+}
 }
 ## OLD: manual conversion
 if(length(grep("&#",x))>0){
