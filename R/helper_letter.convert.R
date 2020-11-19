@@ -276,8 +276,9 @@ x<-gsub("&#x00151;","\u00F6 ",x) # small ö &odblac;
 
 ## convert all other hexadecimals to unicode at once
 if(length(grep("&#x0",x))>0){
-x<-gsub("(\\u....);","\\1",gsub("&#x0","\\u",x,fixed=T))
-x<-unlist(lapply(x,udecode))
+i<-grep("&#x0",x)
+x[i]<-gsub("(\\u....);","\\1",gsub("&#x0","\\u",x[i],fixed=T))
+x[i]<-unlist(lapply(x[i],udecode))
 }
         
 if(length(grep("&#x1",x))>0){
