@@ -109,6 +109,7 @@ The PubMed Central data base offers more than 3 million documents related to the
 setwd("/home/PMC") # May be you would like to choose a certain journal folder instead for testing
 files<-list.files(pattern="XML$|xml$",recursive=TRUE)
 ``` 
+
 2. Apply extraction of article content to all files (replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing)
 ``` r
 library(JATSdecoder)
@@ -120,8 +121,8 @@ abstract<-lapply(files,JATSdecoder,output="abstract")
 abstract<-lapply(files,get.abstract)
 # extract study characteristics
 character<-lapply(files,study.character)
-
 ```
+
 3. Working with a list of `JATSdecoder()` results
 ``` r
 # first article content as list
@@ -137,6 +138,7 @@ lapply(JATS,"[[","history")
 # extract year of publication from history tag
 unlist(lapply(JATS,"[[","history") ,"[","pubyear")
 ``` 
+
 4. Examples for converting, unifying and selecting text with helper functions
 ``` r
 # extract full text from all documents
@@ -184,12 +186,10 @@ year<-factor(year,min(year,na.rm=TRUE):max(year,na.rm=TRUE))
 barplot(table(year),las=1,xlab="year",main="absolute number of published PMC documents per year")
 # display cummulative number of published documents in barplot
 barplot(cumsum(table(year)),las=1,xlab="year",main="cummulative number of published PMC documents")
-
 ``` 
 ![](articlesperyear.png)
 
 3. Analyse distribution of document type
-
 ```r
 # extract document type
 type<-unlist(lapply(JATS ,"[","type"))
@@ -239,12 +239,7 @@ In International Journal on Document Analysis and Recognition (IJDAR), 2015,
 vol. 18, no. 4, pp. 317-335, doi: 10.1007/s10032-015-0249-8. 
 <https://github.com/CeON/CERMINE/>.
 </div>
-
-
 </div>
-
-
-
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
