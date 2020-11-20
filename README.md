@@ -121,7 +121,6 @@ abstract<-lapply(files,JATSdecoder,output="abstract")
 abstract<-lapply(files,get.abstract)
 # extract study characteristics
 character<-lapply(files,study.character)
-
 ```
 3. Working with a list of `JATSdecoder()` results
 ``` r
@@ -185,12 +184,10 @@ year<-factor(year,min(year,na.rm=TRUE):max(year,na.rm=TRUE))
 barplot(table(year),las=1,xlab="year",main="absolute number of published PMC documents per year")
 # display cummulative number of published documents in barplot
 barplot(cumsum(table(year)),las=1,xlab="year",main="cummulative number of published PMC documents")
-
 ``` 
 ![](articlesperyear.png)
 
 3. Analyse distribution of document type
-
 ```r
 # extract document type
 type<-unlist(lapply(JATS ,"[","type"))
@@ -240,12 +237,7 @@ In International Journal on Document Analysis and Recognition (IJDAR), 2015,
 vol. 18, no. 4, pp. 317-335, doi: 10.1007/s10032-015-0249-8. 
 <https://github.com/CeON/CERMINE/>.
 </div>
-
-
 </div>
-
-
-
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
