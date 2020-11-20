@@ -82,6 +82,8 @@ x<-gsub("&#x025cb;"," - ",x) # circle
 x<-gsub("&#x000b7;"," - ",x) #  mitdot
 x<-gsub("&#x022c5;"," - ",x) #  sdot
 # special signs
+x<-gsub("&#x00302;","^",x) #  COMBINING CIRCUMFLEX ACCENT
+x<-gsub("&#x002c4;","^",x) # MODIFIER LETTER UP ARROWHEAD
 x<-gsub("&#x0fb01;","fi",x) # fi ligature
 x<-gsub("&#x0fb04;","ffl",x) # ffl ligature
 x<-gsub("&#x0223c;","~",x) # tilde
@@ -259,10 +261,30 @@ x<-gsub("&#x0041e;","O",x) # CYRILLIC CAPITAL LETTER O
 x<-gsub("&#x0115f;"," ",x) # HANGUL CHOSEONG FILLER
 }
 
-## convert all other hey to unicode
-x<-gsub("&#x0(....);","\\\\u\\1",x)
+## unify some hex
+if(length(grep("&#",x))>0){
+x<-gsub("&#x0237a;","\u03b1",x) # APL FUNCTIONAL SYMBOL ALPHA -> alpha
+x<-gsub("&#x02550;","\u003d",x) # BOX DRAWINGS DOUBLE HORIZONTAL
+x<-gsub("&#x02502;","\u007c",x) # BOX DRAWINGS LIGHT VERTICAL
+x<-gsub("&#x0ff5e;","\u007e",x) #  FULLWIDTH TILDE
+x<-gsub("&#x1d74c;","\u03c7",x) # bold italic small greek chi -> small greek chi
+x<-gsub("&#x1d700;","\u03b5",x) # MATHEMATICAL ITALIC SMALL EPSILON 
+x<-gsub("&#x00151;","\u00F6 ",x) # small ö &odblac;
 
 
+}
+
+## convert all other hexadecimals to unicode at once
+if(length(grep("&#x0",x))>0){
+x<-as.character(parse(text=
+        paste0("'",gsub("(\\u....);","\\1",gsub("&#x0","\\u",x,fixed=T)),"'")
+      ))
+}
+if(length(grep("&#x1",x))>0){
+x<-as.character(parse(text=
+        paste0("'",gsub("(\\u....);","\\1",gsub("&#x1","\\u",x,fixed=T)),"'")
+      ))
+}
 ## OLD: manual conversion
 if(length(grep("&#",x))>0){
 x<-gsub("&#x00102;","\u0102",x) # Ă, LATIN CAPITAL LETTER A WITH BREVE 
@@ -295,20 +317,20 @@ x<-gsub("&#x0010c;","\u010C",x) # Č, C with turned ^ on
 x<-gsub("&#x00107;","\u0107",x) # ć
 x<-gsub("&#x00108;","\u0108",x) # Ĉ, C with two dots
 x<-gsub("&#x00109;","\u0109",x) # ĉ, c with hat
-x<-gsub("&#x000e7;","\u00E7",x) # french c: &ccedil;
-x<-gsub("&#x000c5;","\u00C5",x) # Angstrom letter: capital A with °
-x<-gsub("&#x000e3;","\u00E3",x) # a with ~
-x<-gsub("&#x000e8;","\u00E8",x) # è
-x<-gsub("&#x000e9;","\u00E9",x) # é
-x<-gsub("&#x0012b;","\u011B",x) # ě e with turned ^ on
-x<-gsub("&#x0017b;","\u017B",x) # Ż, Z with dot on top
-x<-gsub("&#x000d3;","\u00D3",x) # Ó O acute
+x<-gsub("&#x000e7;","\u00e7",x) # french c: &ccedil;
+x<-gsub("&#x000c5;","\u00c5",x) # Angstrom letter: capital A with °
+x<-gsub("&#x000e3;","\u00e3",x) # a with ~
+x<-gsub("&#x000e8;","\u00e8",x) # è
+x<-gsub("&#x000e9;","\u00e9",x) # é
+x<-gsub("&#x0012b;","\u011b",x) # ě e with turned ^ on
+x<-gsub("&#x0017b;","\u017b",x) # Ż, Z with dot on top
+x<-gsub("&#x000d3;","\u00d3",x) # Ó O acute
 x<-gsub("&#x00117;","\u0117",x) # ė e with point on top
 x<-gsub("&#x000c9;","\u00C9",x) # É, e acute
-x<-gsub("&#x000ea;","\u00EA",x) # ê
-x<-gsub("&#x000ed;","\u00ED",x) # í i with '
-x<-gsub("&#x000ec;","\u00EC",x) # ì i with `
-x<-gsub("&#x000cd;","\u00CD",x) # Í 
+x<-gsub("&#x000ea;","\u00ea",x) # ê
+x<-gsub("&#x000ed;","\u00ed",x) # í i with '
+x<-gsub("&#x000ec;","\u00ec",x) # ì i with `
+x<-gsub("&#x000cd;","\u00cd",x) # Í 
 x<-gsub("&#x00130;","\u0130",x) # I with a dot on top
 x<-gsub("&#x00159;","\u0159",x) # r with turned ^on top ;  &rcaron;
 x<-gsub("&#x00281;","\u02B6",x) # LATIN LETTER SMALL CAPITAL INVERTED R
@@ -327,7 +349,6 @@ x<-gsub("&#x00131;","\u0131",x) # &imath;
 x<-gsub("&#x0011f;","\u011F",x) # g with small u on top: &gbreve;
 x<-gsub("&#x000d6;","\u00D6",x) # Ö
 x<-gsub("&#x000f6;","\u00F6",x) # ö
-x<-gsub("&#x00151;","\u00F6 ",x) # small ö &odblac;
 x<-gsub("&#x000f8;","\u00F8",x) # ø: danish ö
 x<-gsub("&#x00153;","\u0153",x) # oe: &oelig;
 x<-gsub("&#x00152;","\u0152",x) # OE: &OElig;
@@ -367,9 +388,6 @@ x<-gsub("&#x0224d;","\u003d",x) # EQUIVALENT TO
 x<-gsub("&#x0007c;","\u007c",x) # vertical line
 }
 
-if(length(grep("&#",x))>0){
-}
-
 
 if(length(grep("&#",x))>0){
 # greek/latin/cyrillic characters
@@ -389,7 +407,6 @@ x<-gsub("&#x003b2;","\u03b2",x) # small greek beta
 x<-gsub("&#x00392;","\u0392",x) # capital greek beta
 # chi
 x<-gsub("&#x003c7;","\u03c7",x) # small greek chi
-x<-gsub("&#x1d74c;","\u03c7",x) # bold italic small greek chi -> small greek chi
 x<-gsub("&#x003a7;","\u03a7",x) # capital greek Chi
 # phi etc
 x<-gsub("&#x003c6;","\u03c6",x) # small greek phi
@@ -424,7 +441,6 @@ x<-gsub("&#x00394;","\u0394",x) #  delta-sign
 
 x<-gsub("&#x003b5;","\u03b5",x) # small greek epsilon (epsi)
 x<-gsub("&#x0025b;","\u025b",x) # LATIN SMALL LETTER OPEN E
-x<-gsub("&#x1d700;","\u03b5",x) # MATHEMATICAL ITALIC SMALL EPSILON 
 x<-gsub("&#x003ad;","\u03ad",x) # GREEK SMALL LETTER EPSILON WITH TONOS 
 x<-gsub("&#x003ba;","\u03ba",x) # small greek kappa
 x<-gsub("&#x003f0;","\u03f0",x) # cursive kappa -> used as Chi
@@ -450,9 +466,9 @@ x<-gsub("&#x00273;","\u0273",x) # eta
 x<-gsub("&#x00220;","\u0220",x) # eta
 x<-gsub("&#x0019e;","\u019e",x) # eta
 x<-gsub("&#x000b0;","\u00B0",x) # degree sign
-x<-gsub("&#x02103;","\u00B0",x) # degree Celsius
-x<-gsub("&#x000ba;","\u00B0",x) # MASCULINE ORDINAL INDICATOR 
-x<-gsub("&#x02218;","\u00B0",x) # RING OPERATOR
+x<-gsub("&#x02103;","\u2103",x) # degree Celsius
+x<-gsub("&#x000ba;","\u00ba",x) # MASCULINE ORDINAL INDICATOR 
+x<-gsub("&#x02218;","\u2218",x) # RING OPERATOR
 x<-gsub("&#x02020;","\u2020",x) # daggar (died)
 x<-gsub("&#x02021;","\u2021",x) # double daggar (died)
 x<-gsub("&#x020de;","\u20de",x) # square
@@ -584,7 +600,6 @@ x<-gsub("&#x0027f;","\u027f",x) # LATIN SMALL LETTER REVERSED R WITH FISHHOOK
 x<-gsub("&#x00285;","\u0285",x) # LATIN SMALL LETTER SQUAT REVERSED ESH
 x<-gsub("&#x0029d;","\u029d",x) # LATIN SMALL LETTER J WITH CROSSED-TAIL
 x<-gsub("&#x002a4;","\u02a4",x) #  LATIN SMALL LETTER DEZH DIGRAPH
-x<-gsub("&#x002c4;","\u005e",x) # MODIFIER LETTER UP ARROWHEAD
 x<-gsub("&#x002d8;","\u02d8",x) # BREVE
 x<-gsub("&#x002da;","\u02da",x) # RING ABOVE
 x<-gsub("&#x00303;","\u0303",x) # COMBINING TILDE
@@ -678,8 +693,6 @@ x<-gsub("&#x0220;","\u220",x) # LATIN CAPITAL LETTER N WITH LONG RIGHT LEG
 
 # newly detected 4
 if(length(grep("&#",x))>0){
-x<-gsub("&#x02550;","\u003d",x) # BOX DRAWINGS DOUBLE HORIZONTAL
-x<-gsub("&#x02502;","\u007c",x) # BOX DRAWINGS LIGHT VERTICAL
 x<-gsub("&#x025b6;","\u25b6",x) # Black right-pointing triangle
 x<-gsub("&#x0204e;","\u204e",x) # LOW ASTERISK
 x<-gsub("&#x0212b;","\u212b",x) #  ANGSTROM SIGN
@@ -701,7 +714,6 @@ x<-gsub("&#x00304;","\u0304",x) # COMBINING MACRON
 x<-gsub("&#x0017d;","\u017d",x) # LATIN CAPITAL LETTER Z WITH CARON
 x<-gsub("&#x02082;","\u2082",x) # SUBSCRIPT TWO
 x<-gsub("&#x000c0;","\u00c0",x) # LATIN CAPITAL LETTER A WITH GRAVE
-x<-gsub("&#x0ff5e;","\u007e",x) #  FULLWIDTH TILDE
 x<-gsub("&#x0005e;","\u005e",x) # CIRCUMFLEX ACCENT
 
 
@@ -741,7 +753,6 @@ x<-gsub("&#x00121;","\u0121",x) # LATIN SMALL LETTER G WITH DOT ABOVE
 x<-gsub("&#x00163;","\u0163",x) # LATIN SMALL LETTER T WITH CEDILLA
 x<-gsub("&#x00199;","\u0199",x) # LATIN SMALL LETTER K WITH HOOK
 x<-gsub("&#x00279;","\u0279",x) # LATIN SMALL LETTER TURNED R
-x<-gsub("&#x00302;","\u0302",x) #  COMBINING CIRCUMFLEX ACCENT
 x<-gsub("&#x00457;","\u0457",x) # CYRILLIC SMALL LETTER YI
 x<-gsub("&#x0049b;","\u049b",x) # CYRILLIC SMALL LETTER KA WITH DESCENDER
 x<-gsub("&#x004a1;","\u04a1",x) # CYRILLIC SMALL LETTER BASHKIR KA
@@ -776,7 +787,7 @@ x<-gsub("&#x021c6;","\u21c6",x) # LEFTWARDS ARROW OVER RIGHTWARDS ARROW
 x<-gsub("&#x02259;","\u2259",x) # ESTIMATES
 x<-gsub("&#x0229f;","\u229f",x) # SQUARED MINUS
 x<-gsub("&#x02374;","\u2374",x) # APL FUNCTIONAL SYMBOL RHO
-x<-gsub("&#x0237a;","\u03b1",x) # APL FUNCTIONAL SYMBOL ALPHA
+
 x<-gsub("&#x023b4;","\u23b4",x) # TOP SQUARE BRACKET
 x<-gsub("&#x02756;","\u2756",x) # BLACK DIAMOND MINUS WHITE X
 x<-gsub("&#x0d443;","\ud443",x) # HANGUL SYLLABLE D443
