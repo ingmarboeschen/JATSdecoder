@@ -410,6 +410,7 @@ stats<-stats[nchar(unlist(stats))>2]
 
 # unify F(num, num) ->F(num,num) 
 stats<-gsub("(F\\([0-9\\.]*?,) ([0-9\\.]*?\\))","\\1\\2",stats)
+stats<-gsub("(F[a-zA-Z0-9]*\\([0-9\\.]*?,) ([0-9\\.]*?\\))","\\1\\2",stats)
 
 # unify chi ( again
 stats<-gsub("chi [(]|X2 [(]","chi(",stats)

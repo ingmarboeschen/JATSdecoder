@@ -274,17 +274,30 @@ x<-gsub("&#x00151;","\u00F6 ",x) # small ö &odblac;
 
 }
 
+
+
+
+
 ## convert all other hexadecimals to unicode at once
 if(length(grep("&#x0",x))>0){
-x<-as.character(parse(text=
-        paste0("'",gsub("(\\u....);","\\1",gsub("&#x0","\\u",x,fixed=T)),"'")
-      ))
+i<-grep("&#x0",x)
+x[i]<-gsub("(\\u....);","\\1",gsub("&#x0","\\u",x[i],fixed=T))
+x[i]<-unlist(lapply(x[i],udecode))
 }
+        
 if(length(grep("&#x1",x))>0){
-x<-as.character(parse(text=
-        paste0("'",gsub("(\\u....);","\\1",gsub("&#x1","\\u",x,fixed=T)),"'")
-      ))
+i<-grep("&#x1",x)
+x[i]<-gsub("(\\u....);","\\1",gsub("&#x1","\\u",x[i],fixed=T))
+x[i]<-unlist(lapply(x,udecode))
 }
+
+
+
+######################################################################
+######################################################################
+######################################################################
+
+
 ## OLD: manual conversion
 if(length(grep("&#",x))>0){
 x<-gsub("&#x00102;","\u0102",x) # Ă, LATIN CAPITAL LETTER A WITH BREVE 
@@ -1019,19 +1032,24 @@ x<-gsub("&#x0010e;","\u010e",x) # LATIN CAPITAL LETTER D WITH CARON
 }
 
 # some html and special characters  
-x<-gsub("&le;|\u2264|\u2A7f|\u2a7d","<=",x) # less equal than
-x<-gsub("&ge;|\u2A7e|\u2265",">=",x) # greater equal than
+x<-gsub("&le;|\u2264|\u2A7f|\u2a7d","<=",x) # less equal 
+x<-gsub("&ge;|\u2A7e|\u2265",">=",x) # greater equal 
 x<-gsub("&amp;","& ",x) #  &
 x<-gsub("&lt;","<",x) # less than
-x<-gsub("&le;","<=",x) # less equal than
+x<-gsub("&le;","<=",x) # less equal 
 x<-gsub("&gt;",">",x) # greater than
-x<-gsub("&ge;",">=",x) # greater equal than
+x<-gsub("&ge;",">=",x) # greater equal 
 x<-gsub("&equals;|&#61;|\u003d","=",x) # equal sign
-x<-gsub("\u2912","->",x) # rightwards arrow ->
-x<-gsub("\u00A0","",x) # no break space
+x<-gsub("\u2912","->",x) # upwards arrow ->
 
-# invisible space
-x<-gsub("\u200A"," ",x)
+x<-gsub("\u00A0","",x) # no break space
+x<-gsub("\u200b","",x) # invisible space
+
+# special spaces
+x<-gsub("\u200a|\u200c|\u200d|\u200e|\u200f"," ",x)
+x<-gsub("\u2000|\u2001|\u2002|\u2003|\u2004"," ",x)
+x<-gsub("\u2005|\u2006|\u2007|\u2008|\u2009"," ",x)
+
 # minus/dash -
 x<-gsub("\u2013|\u2014|\u2015|\u2212|\u2010|\u2011","-",x)
 
@@ -1360,4 +1378,19 @@ x<-gsub("^ *|(?<= ) | *$", "", x, perl = TRUE)
 #x<-gsub("—|–","-",x)
 
 return(x)
+}
+
+## Function to convert unicode to ASCII
+udecode <- function(string){
+  uconv <- function(chars) intToUtf8(strtoi(chars, 16L))
+  ufilter <- function(string) {
+    if (substr(string, 1, 1)=="|") uconv(substr(string, 2, 5)) else string
+  }
+  string <- gsub("\\\\u([a-zA-z0-9]{4})", "|\\1", string, perl=TRUE)
+  strings <- unlist(strsplit2(unlist(strsplit2(string, "[|]....","after")), "[|]....","before"))
+  i<-which(is.na(sapply(strings, ufilter)))
+  replacement<-sapply(strings, ufilter)
+  replacement[i]<-names(replacement)[i]
+  string <- paste(replacement, collapse='')
+  return(string)
 }
