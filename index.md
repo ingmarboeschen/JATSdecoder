@@ -97,6 +97,7 @@ study.character("file.xml",output=c("stats","standardStats"))
 # reduce to checkable results only
 study.character("file.xml",output="standardStats",stats.mode="checkable")
 # compare with result of statcheck's function checkHTML() (Epskamp & Nuijten, 2018)
+install.packages("statcheck")
 library(statcheck)
 checkHTML("file.xml")
 ```
