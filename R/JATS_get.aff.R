@@ -20,7 +20,7 @@ if(length(grep("<aff",x))>0){
   aff<-gsub("</aff.*","",unlist(strsplit(x,"<aff"))[-1])
   aff<-gsub("^ | $","",aff)
 # remove <tags>
-if(remove.html==T) aff<-gsub("^ | $","",gsub(".*>","",gsub(" ,",",",gsub("  "," ",gsub("<.*?.*>"," ",gsub("</.*?.*>",", ",aff))))))
+if(remove.html==T) aff<-gsub("^ | $","",gsub(".*>","",gsub(" ,|, [;,]",",",gsub("  "," ",gsub("<.*?.*>"," ",gsub("</.*?.*>",", ",aff))))))
 # remove doubled spaces
   aff<-gsub("^ *|(?<= ) | *$", "", aff, perl = TRUE)  
   aff<-gsub(" ,",",",aff)
