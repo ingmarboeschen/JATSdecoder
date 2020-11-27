@@ -2,7 +2,7 @@
 #'
 #' Extract and standard statistical results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values
 #' @param x result of get.stats()
-#' @param stats.mode Select subset of standard stats. One of: "all", "checkable", "computable", "incomputable"
+#' @param stats.mode Select subset of standard stats. One of: "all", "checkable", "computable", "uncomputable"
 #' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible
 #' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected","directed","both")
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
@@ -1007,7 +1007,7 @@ colnames(res)<-cnames
 }
 
 # only select stats with no recomputable p value
-if(stats.mode=="incomputable") res<-res[is.na(res[,"recalculatedP"]),]
+if(stats.mode=="uncomputable") res<-res[is.na(res[,"recalculatedP"]),]
 if(!is.matrix(res)){
    res<-matrix(res,1)
    colnames(res)<-cnames
