@@ -18,7 +18,7 @@ standardStats(
 \arguments{
 \item{x}{result of get.stats()}
 
-\item{stats.mode}{Select subset of standard stats. One of: "all", "checkable", "computable", "incomputable"}
+\item{stats.mode}{Select subset of standard stats. One of: "all", "checkable", "computable", "uncomputable"}
 
 \item{recalculate.p}{Logical. If TRUE recalculates p values (for 2 sided test) if possible}
 

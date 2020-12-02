@@ -22,7 +22,7 @@ get.stats(
 
 \item{output}{Select the desired output. One of c("both","allStats","standardStats")}
 
-\item{stats.mode}{Select subset of standardStats. One of: "all", "checkable", "computable"}
+\item{stats.mode}{Select subset of standardStats. One of: "all", "checkable", "computable", "uncomputable"}
 
 \item{recalculate.p}{Logical. If TRUE recalculates p-values of standardStats if possible}
 
