@@ -308,7 +308,7 @@ if(length(grep("/[-\\.0-9]|/ [-\\.0-9]",x))>0){
 x<-unlist(lapply(x,frac2num))
 
 # prepare results colnames
-cnames<-c("Zsign","Zval","Fsign","Fval","eta2","omega2","tsign","tval","d","SE","rsign","r","R2sign","R2","Usign","U","Hsign","H","G2sign","G2","OR","RR","chi2","Qsign","Q","df1","df2","beta","SEbeta","Zest","BF10sign","BF10","BFsign","BF","psign","p","recalculatedP","recalcPless","recalcPgreater")
+cnames<-c("raw","Zsign","Zval","Fsign","Fval","eta2","omega2","tsign","tval","d","SE","rsign","r","R2sign","R2","Usign","U","Hsign","H","G2sign","G2","OR","RR","chi2","Qsign","Q","df1","df2","beta","SEbeta","Zest","BF10sign","BF10","BFsign","BF","psign","p","recalculatedP","recalcPless","recalcPgreater")
 res<-matrix(NA,nrow=length(x),ncol=length(cnames))
 colnames(res)<-cnames
 
@@ -333,6 +333,7 @@ if(length(grep("^b[<=>]| b[<=>]",x))>0){
    # add to res
    res[index,"beta"]<-beta
    res[index,"SEbeta"]<-SE
+   res[index,"raw"]<-x[index]
    if(estimateZ==TRUE) res[index,"Zest"]<-beta/SE
    
 }
@@ -346,6 +347,7 @@ if(length(grep("^d[<=>]| d[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-
    # add to res
    res[index,"d"]<-d
    res[index,"SE"]<-SE
+   res[index,"raw"]<-x[index]
    if(estimateZ==TRUE) res[index,"Zest"]<-d/SE
 }
 
@@ -356,6 +358,8 @@ if(length(grep(" SE[<=>]",x))>0&length(grep("^b[<=>]| b[<=>]",x))==0&length(grep
    SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>]*","",x[index]))))
    # add to res
    res[index,"SE"]<-SE
+   res[index,"raw"]<-x[index]
+
 }
 
 ## extract t value and df in t value
@@ -365,7 +369,7 @@ x<-gsub("(\\()t"," t",x)
 x<-gsub("( )t[0-9]*?\\(([1-9])|^t[0-9]*?\\(([1-9])","\\1t(\\2\\3",x)
 x<-gsub("( )t[a-zA-Z]\\(([1-9])|^t[a-zA-Z]\\(([1-9])","\\1t(\\2\\3",x)
 # lines with t values
-index<-grep(" t[(<>=]|^t[(<>=]",x)
+index<-grep(" t[<>=]|^t[<>=]| t[(][0-9 df=]*[)]|^t[(][0-9 df=]*[)]",x)
 if(length(index>0)){
   tval<-x[index]
 # remove till first t value if has 2
@@ -388,6 +392,7 @@ if(length(index>0)){
   tval<-suppressWarnings(as.numeric(gsub(".*[=<>]","",gsub("[;,] .*| .*|[;,]$","",gsub(".*t[(<>=]|^t[(<>=]","",tval)))))
   # insert results to res
   res[index,c("tsign","tval","df2")]<-cbind(sign,tval,tdf)
+  res[index,"raw"]<-x[index]
 }
 
 ## get F-value and its df1 and df2
@@ -405,6 +410,7 @@ eta<-rep(NA,length(ind))
  eta<-gsub("[^0-9\\.].*","",gsub(".*[<=>]","",gsub("[,;] .*| [a-zA-Z].*","",unlist(lapply(strsplit(x[ind]," eta|^eta"),"[",2)))))
 # insert results to res
 res[ind,"eta2"]<-eta
+res[ind,"raw"]<-x[ind]
 }
 
 # extract omega2 
@@ -414,6 +420,7 @@ omega<-rep(NA,length(ind))
  omega<-gsub("[^0-9\\.].*","",gsub(".*[<=>]","",gsub("[,;] .*| [a-zA-Z].*","",unlist(lapply(strsplit(x[ind]," omega|^omega"),"[",2)))))
 # insert results to res
 res[ind,"omega2"]<-omega
+res[ind,"raw"]<-x[ind]
 }
 
 
@@ -454,6 +461,7 @@ df1[which(!is.na(res[index,"df2"]))]<-res[index,][!is.na(res[index,"df2"]),"df1"
 
 # insert results to res
 res[index,c("Fsign","Fval","df1","df2")]<-cbind(sign,Fval,df1,df2)
+res[index,"raw"]<-x[index]
 }
 
 # F-values with (df1,df2)
@@ -494,6 +502,7 @@ sign[is.na(df1)]<-NA
 
 # insert results to res
 res[index,c("Fsign","Fval","df1","df2")]<-cbind(sign,Fval,df1,df2)
+res[index,"raw"]<-x[index]
 }
 
 
@@ -534,6 +543,7 @@ chi2<-gsub("[;,] [Nn]=[0-9]*?$","",chi2)
 chi2<-suppressWarnings(as.numeric(gsub("[^0-9\\.].*","",unlist(lapply(strsplit(gsub(".*chi[(]|.* chi|.* [Nn][=]","",chi2),"<=>|=|<=|>=|<|>"),"[",2)))))
 # add to results
 res[index,c("chi2")]<-cbind(chi2)
+res[index,"raw"]<-x[index]
 # if df 1 has no entry
 i<-which(is.na(res[index,c("df1")]))
 res[index,c("df1")][i]<-cbind(chidf[i])
@@ -572,6 +582,7 @@ r<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lap
 # add to results
 res[index,"rsign"]<-rsign
 res[index,"r"]<-r
+res[index,"raw"]<-x[index]
 ## only add df2 if no df2 has been recorded yet
 use<-is.na(res[index,"df2"])
 res[index,"df2"][use]<-rdf[use]
@@ -601,11 +612,11 @@ H<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lap
 # add to results
 res[index,"Hsign"]<-Hsign
 res[index,"H"]<-H
+res[index,"raw"]<-x[index]
 ## only add df2 if no df2 has been recorded yet
 use<-is.na(res[index,"df1"])
 res[index,"df1"][use]<-Hdf[use]
 }
-res
 
 ## extract G2
 # remove [Dd] in front of G2
@@ -636,6 +647,7 @@ G2<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(la
 # add to results
 res[index,"G2sign"]<-G2sign
 res[index,"G2"]<-G2
+res[index,"raw"]<-x[index]
 ## only add df1 if no df1 has been recorded yet
 use<-is.na(res[index,"df1"])
 res[index,"df1"][use]<-G2df[use]
@@ -665,6 +677,7 @@ R2<-gsub("[^-0-9\\.%].*","",R2)
 # add to results
 res[index,"R2"]<-R2
 res[index,"R2sign"]<-R2sign
+res[index,"raw"]<-x[index]
 #if(length(R2type)==0) R2type<-NA
 #res[index,"R2type"]<-R2type
 }
@@ -683,6 +696,7 @@ Uval<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub(".*U=|.*U[(][0-9].
 # add U values to res
 res[index,c("U")]<-Uval
 res[index,c("Usign")]<-Usign
+res[index,"raw"]<-x[index]
 }
 
 ## extract p value
@@ -706,6 +720,7 @@ pval<-suppressWarnings(as.numeric(gsub("[^0-9\\.].*","",pval)))
 # add p values to res
 res[index,c("psign")]<-psign
 res[index,c("p")]<-pval
+res[index,"raw"]<-x[index]
 }
 
 ## extract BayesFactor
@@ -769,6 +784,7 @@ BFsign[(type=="01")&sign==">"]<-"<"
 # add BayesFactor values to res
 res[index,c("BF10")]<-BF
 res[index,"BF10sign"]<-BFsign
+res[index,"raw"]<-x[index]
 }
 
 ## extract Bayes factor without 01 or 10
@@ -784,6 +800,7 @@ BF<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",BF))))
 # add BF values to res
 res[index,c("BF")]<-BF
 res[index,c("BFsign")]<-BFsign
+res[index,"raw"]<-x[index]
 }
 
 
@@ -805,6 +822,7 @@ OR<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",OR))))
 
 # add OR values to res
 res[index,c("OR")]<-OR
+res[index,"raw"]<-x[index]
 }
 
 ## extract RiskRatio value
@@ -824,6 +842,7 @@ RR<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",RR))))
 
 # add RR values to res
 res[index,c("RR")]<-RR
+res[index,"raw"]<-x[index]
 }
 
 ## extract Z value
@@ -841,6 +860,7 @@ Zval<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",Zval))))
 # add Z values to res
 res[index,c("Zval")]<-Zval
 res[index,c("Zsign")]<-Zsign
+res[index,"raw"]<-x[index]
 }
 
 ## extract Q and df
@@ -877,7 +897,7 @@ Qsign<-gsub("[^<>=].*","",sub("[^<>=]*([=<>])", "\\1",sub(".*Q([\\(=<>])","\\1",
 Q<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lapply(strsplit(Q,"Q[<=>]"),"[",2))))))
 # add to results
 res[index,"Qsign"]<-Qsign
-
+res[index,"raw"]<-x[index]
 # add to results if no df1 has been captured yet
 res[index,c("Q")]<-cbind(Q)
 i2<-is.na(res[index,c("df1")])
@@ -888,6 +908,9 @@ res[index,c("df1")][i2]<-cbind(Qdf)[i2]
 ############
 ## clean up
 ##########
+# set bad captures in df1 and df2 to NA   
+if(length(grep("[^0-9\\.]",res[,"df1"]))>0) res[grep("[^0-9\\.]",res[,"df1"]),"df1"]<-NA
+if(length(grep("[^0-9\\.]",res[,"df2"]))>0) res[grep("[^0-9\\.]",res[,"df2"]),"df2"]<-NA
 
 # remove lines with only NA and set as matrix if is vector
 res<-res[rowSums(is.na(res))!=dim(res)[2],]
@@ -897,9 +920,6 @@ if(is.vector(res)){
    colnames(res)<-cnames
    }
 
-# set bad captures in df1 and df2 to NA   
-if(length(grep("[^0-9\\.]",res[,"df1"]))>0) res[grep("[^0-9\\.]",res[,"df1"]),"df1"]<-NA
-if(length(grep("[^0-9\\.]",res[,"df2"]))>0) res[grep("[^0-9\\.]",res[,"df2"]),"df2"]<-NA
 
 
 #######################
@@ -1084,14 +1104,14 @@ if(!is.null(ncol(res))) if(nrow(res)==0) res<-character(0)
 
 ## Warning massages
    report<-NULL
-if(T2t==TRUE&warn.T2t==TRUE) report<-c(report,"\u2022 Capital T was converted to small t. Maybe T is not t-distributed.\n")
-if(R2r==TRUE&warn.R2r==TRUE) report<-c(report,"\u2022 Capital R was converted to small r. Maybe R is not referring to a correlation.\n")
-if(warn.r==TRUE) report<-c(report,"\u2022 One or more detected r-values are out of range for possible correlations [-1, 1].\n")
-if(warn.R2==TRUE) report<-c(report,"\u2022 One or more detected R^2-values are out of range for possible coefficients of determination [0, 1].\n")
-if(warn.p==TRUE) report<-c(report,"\u2022 One or more detected p-values are out of range for possible p-values [0, 1].\n")
-if(warn.d==TRUE) report<-c(report,"\u2022 A huge effect was detected. One or more |d|-values > 1.\n")
-if(warn.eta==TRUE) report<-c(report,"\u2022 A huge effect was detected. One or more eta^2-values > .3.\n")
-if(warn.multi.p==TRUE) report<-c(report,"\u2022 There is lines with more than one recomputable p-value. Please split the result manually and proceed checking.\n")
+if(T2t==TRUE&warn.T2t==TRUE) report<-c(report,"- Capital T was converted to small t. Maybe T is not t-distributed.\n")
+if(R2r==TRUE&warn.R2r==TRUE) report<-c(report,"- Capital R was converted to small r. Maybe R is not referring to a correlation.\n")
+if(warn.r==TRUE) report<-c(report,"- One or more detected r-values are out of range for possible correlations [-1, 1].\n")
+if(warn.R2==TRUE) report<-c(report,"- One or more detected R^2-values are out of range for possible coefficients of determination [0, 1].\n")
+if(warn.p==TRUE) report<-c(report,"- One or more detected p-values are out of range for possible p-values [0, 1].\n")
+if(warn.d==TRUE) report<-c(report,"- A rather big effect was detected. One or more |d|-values > 1.\n")
+if(warn.eta==TRUE) report<-c(report,"- A rather big effect was detected. One or more eta^2-values > .3.\n")
+if(warn.multi.p==TRUE) report<-c(report,"- There are one or more results with several recomputable test statistics. Please split the result manually and proceed checking.\n")
 if(!is.null(report)) warning(report)
 return(res)
 
