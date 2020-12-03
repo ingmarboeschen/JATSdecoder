@@ -39,7 +39,7 @@ get.stats(
 \item{cermine}{Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results}
 }
 \description{
-Extract statistical results from text or NISO-JATS coded XML file as vector, extract standardStats and recalculate p-value if possible
+Extract statistical results from plain text, xml, cermxml, html, htm or docx files. The result is a list with a vector containing all identified sticked results and a matrix with containing reported standard statistics and recalculated p-values if computation is possible.
 }
 \examples{
 x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05).",

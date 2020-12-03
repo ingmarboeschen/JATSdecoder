@@ -4,14 +4,10 @@
 \alias{text2sentences}
 \title{text2sentences}
 \usage{
-text2sentences(x, NLP = FALSE, lang = "en")
+text2sentences(x)
 }
 \arguments{
 \item{x}{text to process}
-
-\item{NLP}{Logical. If TRUE natural language sentence tokenisation will be prformed (requires packages 'NLP' and 'openNLP')}
-
-\item{lang}{language for NLP sentence tokenization}
 }
 \description{
 Convert floating text to a vector with sentences via fine tuned regular expressions or NLP sentence tokenization
@@ -19,5 +15,4 @@ Convert floating text to a vector with sentences via fine tuned regular expressi
 \examples{
 x<-"Some text with result (t(18)=1.2, p<.05). This shows how text2sentences works."
 text2sentences(x)
-text2sentences(x,NLP=TRUE)
 }
