@@ -97,7 +97,6 @@ x<-unlist(lapply(x,percent2number))
    x<-gsub("\\| | \\|| \\| |\\|","",x)
    # space clean up
    x<-gsub("^ *|(?<= ) | *$", "", x, perl = TRUE)
-
    # remove " partial " "change"
    x<-gsub(" [pP]artial | [Cc]hange |[pP]artial|[Cc]hange","",x)
    # remove hyphen
@@ -126,6 +125,7 @@ x<-unlist(lapply(x,percent2number))
    x<-gsub("[Bb]etas","beta",x) # singular
    # unify chi2s -> chi2
    x<-gsub("X2|[Cc]hi2s|X 2 ","chi2",x) 
+   x<-gsub("[Cc]hi[- ][Ss]quare|[Cc]hisquare","chi2",x) 
    x<-gsub("[Cc]hi2","chi2",x) 
    x<-gsub("[Cc]hi2 \\(","chi2(",x) 
    x<-gsub("[Cc]hi2","chi2",x) 

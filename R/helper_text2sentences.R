@@ -2,27 +2,15 @@
 #'
 #' Convert floating text to a vector with sentences via fine tuned regular expressions or NLP sentence tokenization
 #' @param x text to process
-#' @param NLP Logical. If TRUE natural language sentence tokenisation will be prformed (requires packages 'NLP' and 'openNLP')
-#' @param lang language for NLP sentence tokenization
-#' @importFrom openNLP Maxent_Sent_Token_Annotator
-#' @importFrom NLP as.String annotate
 #' @export
 #' @examples
 #' x<-"Some text with result (t(18)=1.2, p<.05). This shows how text2sentences works."
 #' text2sentences(x)
-#' text2sentences(x,NLP=TRUE)
 
 # Depends on strsplit2, NLP & openNLP
-text2sentences<-function(x,NLP=FALSE,lang="en"){
+text2sentences<-function(x){
 x[is.na(x)]<-""
 t<-x
-if(NLP==TRUE){
-  sent_token<-openNLP::Maxent_Sent_Token_Annotator(lang)
-  t<-NLP::as.String(t)
-  bounds<-NLP::annotate(t,sent_token)
-  sentences<-t[bounds]
-}
-if(NLP==FALSE){
   # unify
   temp<-gsub("  "," ",gsub("  "," ",t))
   temp<-gsub(" \\. ","\\. ",gsub(" \\, ","\\, ",temp))
@@ -65,7 +53,6 @@ temp<-movedot(temp)
    }
 } 
   sentences<-temp
-} # end: no NLP
   return(sentences)
 }
 

@@ -1,6 +1,6 @@
 #' get.stats
 #'
-#' Extract statistical results from text or NISO-JATS coded XML file as vector, extract standardStats and recalculate p-value if possible
+#' Extract statistical results from plain text, xml, cermxml, html, htm or docx files. The result is a list with a vector containing all identified sticked results and a matrix with containing reported standard statistics and recalculated p-values if computation is possible.
 #' @param x text or JATScoded XML file to extract statistical results from
 #' @param stats.mode Select subset of standardStats. One of: "all", "checkable", "computable", "uncomputable"
 #' @param recalculate.p Logical. If TRUE recalculates p-values of standardStats if possible

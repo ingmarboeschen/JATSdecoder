@@ -196,9 +196,9 @@ if(length(grep("^one ",test.direction))>0){
  sig.adjectives<-NA)
  
 # SAMPLE SIZE
- if(sum(is.element(c("all","sample.size"),output))>0){
- sample.size<-est.ss(abstract=abstract,text=both,quantileDF=quantileDF,max.only=N.max.only)
- }else sample.size<-NA
+# if(sum(is.element(c("all","sample.size"),output))>0){
+# sample.size<-est.ss(abstract=abstract,text=both,quantileDF=quantileDF,max.only=N.max.only)
+# }else sample.size<-NA
 
 ## output
 res<-list(
@@ -218,8 +218,8 @@ res<-list(
           software=software,
           Rpackage=Rpackage,
           stats=stats,
-          standardStats=standardStats,
-          estimated.sample.size=sample.size
+          standardStats=standardStats#,
+ #         estimated.sample.size=sample.size
           )
 
 if(nostat==TRUE)  output<-output[output!="stats"]
