@@ -24,6 +24,8 @@ warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.
 # convert with get.stats() if has " [<=>] [0-9\\.-]"
 if(length(grep(" [<=>] [0-9\\.-]|[<=>] [0-9\\.-]",x))>0) x<-allStats(x)
 if(length(x)>0){
+# take copy for raw output
+y<-x
 
 # remove space between letter and (
 x<-gsub("([A-Za-z]) (\\([0-9Nnd])","\\1\\2",x)
@@ -333,7 +335,7 @@ if(length(grep("^b[<=>]| b[<=>]",x))>0){
    # add to res
    res[index,"beta"]<-beta
    res[index,"SEbeta"]<-SE
-   res[index,"raw"]<-x[index]
+   res[index,"raw"]<-y[index]
    if(estimateZ==TRUE) res[index,"Zest"]<-beta/SE
    
 }
@@ -347,7 +349,7 @@ if(length(grep("^d[<=>]| d[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-
    # add to res
    res[index,"d"]<-d
    res[index,"SE"]<-SE
-   res[index,"raw"]<-x[index]
+   res[index,"raw"]<-y[index]
    if(estimateZ==TRUE) res[index,"Zest"]<-d/SE
 }
 
@@ -358,7 +360,7 @@ if(length(grep(" SE[<=>]",x))>0&length(grep("^b[<=>]| b[<=>]",x))==0&length(grep
    SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>]*","",x[index]))))
    # add to res
    res[index,"SE"]<-SE
-   res[index,"raw"]<-x[index]
+   res[index,"raw"]<-y[index]
 
 }
 
@@ -392,7 +394,7 @@ if(length(index>0)){
   tval<-suppressWarnings(as.numeric(gsub(".*[=<>]","",gsub("[;,] .*| .*|[;,]$","",gsub(".*t[(<>=]|^t[(<>=]","",tval)))))
   # insert results to res
   res[index,c("tsign","tval","df2")]<-cbind(sign,tval,tdf)
-  res[index,"raw"]<-x[index]
+  res[index,"raw"]<-y[index]
 }
 
 ## get F-value and its df1 and df2
@@ -461,7 +463,7 @@ df1[which(!is.na(res[index,"df2"]))]<-res[index,][!is.na(res[index,"df2"]),"df1"
 
 # insert results to res
 res[index,c("Fsign","Fval","df1","df2")]<-cbind(sign,Fval,df1,df2)
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 }
 
 # F-values with (df1,df2)
@@ -502,7 +504,7 @@ sign[is.na(df1)]<-NA
 
 # insert results to res
 res[index,c("Fsign","Fval","df1","df2")]<-cbind(sign,Fval,df1,df2)
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 }
 
 
@@ -510,14 +512,11 @@ res[index,"raw"]<-x[index]
 # unify Chi2 -> chi
 x<-gsub("[Cc]hi2","chi",x)
 x<-gsub("([a-zA-Z])[Cc]hi","\\1 chi",x)
-
 # remove text from chi_text(12)=
 if(length(grep("^chi[A-Za-z]| chi[A-Za-z]",x))>0) x[grep("^chi[A-Za-z]| chi[A-Za-z]",x)]<-gsub("chi[A-Za-z]*?([\\(<>=])","chi\\1",x[grep("^chi[A-Za-z]| chi[A-Za-z]",x)])
-
 index<-grep(" chi[<=>(]|^chi[<=>(]",x)
 if(length(index)>0){
 chi2<-x[index]
-
 chidf<-rep(NA,length(chi2))
 # find df by coding chi(df)
 ind<-grep("chi[(]",chi2)
@@ -543,10 +542,12 @@ chi2<-gsub("[;,] [Nn]=[0-9]*?$","",chi2)
 chi2<-suppressWarnings(as.numeric(gsub("[^0-9\\.].*","",unlist(lapply(strsplit(gsub(".*chi[(]|.* chi|.* [Nn][=]","",chi2),"<=>|=|<=|>=|<|>"),"[",2)))))
 # add to results
 res[index,c("chi2")]<-cbind(chi2)
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 # if df 1 has no entry
 i<-which(is.na(res[index,c("df1")]))
 res[index,c("df1")][i]<-cbind(chidf[i])
+x[index]<-gsub("^chi([<=>\\( ])","chi2\\1",x[index])
+x[index]<-gsub(" chi([<=>\\( ])"," chi2\\1",x[index])
 }
 
 ## extract r
@@ -582,7 +583,7 @@ r<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lap
 # add to results
 res[index,"rsign"]<-rsign
 res[index,"r"]<-r
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 ## only add df2 if no df2 has been recorded yet
 use<-is.na(res[index,"df2"])
 res[index,"df2"][use]<-rdf[use]
@@ -612,7 +613,7 @@ H<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lap
 # add to results
 res[index,"Hsign"]<-Hsign
 res[index,"H"]<-H
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 ## only add df2 if no df2 has been recorded yet
 use<-is.na(res[index,"df1"])
 res[index,"df1"][use]<-Hdf[use]
@@ -647,7 +648,7 @@ G2<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(la
 # add to results
 res[index,"G2sign"]<-G2sign
 res[index,"G2"]<-G2
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 ## only add df1 if no df1 has been recorded yet
 use<-is.na(res[index,"df1"])
 res[index,"df1"][use]<-G2df[use]
@@ -677,7 +678,7 @@ R2<-gsub("[^-0-9\\.%].*","",R2)
 # add to results
 res[index,"R2"]<-R2
 res[index,"R2sign"]<-R2sign
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 #if(length(R2type)==0) R2type<-NA
 #res[index,"R2type"]<-R2type
 }
@@ -696,7 +697,7 @@ Uval<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub(".*U=|.*U[(][0-9].
 # add U values to res
 res[index,c("U")]<-Uval
 res[index,c("Usign")]<-Usign
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 }
 
 ## extract p value
@@ -720,7 +721,7 @@ pval<-suppressWarnings(as.numeric(gsub("[^0-9\\.].*","",pval)))
 # add p values to res
 res[index,c("psign")]<-psign
 res[index,c("p")]<-pval
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 }
 
 ## extract BayesFactor
@@ -784,7 +785,7 @@ BFsign[(type=="01")&sign==">"]<-"<"
 # add BayesFactor values to res
 res[index,c("BF10")]<-BF
 res[index,"BF10sign"]<-BFsign
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 }
 
 ## extract Bayes factor without 01 or 10
@@ -800,7 +801,7 @@ BF<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",BF))))
 # add BF values to res
 res[index,c("BF")]<-BF
 res[index,c("BFsign")]<-BFsign
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 }
 
 
@@ -822,7 +823,7 @@ OR<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",OR))))
 
 # add OR values to res
 res[index,c("OR")]<-OR
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 }
 
 ## extract RiskRatio value
@@ -842,7 +843,7 @@ RR<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",RR))))
 
 # add RR values to res
 res[index,c("RR")]<-RR
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 }
 
 ## extract Z value
@@ -860,7 +861,7 @@ Zval<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",Zval))))
 # add Z values to res
 res[index,c("Zval")]<-Zval
 res[index,c("Zsign")]<-Zsign
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 }
 
 ## extract Q and df
@@ -897,7 +898,7 @@ Qsign<-gsub("[^<>=].*","",sub("[^<>=]*([=<>])", "\\1",sub(".*Q([\\(=<>])","\\1",
 Q<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lapply(strsplit(Q,"Q[<=>]"),"[",2))))))
 # add to results
 res[index,"Qsign"]<-Qsign
-res[index,"raw"]<-x[index]
+res[index,"raw"]<-y[index]
 # add to results if no df1 has been captured yet
 res[index,c("Q")]<-cbind(Q)
 i2<-is.na(res[index,c("df1")])
