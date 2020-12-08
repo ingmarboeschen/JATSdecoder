@@ -111,7 +111,7 @@ stats<-gsub("\u00DF","beta",stats)
 # unify eta and partial eta
 stats<-gsub("epsilon","eta",stats)
 stats<-gsub("\\(partial\\)","(p)",stats)
-stats<-gsub("eta[\\^]2 p|eta[\\^]2p|etap[\\^]2|eta\\(p\\)[\\^]2","eta2(p)",stats)
+stats<-gsub("eta[\\^ ]2 p|eta[\\^ ]2p|etap[\\^ ]2|eta\\(p\\)[\\^ ]2","eta2(p)",stats)
 stats<-gsub("eta\\(p\\)2|eta\\(p\\) 2|eta\\(p2\\)","eta2(p)",stats)
 stats<-gsub("eta[\\^]2|eta 2","eta2",stats)
 

@@ -126,11 +126,11 @@ x<-unlist(lapply(x,percent2number))
    x<-gsub("\u0392","beta",x) # greek capital BETA
    x<-gsub("[Bb]etas","beta",x) # singular
    # unify chi2s -> chi2
-   x<-gsub("X2|[Cc]hi2s|X 2 ","chi2",x) 
-   x<-gsub("[Cc]hi[- ][Ss]quare|[Cc]hisquare","chi2",x) 
-   x<-gsub("[Cc]hi2","chi2",x) 
+   x<-gsub("X2|[Cc]hi2s|X 2 ","Chi2",x) 
+   x<-gsub("[Cc]hi[- ][Ss]quare|[Cc]hisquare","Chi2",x) 
+   x<-gsub("[Cc]hi2","Chi2",x) 
    x<-gsub("[Cc]hi2 \\(","chi2(",x) 
-   x<-gsub("[Cc]hi2","chi2",x) 
+   x<-gsub("[Cc]hi2","Chi2",x) 
    x<-gsub("^[Xx](\\([0-9]*\\))2","chi2\\1",x)
    x<-gsub("[^a-zA-Z][Xx](\\([0-9]*\\))2"," chi2\\1",x)
    x<-gsub("^[Xx](\\([0-9]*\\))","chi2\\1",x)
@@ -310,7 +310,7 @@ if(length(grep("/[-\\.0-9]|/ [-\\.0-9]",x))>0){
 x<-unlist(lapply(x,frac2num))
 
 # prepare results colnames
-cnames<-c("raw","Zsign","Zval","Fsign","Fval","eta2","omega2","tsign","tval","d","SE","rsign","r","R2sign","R2","Usign","U","Hsign","H","G2sign","G2","OR","RR","chi2","Qsign","Q","df1","df2","beta","SEbeta","Zest","BF10sign","BF10","BFsign","BF","psign","p","recalculatedP","recalcPless","recalcPgreater")
+cnames<-c("raw","Z_op","Z","F_op","F","eta2","omega2","t_op","t","d","SE","r_op","r","R2_op","R2","U_op","U","H_op","H","G2_op","G2","OR","RR","Chi2","Q_op","Q","df1","df2","beta","SEbeta","Zest","BF10_op","BF10","BF_op","BF","p_op","p","recalculatedP","p_H0_less","p_H0_greater")
 res<-matrix(NA,nrow=length(x),ncol=length(cnames))
 colnames(res)<-cnames
 
@@ -393,7 +393,7 @@ if(length(index>0)){
   tval<-gsub("\\([0-9\\.,;]*\\)|\\]","",tval) # remove df within brackets
   tval<-suppressWarnings(as.numeric(gsub(".*[=<>]","",gsub("[;,] .*| .*|[;,]$","",gsub(".*t[(<>=]|^t[(<>=]","",tval)))))
   # insert results to res
-  res[index,c("tsign","tval","df2")]<-cbind(sign,tval,tdf)
+  res[index,c("t_op","t","df2")]<-cbind(sign,tval,tdf)
   res[index,"raw"]<-y[index]
 }
 
@@ -462,7 +462,7 @@ df1[which(!is.na(res[index,"df2"]))]<-res[index,][!is.na(res[index,"df2"]),"df1"
 
 
 # insert results to res
-res[index,c("Fsign","Fval","df1","df2")]<-cbind(sign,Fval,df1,df2)
+res[index,c("F_op","F","df1","df2")]<-cbind(sign,Fval,df1,df2)
 res[index,"raw"]<-y[index]
 }
 
@@ -503,7 +503,7 @@ Fval[is.na(df1)]<-NA
 sign[is.na(df1)]<-NA
 
 # insert results to res
-res[index,c("Fsign","Fval","df1","df2")]<-cbind(sign,Fval,df1,df2)
+res[index,c("F_op","F","df1","df2")]<-cbind(sign,Fval,df1,df2)
 res[index,"raw"]<-y[index]
 }
 
@@ -541,7 +541,7 @@ chi2<-gsub("[;,] [Nn]=[0-9]*?$","",chi2)
 # extract chisqure result
 chi2<-suppressWarnings(as.numeric(gsub("[^0-9\\.].*","",unlist(lapply(strsplit(gsub(".*chi[(]|.* chi|.* [Nn][=]","",chi2),"<=>|=|<=|>=|<|>"),"[",2)))))
 # add to results
-res[index,c("chi2")]<-cbind(chi2)
+res[index,c("Chi2")]<-cbind(chi2)
 res[index,"raw"]<-y[index]
 # if df 1 has no entry
 i<-which(is.na(res[index,c("df1")]))
@@ -581,7 +581,7 @@ rsign<-gsub("[^<>=].*","",gsub("r","",unlist(lapply(strsplit(r,"[,; ]"),function
 # get r value
 r<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lapply(strsplit(r,"r[<=>]"),"[",2))))))
 # add to results
-res[index,"rsign"]<-rsign
+res[index,"r_op"]<-rsign
 res[index,"r"]<-r
 res[index,"raw"]<-y[index]
 ## only add df2 if no df2 has been recorded yet
@@ -611,7 +611,7 @@ Hsign<-gsub("[^<>=].*","",sub("[^<>=]*([=<>])", "\\1",sub(".*H([\\(=<>])","\\1",
 # get H value
 H<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lapply(strsplit(H,"H[<=>]"),"[",2))))))
 # add to results
-res[index,"Hsign"]<-Hsign
+res[index,"H_op"]<-Hsign
 res[index,"H"]<-H
 res[index,"raw"]<-y[index]
 ## only add df2 if no df2 has been recorded yet
@@ -646,7 +646,7 @@ G2sign<-gsub("[^<>=].*","",sub("[^<>=]*([=<>])", "\\1",sub(".*G2([\\(=<>])","\\1
 # get G2 value
 G2<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lapply(strsplit(G2,"G2[<=>]"),"[",2))))))
 # add to results
-res[index,"G2sign"]<-G2sign
+res[index,"G2_op"]<-G2sign
 res[index,"G2"]<-G2
 res[index,"raw"]<-y[index]
 ## only add df1 if no df1 has been recorded yet
@@ -677,7 +677,7 @@ R2<-gsub("[<=>]","",gsub(".*?[<=>](.+)", "\\1",unlist(lapply(strsplit(R2,"R2"),"
 R2<-gsub("[^-0-9\\.%].*","",R2)
 # add to results
 res[index,"R2"]<-R2
-res[index,"R2sign"]<-R2sign
+res[index,"R2_op"]<-R2sign
 res[index,"raw"]<-y[index]
 #if(length(R2type)==0) R2type<-NA
 #res[index,"R2type"]<-R2type
@@ -696,7 +696,7 @@ Usign<-gsub("[^<>=].*","",sub("[^<>=]*([=<>])", "\\1",sub(".*U([\\(=<>])","\\1",
 Uval<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub(".*U=|.*U[(][0-9].*?=","", Uval))))
 # add U values to res
 res[index,c("U")]<-Uval
-res[index,c("Usign")]<-Usign
+res[index,c("U_op")]<-Usign
 res[index,"raw"]<-y[index]
 }
 
@@ -719,7 +719,7 @@ pval<-gsub("[<>=]","",pval)
 # remove everything behind non number or dot
 pval<-suppressWarnings(as.numeric(gsub("[^0-9\\.].*","",pval)))
 # add p values to res
-res[index,c("psign")]<-psign
+res[index,c("p_op")]<-psign
 res[index,c("p")]<-pval
 res[index,"raw"]<-y[index]
 }
@@ -784,7 +784,7 @@ BFsign[(type=="01")&sign==">"]<-"<"
 
 # add BayesFactor values to res
 res[index,c("BF10")]<-BF
-res[index,"BF10sign"]<-BFsign
+res[index,"BF10_op"]<-BFsign
 res[index,"raw"]<-y[index]
 }
 
@@ -800,7 +800,7 @@ BFsign<-gsub("[^<=>].*","",BF)
 BF<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",BF))))
 # add BF values to res
 res[index,c("BF")]<-BF
-res[index,c("BFsign")]<-BFsign
+res[index,c("BF_op")]<-BFsign
 res[index,"raw"]<-y[index]
 }
 
@@ -859,8 +859,8 @@ Zsign<-gsub("[^<=>].*","",Zsign)
 Zval<-suppressWarnings(as.numeric(gsub("[<=>]","",gsub("[,; ].*","",Zval))))
 
 # add Z values to res
-res[index,c("Zval")]<-Zval
-res[index,c("Zsign")]<-Zsign
+res[index,c("Z")]<-Zval
+res[index,c("Z_op")]<-Zsign
 res[index,"raw"]<-y[index]
 }
 
@@ -897,7 +897,7 @@ Qsign<-gsub("[^<>=].*","",sub("[^<>=]*([=<>])", "\\1",sub(".*Q([\\(=<>])","\\1",
 # get Q value
 Q<-suppressWarnings(as.numeric(gsub("[^0-9\\.-].*","",gsub("[<=>]","",unlist(lapply(strsplit(Q,"Q[<=>]"),"[",2))))))
 # add to results
-res[index,"Qsign"]<-Qsign
+res[index,"Q_op"]<-Qsign
 res[index,"raw"]<-y[index]
 # add to results if no df1 has been captured yet
 res[index,c("Q")]<-cbind(Q)
@@ -934,27 +934,27 @@ suppressWarnings({
   recalculatedPG2<-round(1-stats::pchisq(as.numeric(res[,"G2"]),as.numeric(res[,"df1"])),5)
   recalculatedPQ<-round(1-stats::pchisq(as.numeric(res[,"Q"]),as.numeric(res[,"df1"])),5)
   recalculatedPr<-round(2*(1-stats::pt((abs(as.numeric(res[,"r"]))*sqrt(as.numeric(res[,"df2"])))/sqrt(1-as.numeric(res[,"r"])^2),as.numeric(res[,"df2"]))),5)
-  recalculatedPchi<-round(1-stats::pchisq(as.numeric(res[,"chi2"]),as.numeric(res[,"df1"])),5)
-  recalculatedPt<-round(2*(1-stats::pt(abs(as.numeric(res[,"tval"])),as.numeric(res[,"df2"]))),5)
-  recalculatedPZ<-round(2*(1-stats::pnorm(abs(as.numeric(res[,"Zval"])))),5)
+  recalculatedPchi<-round(1-stats::pchisq(as.numeric(res[,"Chi2"]),as.numeric(res[,"df1"])),5)
+  recalculatedPt<-round(2*(1-stats::pt(abs(as.numeric(res[,"t"])),as.numeric(res[,"df2"]))),5)
+  recalculatedPZ<-round(2*(1-stats::pnorm(abs(as.numeric(res[,"Z"])))),5)
   recalculatedPZest<-round(2*(1-stats::pnorm(abs(as.numeric(res[,"Zest"])))),5)
-  recalculatedPF<-round(1-stats::pf(as.numeric(res[,"Fval"]),as.numeric(res[,"df1"]),as.numeric(res[,"df2"])),5)
+  recalculatedPF<-round(1-stats::pf(as.numeric(res[,"F"]),as.numeric(res[,"df1"]),as.numeric(res[,"df2"])),5)
 })
 
 
 # for directed tests alternative="directed|both" Z-,t-,r-values 
 suppressWarnings({
   recalculatedPrg<-round((1-stats::pt((abs(as.numeric(res[,"r"]))*sqrt(as.numeric(res[,"df2"])))/sqrt(1-as.numeric(res[,"r"])^2),as.numeric(res[,"df2"]))),5)
-  recalculatedPtg<-round((1-stats::pt(abs(as.numeric(res[,"tval"])),as.numeric(res[,"df2"]))),5)
-  recalculatedPZg<-round((1-stats::pnorm(abs(as.numeric(res[,"Zval"])))),5)
+  recalculatedPtg<-round((1-stats::pt(abs(as.numeric(res[,"t"])),as.numeric(res[,"df2"]))),5)
+  recalculatedPZg<-round((1-stats::pnorm(abs(as.numeric(res[,"Z"])))),5)
   recalculatedPZgest<-round((1-stats::pnorm(abs(as.numeric(res[,"Zest"])))),5)
 })
 
 # for directed tests alternative="directed|both" Z-,t-,r-values 
 suppressWarnings({
   recalculatedPrl<-round((stats::pt((abs(as.numeric(res[,"r"]))*sqrt(as.numeric(res[,"df2"])))/sqrt(1-as.numeric(res[,"r"])^2),as.numeric(res[,"df2"]))),5)
-  recalculatedPtl<-round((stats::pt(abs(as.numeric(res[,"tval"])),as.numeric(res[,"df2"]))),5)
-  recalculatedPZl<-round((stats::pnorm(abs(as.numeric(res[,"Zval"])))),5)
+  recalculatedPtl<-round((stats::pt(abs(as.numeric(res[,"t"])),as.numeric(res[,"df2"]))),5)
+  recalculatedPZl<-round((stats::pnorm(abs(as.numeric(res[,"Z"])))),5)
   recalculatedPZlest<-round((stats::pnorm(abs(as.numeric(res[,"Zest"])))),5)
 })
 
@@ -984,16 +984,16 @@ d<-data.frame(recalculatedPtl,recalculatedPrl,recalculatedPZl)
 recalcPless<-NULL
 for(i in 1:dim(d)[1]) recalcPless[i]<-d[i,][!is.na(d[i,])][1]
 # add to res
-  if(!is.null(dim(res))) res[,"recalcPless"]<-recalcPless
-  if(is.null(dim(res))) res["recalcPless"]<-recalcPless
+  if(!is.null(dim(res))) res[,"p_H0_less"]<-recalcPless
+  if(is.null(dim(res))) res["p_H0_less"]<-recalcPless
   
 d<-data.frame(recalculatedPrg,recalculatedPtg,recalculatedPZg)
 # get p value by rank r, t, Z
 recalcPgreater<-NULL
 for(i in 1:dim(d)[1]) recalcPgreater[i]<-d[i,][!is.na(d[i,])][1]
 # add to res
-  if(!is.null(dim(res))) res[,"recalcPgreater"]<-recalcPgreater
-  if(is.null(dim(res))) res["recalcPgreater"]<-recalcPgreater
+  if(!is.null(dim(res))) res[,"p_H0_greater"]<-recalcPgreater
+  if(is.null(dim(res))) res["p_H0_greater"]<-recalcPgreater
   
 }
   
@@ -1036,8 +1036,8 @@ if(!is.matrix(res)){
 
 # remove sided test p-values if not requested by alternative and reduce cnames
 if(is.element(alternative,c("undirected"))){
-   res<-res[,-which(is.element(cnames,c("recalcPgreater","recalcPless")))]
-   cnames<-cnames[-which(is.element(cnames,c("recalcPgreater","recalcPless")))]
+   res<-res[,-which(is.element(cnames,c("p_H0_greater","p_H0_less")))]
+   cnames<-cnames[-which(is.element(cnames,c("p_H0_greater","p_H0_less")))]
    if(!is.matrix(res)){
    res<-matrix(res,1)
    colnames(res)<-cnames
@@ -1049,7 +1049,7 @@ if(sum(as.numeric(res[,"r"])>1|as.numeric(res[,"r"])<(-1),na.rm=T)>0) warn.r<-TR
 # need warning massage for R2 > 1|R2 < -1
 if(sum(as.numeric(res[,"R2"])>1|as.numeric(res[,"R2"])<(0),na.rm=T)>0) warn.R2<-TRUE   
 # set warn.T2t to FALSE if has no t value
-if(sum(is.na(res[,"tval"]))==length(res[,"tval"])) warn.T2t<-FALSE
+if(sum(is.na(res[,"t"]))==length(res[,"t"])) warn.T2t<-FALSE
 # set warn.R2r to FALSE if has no r value
 if(sum(is.na(res[,"r"]))==length(res[,"r"])) warn.R2r<-FALSE
 # need p warning

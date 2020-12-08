@@ -12,9 +12,10 @@
 get.country<-function(x,unifyCountry=TRUE){
 # readLines if x is file
 if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+ t<-x
 
-t<-paste(x,collapse="")
 if(length(grep("<country",t))>0){
+ t<-paste(t,collapse="")
 # split t to vector at <country
  t<-unlist(strsplit2(grep("<country",t,value=TRUE),"<country","before"))
 # extract country tag content
@@ -160,3 +161,4 @@ return(x)
 
 # vector with all country names from worldmap function
 .allCountries<-c("Afghanistan","Angola","Albania","United Arab Emirates","Argentina","Armenia","Antarctica","Fr. S. and Antarctic Lands","Australia","Austria","Azerbaijan","Burundi","Belgium","Benin","Burkina Faso","Bangladesh","Bulgaria","Bahamas","Bosnia and Herz.","Belarus","Belize","Bolivia","Brazil","Brunei","Bhutan","Botswana","Central African Rep.","Canada","Switzerland","Chile","China","Ivory Coast","Cameroon","Congo (Kinshasa)","Congo (Brazzaville)","Colombia","Costa Rica","Cuba","N. Cyprus","Cyprus","Czech Rep.","Germany","Djibouti","Denmark","Dominican Rep.","Algeria","Ecuador","Egypt","Eritrea","Spain","Estonia","Ethiopia","Finland","Fiji","Falkland Is.","France","Gabon","United Kingdom","Georgia","Ghana","Guinea","Gambia","Guinea Bissau","Eq. Guinea","Greece","Greenland","Guatemala","Guyana","Honduras","Croatia","Haiti","Hungary","Indonesia","India","Ireland","Iran","Iraq","Iceland","Israel","Italy","Jamaica","Jordan","Japan","Kazakhstan","Kenya","Kyrgyzstan","Cambodia","S. Korea","Kosovo","Kuwait","Laos","Lebanon","Liberia","Libya","Sri Lanka","Lesotho","Lithuania","Luxembourg","Latvia","Morocco","Moldova","Madagascar","Mexico","Macedonia","Mali","Myanmar","Montenegro","Mongolia","Mozambique","Mauritania","Malawi","Malaysia","Namibia","New Caledonia","Niger","Nigeria","Nicaragua","Netherlands","Norway","Nepal","New Zealand","Oman","Pakistan","Panama","Peru","Philippines","Papua New Guinea","Poland","Puerto Rico","N. Korea","Portugal","Paraguay","Qatar","Romania","Russia","Rwanda","W. Sahara","Saudi Arabia","Sudan","S. Sudan","Senegal","Solomon Is.","Sierra Leone","El Salvador","Somalia","Serbia","Suriname","Slovakia","Slovenia","Sweden","Swaziland","Syria","Chad","Togo","Thailand","Tajikistan","Turkmenistan","East Timor","Trinidad and Tobago","Tunisia","Turkey","Taiwan","Tanzania","Uganda","Ukraine","Uruguay","United States","Uzbekistan","Venezuela","Vietnam","Vanuatu","West Bank","Yemen","South Africa","Zambia","Zimbabwe","Aruba","Anguilla","Aland","Andorra","American Samoa","Ashmore and Cartier Is.","Antigua and Barb.","Bahrain","St. Barthelemy","Bermuda","Barbados","Cook Is.","Comoros","Cape Verde","Curacao","Cayman Is.","Dominica","Faroe Is.","Micronesia","Gaza","Guernsey","Grenada","Guam","Hong Kong","Heard I. and McDonald Is.","Isle of Man","Indian Ocean Ter.","Br. Indian Ocean Ter.","Jersey","NA","Kiribati","St. Kitts and Nevis","Saint Lucia","Liechtenstein","Macau","St. Martin","Monaco","Maldives","Marshall Is.","Malta","N. Mariana Is.","Montserrat","Mauritius","Norfolk Island","Niue","Nauru","Pitcairn Is.","Palau","Fr. Polynesia","Singapore","S. Geo. and S. Sandw. Is.","Saint Helena","San Marino","St. Pierre and Miquelon","Sao Tome and Principe","Sint Maarten","Seychelles","Turks and Caicos Is.","Tonga","Vatican","St. Vin. and Gren.","British Virgin Is.","U.S. Virgin Is.","Wallis and Futuna","Samoa","Tuvalu","French Guiana")  
+

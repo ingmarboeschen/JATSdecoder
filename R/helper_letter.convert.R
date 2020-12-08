@@ -14,8 +14,6 @@
 letter.convert<-function(x,cermine=FALSE,greek2text=FALSE,warning=TRUE){
 # clean up white spaces
 x<-gsub("^ *|(?<= ) | *$", "", x, perl = TRUE)
-# unify -
-x<-gsub("\u2013|\u2014|\u2015|\u2212|\u2010|\u2011","-",x)
 
 # if has hex letters convert to simplified letter
 if(length(grep("&#",x))>0){
@@ -33,6 +31,11 @@ x<-gsub("&x02a2;","\u2a2",x) # LATIN LETTER REVERSED GLOTTAL STOP WITH STROKE
 x<-gsub("&x0215;","\u00fc",x) # LATIN SMALL LETTER U WITH DOUBLE GRAVE
 x<-gsub("&#x0210;","\u210",x) # LATIN CAPITAL LETTER R WITH DOUBLE GRAVE
 x<-gsub("&#x0220;","\u220",x) # LATIN CAPITAL LETTER N WITH LONG RIGHT LEGx<-gsub("&#x0feff;","",x) # empty seperator
+x<-gsub("&#x0237a;","\u03b1",x) # APL FUNCTIONAL SYMBOL ALPHA -> alpha
+x<-gsub("&#x0ff5e;","\u007e",x) #  FULLWIDTH TILDE
+x<-gsub("&#x1d74c;","\u03c7",x) # bold italic small greek chi -> small greek chi
+x<-gsub("&#x1d700;","\u03b5",x) # MATHEMATICAL ITALIC SMALL EPSILON
+
 x<-gsub("&#x0003f;","?",x) # question mark
 x<-gsub("&#x0ff1f;","? ",x) # FULLWIDTH QUESTION MARK
 x<-gsub("&#x0ff05;","%",x) # FULLWIDTH PERCENT SIGN
@@ -265,17 +268,11 @@ x<-gsub("&#x003bf;","o",x) # GREEK SMALL LETTER OMICRON
 x<-gsub("&#x0041e;","O",x) # CYRILLIC CAPITAL LETTER O
 }
 
-## unify some hex
+## unify hex
 if(length(grep("&#",x))>0){
-x<-gsub("&#x0237a;","\u03b1",x) # APL FUNCTIONAL SYMBOL ALPHA -> alpha
 x<-gsub("&#x02550;","\u003d",x) # BOX DRAWINGS DOUBLE HORIZONTAL
 x<-gsub("&#x02502;","\u007c",x) # BOX DRAWINGS LIGHT VERTICAL
-x<-gsub("&#x0ff5e;","\u007e",x) #  FULLWIDTH TILDE
-x<-gsub("&#x1d74c;","\u03c7",x) # bold italic small greek chi -> small greek chi
-x<-gsub("&#x1d700;","\u03b5",x) # MATHEMATICAL ITALIC SMALL EPSILON 
 x<-gsub("&#x00151;","\u00F6 ",x) # small ö &odblac;
-
-
 }
 
 
@@ -403,11 +400,6 @@ x<-gsub("&#x00025;","\u0025",x) # percent
 x<-gsub("&#x02030;","\u2030",x) # per mille
 x<-gsub("&#x0224d;","\u003d",x) # EQUIVALENT TO
 x<-gsub("&#x0007c;","\u007c",x) # vertical line
-}
-
-
-if(length(grep("&#",x))>0){
-# greek/latin/cyrillic characters
 x<-gsub("&#x0043a;","\u043a",x) # kyrillik letter ka
 x<-gsub("&#x003b9;","\u03b9",x) # greek letter iota
 x<-gsub("&#x000c3;","\u00c3",x) # A with ^
@@ -415,17 +407,13 @@ x<-gsub("&#x000ee;","\u00ee",x) # i with ^
 x<-gsub("&#x0014d;","\u014d",x) # o with bar 
 x<-gsub("&#x000d4;","\u00d4",x) # O with ^
 x<-gsub("&#x000bf;","\u00BF",x) # spanish start of question mark ¿
-# alpha 
 x<-gsub("&#x003b1;","\u03b1",x) # small greek alpha
 x<-gsub("&#x00251;","\u0251",x) # small latin letter alpha
 x<-gsub("&#x0221d;","\u221d",x) # PROPORTIONAL TO
-# beta
 x<-gsub("&#x003b2;","\u03b2",x) # small greek beta
 x<-gsub("&#x00392;","\u0392",x) # capital greek beta
-# chi
 x<-gsub("&#x003c7;","\u03c7",x) # small greek chi
 x<-gsub("&#x003a7;","\u03a7",x) # capital greek Chi
-# phi etc
 x<-gsub("&#x003c6;","\u03c6",x) # small greek phi
 x<-gsub("&#x003a6;","\u03a6",x) # capital greek Phi
 x<-gsub("&#x00424;","\u0424",x) # CYRILLIC CAPITAL LETTER EF -> looks like Phi
@@ -455,7 +443,6 @@ x<-gsub("&#x025b5;","\u25b5",x) # utri (triangle)
 x<-gsub("&#x025b3;","\u25b3",x) # WHITE UP-POINTING TRIANGLE
 x<-gsub("&#x022bf;","\u22bf",x) # italic triangle
 x<-gsub("&#x00394;","\u0394",x) #  delta-sign
-
 x<-gsub("&#x003b5;","\u03b5",x) # small greek epsilon (epsi)
 x<-gsub("&#x0025b;","\u025b",x) # LATIN SMALL LETTER OPEN E
 x<-gsub("&#x003ad;","\u03ad",x) # GREEK SMALL LETTER EPSILON WITH TONOS 
@@ -519,12 +506,6 @@ x<-gsub("&#x0025c;","\u025c",x) # LATIN SMALL LETTER REVERSED OPEN E
 x<-gsub("&#x02713;","\u2713",x) # Hook
 x<-gsub("&#x02670;","\u2670",x) # WEST SYRIAC CROSS 
 x<-gsub("&#x000b6;","\u00b6",x) # English name pilcrow or paragraph mark
-}
-
-
-
-# newly detected
-if(length(grep("&#",x))>0){
 x<-gsub("&#x0005f;","\u005f",x) # low line
 x<-gsub("&#x000a2;","\u00a2",x) # cent sign
 x<-gsub("&#x000a8;","\u00a8",x) # DIAERESIS
@@ -588,10 +569,6 @@ x<-gsub("&#x027f6;","\u27f6",x) # LONG RIGHTWARDS ARROW
 x<-gsub("&#x0a64d;","\ua64d",x) # CYRILLIC SMALL LETTER BROAD OMEGA
 x<-gsub("&#x0fe37;","\ufe37",x) # PRESENTATION FORM FOR VERTICAL LEFT CURLY BRACKET
 x<-gsub("&#x0fe38;","\ufe38",x) # PRESENTATION FORM FOR VERTICAL RIGHT CURLY BRACKET
-}
-
-# newly detected 2
-if(length(grep("&#",x))>0){
 x<-gsub("&#x000a7;","\u00a7",x) # SECTION SIGN
 x<-gsub("&#x000b8;","\u00b8",x) # CEDILLA
 x<-gsub("&#x000c2;","\u00c2",x) # LATIN CAPITAL LETTER A WITH CIRCUMFLEX
@@ -657,10 +634,6 @@ x<-gsub("&#x027e8;","\u27e8",x) # MATHEMATICAL LEFT ANGLE BRACKET
 x<-gsub("&#x02a01;","\u2a01",x) # N-ARY CIRCLED PLUS OPERATOR
 x<-gsub("&#x02a09;","\u2a09",x) # N-ARY TIMES OPERATOR
 x<-gsub("&#x03002;","\u3002",x) # IDEOGRAPHIC FULL STOP
-}
-
-# newly detected 3
-if(length(grep("&#",x))>0){
 x<-gsub("&#x000a1;","\u00a1",x) # spanish INVERTED EXCLAMATION MARK
 x<-gsub("&#x000ca;","\u00ca",x) # LATIN CAPITAL LETTER E WITH CIRCUMFLEX
 x<-gsub("&#x00139;","\u0139",x) # LATIN CAPITAL LETTER L WITH ACUTE
@@ -703,12 +676,6 @@ x<-gsub("&#x03001;","\u3001",x) #  IDEOGRAPHIC COMMA
 x<-gsub("&#x099dd;","\u99dd",x) # CJK UNIFIED IDEOGRAPH-99dd
 x<-gsub("&#x0fffd;","\ufffd",x) # CIRCLED QUESTION MARK
 x<-gsub("&#x0266;","\u266",x) # LATIN SMALL LETTER H WITH HOOK
-
-}
-
-
-# newly detected 4
-if(length(grep("&#",x))>0){
 x<-gsub("&#x025b6;","\u25b6",x) # Black right-pointing triangle
 x<-gsub("&#x0204e;","\u204e",x) # LOW ASTERISK
 x<-gsub("&#x0212b;","\u212b",x) #  ANGSTROM SIGN
@@ -797,7 +764,6 @@ x<-gsub("&#x021c6;","\u21c6",x) # LEFTWARDS ARROW OVER RIGHTWARDS ARROW
 x<-gsub("&#x02259;","\u2259",x) # ESTIMATES
 x<-gsub("&#x0229f;","\u229f",x) # SQUARED MINUS
 x<-gsub("&#x02374;","\u2374",x) # APL FUNCTIONAL SYMBOL RHO
-
 x<-gsub("&#x023b4;","\u23b4",x) # TOP SQUARE BRACKET
 x<-gsub("&#x02756;","\u2756",x) # BLACK DIAMOND MINUS WHITE X
 x<-gsub("&#x0d443;","\ud443",x) # HANGUL SYLLABLE D443
@@ -814,11 +780,6 @@ x<-gsub("&#x0011c;","\u011c",x) # LATIN CAPITAL LETTER G WITH CIRCUMFLEX
 x<-gsub("&#x00129;","\u0129",x) # LATIN SMALL LETTER I WITH TILDE
 x<-gsub("&#x00169;","\u0169",x) # LATIN SMALL LETTER U WITH TILDE
 x<-gsub("&#x0018e;","\u018e",x) # LATIN CAPITAL LETTER REVERSED E
-}
-
-
-# newly detected 6
-if(length(grep("&#",x))>0){
 x<-gsub("&#x0043f;","\u043f",x) # CYRILLIC SMALL LETTER PE
 x<-gsub("&#x00442;","\u0442",x) # CYRILLIC SMALL LETTER TE
 x<-gsub("&#x0045b;","\u045b",x) # CYRILLIC SMALL LETTER TSHE
@@ -900,10 +861,6 @@ x<-gsub("&#x0305f;","\u305f",x) # HIRAGANA LETTER TA
 x<-gsub("&#x0e5fb;","\ue5fb",x) # Private Use Area E5FB
 x<-gsub("&#x0fb03;","\ufb03",x) # LATIN SMALL LIGATURE FFI
 x<-gsub("&#x0ff65;","\uff65",x) # HALFWIDTH KATAKANA MIDDLE DOT
-}
-
-# newly detected 7
-if(length(grep("&#",x))>0){
 x<-gsub("&#x000a4;","\u00a4",x) # CURRENCY SIGN
 x<-gsub("&#x000a6;","\u00a6",x) # BROKEN BAR
 x<-gsub("&#x000cb;","\u00cb",x) # LATIN CAPITAL LETTER E WITH DIAERESIS
@@ -1028,26 +985,42 @@ x<-gsub("&#x0010e;","\u010e",x) # LATIN CAPITAL LETTER D WITH CARON
 
 }# End hexadecimal conversion
 
-## unify some html and unicode special characters  
-x<-gsub("&le;|\u2264|\u2A7f|\u2a7d","<=",x) # less equal 
-x<-gsub("&ge;|\u2A7e|\u2265",">=",x) # greater equal 
+## unify some html letters  
 x<-gsub("&amp;","& ",x) #  &
 x<-gsub("&lt;","<",x) # less than
 x<-gsub("&le;","<=",x) # less equal 
 x<-gsub("&gt;",">",x) # greater than
 x<-gsub("&ge;",">=",x) # greater equal 
-x<-gsub("&equals;|&#61;|\u003d","=",x) # equal sign
+x<-gsub("&equals;|&#61;","=",x) # equal sign
+x<-gsub("&amp;","& ",x) #  &
+x<-gsub("&acute;","'",x) # 
+x<-gsub("&DiacriticalAcute;","'",x) # 
+x<-gsub("&apos;","'",x) # 
+x<-gsub("&semi;",";",x) # semi colon
+x<-gsub("&comma;",",",x) # comma
+x<-gsub("&quot;","'",x) # 
+x<-gsub("&lpar;","(",x) # 
+x<-gsub("&rpar;",")",x) # )
+x<-gsub("&rsqb;|&rbrack;","]",x) # 
+x<-gsub("&lsqb;|&lbrack;","[",x) # 
+x<-gsub("&sup2;","^2",x) # superscript 2
+x<-gsub("&sol;","/",x) # /
+x<-gsub("&chi;","\u03a7",x) # Chi
+x<-gsub("&beta;","\u03b2",x) # beta
+x<-gsub("&alpha;","\u03b1",x) # alpha
 
+## unify unicode special characters 
+x<-gsub("\u2264|\u2A7f|\u2a7d","<=",x) # less equal 
+x<-gsub("\u2A7e|\u2265",">=",x) # greater equal 
+x<-gsub("\u003d","=",x) # equal sign
 # special spaces
 x<-gsub("\u00A0","",x) # no break space
 x<-gsub("\u200b","",x) # invisible space
 x<-gsub("\u200a|\u200c|\u200d|\u200e|\u200f"," ",x)
 x<-gsub("\u2000|\u2001|\u2002|\u2003|\u2004"," ",x)
 x<-gsub("\u2005|\u2006|\u2007|\u2008|\u2009"," ",x)
-
 # minus/dash -
 x<-gsub("\u2013|\u2014|\u2015|\u2212|\u2010|\u2011","-",x)
-
 x<-gsub("\u00B2","^2",x) # superscript 2
 x<-gsub("\u201D","'",x) # right double quote
 x<-gsub("\u201C","'",x) # left double quote

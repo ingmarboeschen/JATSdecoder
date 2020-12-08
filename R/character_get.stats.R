@@ -84,7 +84,7 @@ html2text<-function(file
     x<-readLines(file,warn=FALSE)
     y<-invisible(x)
     # is JATS coded document?
-    if(length(grep("NLM//DTD",head(x)))>0){
+    if(length(grep("NLM//DTD",x[1:6]))>0){
       y<-JATSdecoder(file[1],output=c("abstract","sections","text","captions"))
       y<-unlist(lapply(y,text2sentences))
       }else{
