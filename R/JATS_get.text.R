@@ -8,6 +8,7 @@
 #' @param sentences Logical. IF TRUE text is returned as sectioned list with sentences
 #' @param cermine Logical. If TRUE CERMINE specific error handling and letter conversion will be applied. If set to "auto" file name ending with 'cermxml$' will set cermine=TRUE
 #' @param rm.table Logical. If TRUE removes <table> tag from text
+#' @param rm.formula Logical. If TRUE removes <formula> tags
 #' @param rm.xref Logical. If TRUE removes <xref> tag (citing) from text
 #' @param rm.media Logical. If TRUE removes <media> tag from text
 #' @param rm.graphic Logical. If TRUE removes <graphic> and <fig> tag from text
@@ -20,12 +21,14 @@ get.text<-function(x,sectionsplit="",
                   sentences=FALSE,
                   cermine="auto",
                   rm.table=TRUE,
+                  rm.formula=TRUE,
                   rm.xref=TRUE,
                   rm.media=TRUE,
                   rm.graphic=TRUE,
                   rm.ext_link=TRUE
 ){
 captions<-character(0)
+
 # set cermine if "auto"
 if(cermine=="auto") cermine<-ifelse(length(grep("cermxml$",x[1]))>0,TRUE,FALSE)
 # readLines if x is file
@@ -101,22 +104,17 @@ while(length(grep("^\\(.*?.*\\) |\\(.\\) ",sec))>0) sec<-gsub("^\\(.*?.*\\) |\\(
 # remove text after begin of reference list or end of body
 txt<-gsub("<ref-lis.*|</body.*","",txt)
 # remove text til first </title>
-#txt<-gsub(".*</title>|.*<title/>", "\\1",txt)
 txt<-sub(".*?(</title>)|.*?(<title/>)", "", txt)
 
 # letter convert
 if(letter.convert==TRUE) txt<-letter.convert(txt,cermine=cermine,greek2text=greek2text,warning=FALSE)
 
-# clean up cermines captures of degree of freedom as reference if input is cermine JATS
-#if(cermine==TRUE){
-#txt<-letter.convert(txt,cermine=cermine,greek2text=greek2text)
-# }
  
 # unify most usual degree of fredoms noted in "[]" to "()" in statistical reports
-txt<-gsub("([^a-zA-z][FRrzZTt2])\\[([0-9\\. ,;]*?)\\]","\\1(\\2)",txt)
-txt<-gsub("([^a-zA-z][FRrzZTt2]) \\[([0-9\\. ,;]*?)\\]","\\1(\\2)",txt)
-txt<-gsub("(^[FRrzZTt2])\\[([0-9\\. ,;]*?)\\]","\\1(\\2)",txt)
-txt<-gsub("(^[FRrzZTt2]) \\[([0-9\\. ,;]*?)\\]","\\1(\\2)",txt)
+txt<-gsub("([^a-zA-z][FRrzHQZTt2])\\[([0-9\\. ,;]*?)\\]","\\1(\\2)",txt)
+txt<-gsub("([^a-zA-z][FRrzHQZTt2]) \\[([0-9\\. ,;]*?)\\]","\\1(\\2)",txt)
+txt<-gsub("(^[FRrzQHZTt2])\\[([0-9\\. ,;]*?)\\]","\\1(\\2)",txt)
+txt<-gsub("(^[FRrzQHZTt2]) \\[([0-9\\. ,;]*?)\\]","\\1(\\2)",txt)
 
 # clean up white spaces
 txt<-gsub("^ *|(?<= ) | *$", "", txt, perl = TRUE)
@@ -185,10 +183,12 @@ if(rm.graphic==T){
   textred<-lapply(textred,function(x) gsub("<graphic.*?.*\"/>","removedGRAPHIC",x))
 }
 
-# remove <formula>-tag from text
-  textred<-lapply(textred,function(x) gsub("<disp .*?.*\"/>"," ",x))
-  textred<-lapply(textred,function(x) gsub("</disp .*?.*>"," ",x))
-
+# remove formula-tags from text
+if(rm.formula==T){
+  textred<-lapply(textred,function(x) gsub("<disp .*?.*\"/>|</disp .*?.*>"," ",x))
+  textred<-lapply(textred,function(x) gsub("<inline-f.*?>|</inline-f.*?>"," ",x))
+  textred<-lapply(textred,function(x) gsub("<mml.*?>|</mml.*?>"," ",x))
+}
 
 # remove <caption> from text if some is left
 textred<-lapply(textred,function(x) gsub("</caption>","",gsub("<caption.*?.*</caption>","",x)))
@@ -202,15 +202,7 @@ textred<-lapply(textred,function(x) gsub("<sup>","^",x))
 textred<-lapply(textred,function(x) gsub("<p id.*?.*>|<supplementary.*?.*\">","",x))
 # remove citing breaks []
 #textred<-gsub("\\[.*?.*]|\\[\\]","",textred)
-# remove other html codings
-#textred<-gsub("<.*?.*>","",textred)
-# remove paragraph fig ()
-#textred<-lapply(textred,function(x) gsub("[(]Fig.*?.*[)]","",x))
-# remove paragraph Tab ()
-#textred<-lapply(textred,function(x) gsub("[(]Tab.*?.*[)]","",x))
 
-# text to single line
-#textred<-lapply(textred,text2sentences)
 
 # clean up ",," and unlist
 textred<-lapply(textred,function(x) gsub(", ,|, , ,|,,|,,,",",",x))

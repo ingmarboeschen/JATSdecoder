@@ -4,7 +4,7 @@
 #' @param x a NISO-JATS coded XML file or text
 #' @param sectionsplit search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")
 #' @param sentences Logical. IF TRUE text is returned as sectioned list with sentences
-#' @param output selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "captions", "references")
+#' @param output selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "tables", "captions", "references")
 #' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
 #' @param warning Logical. If TRUE outputs a warning if processing CERMINE converted PDF files
 #' @param unify.country.name Logical. If TRUE tries to unify country name/s with list of country names from worldmap() 
@@ -18,6 +18,7 @@ JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experi
 rm.na.history<-TRUE
 rm.xref.text<-TRUE
 rm.table.text<-TRUE
+rm.formula.text<-TRUE
 rm.graphic.text<-TRUE
 # check if x is xml file else stop
 if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0) stop("file is not in XML nor NISO-JATS format")
@@ -38,7 +39,7 @@ x<-x[nchar(x)>0]
 if(length(grep("!DOCTYPE",x[1:5]))==0) stop("x seems not to be a JATS coded file or text")
 
 if(sum(is.element(c("all","sections","text","captions"),output))>0){
-temp<-get.text(x,sectionsplit,letter.convert=letter.convert,rm.table=rm.table.text,rm.xref=rm.xref.text, rm.graphic=rm.graphic.text,cermine=cerm,greek2text=greek2text,sentences=sentences)
+temp<-get.text(x,sectionsplit,letter.convert=letter.convert,rm.table=rm.table.text,rm.xref=rm.xref.text, rm.graphic=rm.graphic.text,rm.formula=rm.formula.text,cermine=cerm,greek2text=greek2text,sentences=sentences)
 sections<-temp$section
 text<-temp$text
 captions<-temp$captions
@@ -61,6 +62,7 @@ ifelse(sum(is.element(c("all","keywords"),output))>0,    keywords<-get.keywords(
 ifelse(sum(is.element(c("all","abstract"),output))>0,    abstract<-text2sentences(get.abstract(x,sentences=sentences,letter.convert=letter.convert,cermine=cerm)), abstract<-NA)
 ifelse(sum(is.element(c("all","sections"),output))>0,    sections<-sections,                                   sections<-NA)
 ifelse(sum(is.element(c("all","text"),output))>0,        text<-text,                                           text<-NA)
+ifelse(sum(is.element(c("all","tables"),output))>0,    tables<-get.tables(x),                                   tables<-NA)
 ifelse(sum(is.element(c("all","captions"),output))>0,    captions<-captions,                                   captions<-NA)
 ifelse(sum(is.element(c("all","references"),output))>0,  references<-get.references(x,letter.convert=letter.convert,remove.html=T),references<-NA)
 
@@ -81,6 +83,7 @@ res<-list(
  abstract=abstract,
  sections=sections,
  text=text,
+ tables=tables,
  captions=captions,
  references=references
 )

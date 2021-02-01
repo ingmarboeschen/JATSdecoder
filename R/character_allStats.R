@@ -380,6 +380,11 @@ x[i]<-gsub(".*[(]","",x[i])
 return(x)
 })
 
+## NEW
+# remove letters and numbers at end after last result
+stats<-gsub("([<=>][-\\+\\)\\]\\.\\^0-9eE \\^]*)[^<=>]*$","\\1",stats)
+## end NEW
+
 # remove text behind ")" in lines with no "("
 stats<-lapply(stats,function(x){ if(length(grep("[(]",x,invert=TRUE))>0&length(grep("[)]",x))>0) {
 i<-(1:length(x))[grep("[)]",x)]; i<-i[grep("[(]",x[i],invert=TRUE)]

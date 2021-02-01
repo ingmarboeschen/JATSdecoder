@@ -280,19 +280,11 @@ x<-gsub("&#x00151;","\u00F6 ",x) # small ö &odblac;
 
 
 ## convert all other hexadecimals to unicode at once
-if(length(grep("&#x0",x))>0){
-i<-grep("&#x0",x)
-x[i]<-gsub("(\\u....);","\\1",gsub("&#x0","\\u",x[i],fixed=T))
+if(length(grep("&#x[10]",x))>0){
+i<-grep("&#x[10]",x)
 x[i]<-unlist(lapply(x[i],udecode))
 }
         
-if(length(grep("&#x1",x))>0){
-i<-grep("&#x1",x)
-x[i]<-gsub("(\\u....);","\\1",gsub("&#x1","\\u",x[i],fixed=T))
-x[i]<-unlist(lapply(x,udecode))
-}
-
-
 
 ######################################################################
 ######################################################################
@@ -1350,15 +1342,34 @@ return(x)
 
 ## Function to convert unicode to ASCII
 udecode <- function(string){
-  uconv <- function(chars) intToUtf8(strtoi(chars, 16L))
-  ufilter <- function(string) {
-    if (substr(string, 1, 1)=="|") uconv(substr(string, 2, 5)) else string
+# functions
+uconv <- function(chars) intToUtf8(strtoi(chars, 16L))
+  ufilter <- function(string){
+  tryCatch({
+  input<-string
+    if(substr(string, 1, 1)=="|") return(uconv(substr(string,2,5))) else return(string)
+    },error=function(e){return(input)})   
+    #    if (length(grep("^[|][a-zA-z0-9]{4}",x))>0) uconv(substr(string, 2, 5)) else string
   }
+  # convert | -> @@
+  string<-gsub("[|]","@@",string)
+# hex to unicode
+  if(length(grep("&#x0",string))>0){
+  i<-grep("&#x0",string)
+  string[i]<-gsub("(\\u....);","\\1",gsub("&#x0","\\u",string[i],fixed=T))
+  }
+  if(length(grep("&#x1",string))>0){
+  i<-grep("&#x1",string)
+  string[i]<-gsub("(\\u....);","\\1",gsub("&#x1","\\u",string[i],fixed=T))
+  }
+  # unicode to raw
   string <- gsub("\\\\u([a-zA-z0-9]{4})", "|\\1", string, perl=TRUE)
-  strings <- unlist(strsplit2(unlist(strsplit2(string, "[|]....","after")), "[|]....","before"))
+  strings <- unlist(strsplit2(unlist(strsplit2(string, "[|][a-zA-z0-9]{4}","after")), "[|][a-zA-z0-9]{4}","before"))
   i<-which(is.na(sapply(strings, ufilter)))
   replacement<-sapply(strings, ufilter)
   replacement[i]<-names(replacement)[i]
   string <- paste(replacement, collapse='')
+  # reconvert @@ -> |
+  string<-gsub("@@","|",string)
   return(string)
 }
