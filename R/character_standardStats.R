@@ -26,7 +26,6 @@ if(length(grep(" [<=>] [0-9\\.-]|[<=>] [0-9\\.-]",x))>0) x<-allStats(x)
 if(length(x)>0){
 # take copy for raw output
 y<-x
-
 # remove space between letter and (
 x<-gsub("([A-Za-z]) (\\([0-9Nnd])","\\1\\2",x)
 # remove 'Letter'chi'letter'
@@ -278,36 +277,12 @@ x<-unlist(lapply(x,paste,collapse=""))
 x<-gsub(", [Nn]=[0-9]*","",x)
 x<-gsub("[Nn]=[0-9]*, ","",x)
 
-# convert fraction to digit number
-frac2num<-function(x){
-if(length(grep("/[-\\.0-9]|/ [-\\.0-9]",x))>0){
-    x<-unlist(strsplit2(x,"\\.$","before"))
-    x<-gsub("([0-9]) /([-\\.0-9])","\\1/\\2",x)
-    x<-gsub("([0-9]) / ([-\\.0-9])","\\1/\\2",x)
-    x<-gsub("([0-9])/ ([-\\.0-9])","\\1/\\2",x)
-    x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?/[-\\.0-9]","before"))
-    # get lines with fraction
-    ind<-grep("[0-9]/[-0-9\\.]",x)
-    # lines with only one fraction
-    ind<-ind[nchar(x[ind])-nchar(gsub("/","",x[ind]))==1]
-    if(length(ind)>0){
-        # get num/num
-        frac<-regmatches(x[ind],regexpr("[-\\.0-9]*/[-\\.0-9]*",x[ind]))
-        # recompute num=num/num
-        num<-sapply(frac, function(x) eval(parse(text=x)))
-        num<-as.character(round(num,4))
-        # insert num
-        for(i in 1:length(ind)) x[ind[i]]<-gsub("([-\\.0-9]*/[-\\.0-9]*)",num[i],x[ind[i]])
-    }
-    # collapse and clean up
-    x<-gsub("  "," ",gsub("  "," ",gsub(" $","",paste(x,collapse=" "))))
-    x<-gsub(" , ",", ",x)
-    x<-gsub(" \\.$",".",x)
-}
-    return(x)
-}
-# apply
-x<-unlist(lapply(x,frac2num))
+# convert different representations to digit number
+x<-unlist(lapply(x,text2num))
+
+# remove spaces in front or after operator
+x<-gsub(" ([<=>])","\\1",x)
+x<-gsub("([<=>]) ","\\1",x)
 
 # prepare results colnames
 cnames<-c("result","Z_op","Z","F_op","F","eta2","omega2","t_op","t","d","SE","r_op","r","R2_op","R2","U_op","U","H_op","H","G2_op","G2","OR","RR","Chi2","Q_op","Q","df1","df2","beta","SEbeta","Zest","BF10_op","BF10","BF_op","BF","p_op","p","recalculatedP","p_H0_less","p_H0_greater")
