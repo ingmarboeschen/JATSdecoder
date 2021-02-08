@@ -7,11 +7,13 @@
 get.text(
   x,
   sectionsplit = "",
+  grepsection = "",
   letter.convert = TRUE,
   greek2text = FALSE,
   sentences = FALSE,
   cermine = "auto",
   rm.table = TRUE,
+  rm.formula = TRUE,
   rm.xref = TRUE,
   rm.media = TRUE,
   rm.graphic = TRUE,
@@ -23,6 +25,8 @@ get.text(
 
 \item{sectionsplit}{search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")}
 
+\item{grepsection}{search pattern to reduce text to specific section namings only}
+
 \item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
 
 \item{greek2text}{Logical. If TRUE some greek letters and special characters will be unified to textual representation. (important to extract stats)}
@@ -32,6 +36,8 @@ get.text(
 \item{cermine}{Logical. If TRUE CERMINE specific error handling and letter conversion will be applied. If set to "auto" file name ending with 'cermxml$' will set cermine=TRUE}
 
 \item{rm.table}{Logical. If TRUE removes <table> tag from text}
+
+\item{rm.formula}{Logical. If TRUE removes <formula> tags}
 
 \item{rm.xref}{Logical. If TRUE removes <xref> tag (citing) from text}
 

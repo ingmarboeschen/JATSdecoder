@@ -8,6 +8,7 @@ JATSdecoder(
   x,
   sectionsplit = c("intro", "method", "result", "study", "experiment", "conclu",
     "implica", "discussion"),
+  grepsection = "",
   sentences = FALSE,
   output = "all",
   letter.convert = TRUE,
@@ -21,9 +22,11 @@ JATSdecoder(
 
 \item{sectionsplit}{search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")}
 
+\item{grepsection}{search pattern to reduce text to specific section namings only}
+
 \item{sentences}{Logical. IF TRUE text is returned as sectioned list with sentences}
 
-\item{output}{selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "captions", "references")}
+\item{output}{selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "tables", "captions", "references")}
 
 \item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
 
