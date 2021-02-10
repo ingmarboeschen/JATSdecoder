@@ -3,6 +3,7 @@
 #' Function to extract and structure NISO-JATS coded XML file or text into a list
 #' @param x a NISO-JATS coded XML file or text
 #' @param sectionsplit search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")
+#' @param grepsection search pattern to reduce text to specific section namings only
 #' @param sentences Logical. IF TRUE text is returned as sectioned list with sentences
 #' @param output selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "tables", "captions", "references")
 #' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
@@ -12,7 +13,7 @@
 #' @export
 
 # define function
-JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experiment","conclu","implica","discussion"),
+JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experiment","conclu","implica","discussion"),grepsection="",
                          sentences=FALSE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE){
 # presettings
 rm.na.history<-TRUE
@@ -39,7 +40,7 @@ x<-x[nchar(x)>0]
 if(length(grep("!DOCTYPE",x[1:5]))==0) stop("x seems not to be a JATS coded file or text")
 
 if(sum(is.element(c("all","sections","text","captions"),output))>0){
-temp<-get.text(x,sectionsplit,letter.convert=letter.convert,rm.table=rm.table.text,rm.xref=rm.xref.text, rm.graphic=rm.graphic.text,rm.formula=rm.formula.text,cermine=cerm,greek2text=greek2text,sentences=sentences)
+temp<-get.text(x,sectionsplit=sectionsplit,grepsection=grepsection,letter.convert=letter.convert,rm.table=rm.table.text,rm.xref=rm.xref.text, rm.graphic=rm.graphic.text,rm.formula=rm.formula.text,cermine=cerm,greek2text=greek2text,sentences=sentences)
 sections<-temp$section
 text<-temp$text
 captions<-temp$captions
