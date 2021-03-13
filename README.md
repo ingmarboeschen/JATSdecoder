@@ -58,7 +58,7 @@ The contained functions are listed below. For a detailed description see the ful
 * [devtools](https://github.com/r-lib/devtools) package
 
 
-### How to cite JATSdecoder** <br>
+### How to cite JATSdecoder
 ```
 JATSdecoder: A meta data and text extraction and manipulation tool set. Ingmar Böschen (2021). R package version 1.0.1.
 ```
