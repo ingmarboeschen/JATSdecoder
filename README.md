@@ -66,7 +66,7 @@ JATSdecoder: A meta data and text extraction and manipulation tool set. Ingmar B
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To install **JATSdecoder** run the follow steps:
+To install **JATSdecoder** run the following steps:
 
 ### Installation
 1. Install and load the [devtools](https://github.com/r-lib/devtools) package
