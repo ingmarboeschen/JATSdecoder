@@ -32,7 +32,7 @@ The contained functions are listed below. For a detailed description see the ful
   - get.references() # extracts reference list as vector
 
 
-- **JATSdecoder::study.character()** applies several functions on specific elements of the `JATSdecoder()` result. These functions can be used stand alone on any plain text input:
+- **JATSdecoder::study.character()** applies several functions on specific elements of the `JATSdecoder()` result. These functions can be used stand alone on any plain textual input:
   - get.n.studies()   # extracts number of studies from sections or abstract
   - get.alpha.error()  # extracts alpha error from text 
   - get.method()  # extracts statistical methods from method and result section with `ngram()`
@@ -44,7 +44,7 @@ The contained functions are listed below. For a detailed description see the ful
   - get.multiple.comparison()  # extracts correction method for multiple testing from method and result section with dictionary search
   - get.sig.adjectives()  # extracts common inadequate adjectives used before *signignificant* and *not significant* 
 
-- **JATSdecoder helper functions** are helpfull for many text mining project and straight forward to use on any textual input:
+- **JATSdecoder helper functions** are helpfull for many text mining projects and straight forward to use on any textual input:
   - text2sentences() # breaks floating text into sentences
   - text2num() # converts spelled out numbers, fractions, potencies, percentages and numbers denoted with e+num to decimals
   - ngram() # creates n gram of words around a pattern match in text 
