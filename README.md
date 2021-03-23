@@ -1,8 +1,8 @@
 # JATSdecoder
-A meta data and text extraction and manipulation tool set for the statistical programming language [R](www.r-project.org). 
+A metadata and text extraction and manipulation tool set for the statistical programming language [R](www.r-project.org). 
 
-**JATSdecoder** facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of meta data and text parts. 
-Its function `JATSdecoder()` extracts meta data, sectioned text and reference list from [NISO-JATS](https://jats.nlm.nih.gov/publishing/tag-library/1.1d2/index.html) coded XML files. 
+**JATSdecoder** facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of metadata and text parts. 
+Its function `JATSdecoder()` extracts metadata, sectioned text and reference list from [NISO-JATS](https://jats.nlm.nih.gov/publishing/tag-library/1.1d2/index.html) coded XML files. 
 Wheras `study.character()` uses the `JATSdecoder()` result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text and others. 
 
 Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
@@ -60,7 +60,7 @@ The contained functions are listed below. For a detailed description see the ful
 
 ### How to cite JATSdecoder
 ```
-JATSdecoder: A meta data and text extraction and manipulation tool set. Ingmar Böschen (2021). R package version 1.0.1.
+JATSdecoder: A metadata and text extraction and manipulation tool set. Ingmar Böschen (2021). R package version 1.0.1.
 ```
 
 <!-- GETTING STARTED -->
@@ -92,7 +92,7 @@ library(JATSdecoder)
 # download example XML file via URL
 URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
 download.file(URL,"file.xml")
-# convert full article to list with meta data, sectioned text and reference list
+# convert full article to list with metadata, sectioned text and reference list
 JATSdecoder("file.xml")
 # extract specific content (here: abstract)
 JATSdecoder("file.xml",output="abstract")
