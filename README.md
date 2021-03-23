@@ -32,7 +32,7 @@ The contained functions are listed below. For a detailed description see the ful
   - get.references() # extracts reference list as vector
 
 
-- **JATSdecoder::study.character()** applies several functions on specific elements of the `JATSdecoder()` result and can be used stand alone on any plain text input:
+- **JATSdecoder::study.character()** applies several functions on specific elements of the `JATSdecoder()` result. These functions can be used stand alone on any plain text input:
   - get.n.studies()   # extracts number of studies from sections or abstract
   - get.alpha.error()  # extracts alpha error from text 
   - get.method()  # extracts statistical methods from method and result section with `ngram()`
