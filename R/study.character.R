@@ -10,11 +10,13 @@
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
 #' @param T2t Logical. If TRUE capital letter T is treated as t-statistic when extracting statistics with get.stats()
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats()
+#' @param selectStandardStats Select specific standard statistics only (e.g.: c("t","F","Chi2"))
 #' @param update.package.list if TRUE updates available R packages with available.packages() function
 #' @param add.software additional software names to detect as vector
 #' @param quantileDF quantile of (df1+1)+(df2+1) to extract for estimating sample size
 #' @param N.max.only return only maximum of estimated sample sizes
 #' @param output output selection of specific results c("all", "doi", "title", "year", "n.studies", "methods", "alpha.error", "power", "multi.comparison.correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test.direction", "sig.adjectives", "software", "Rpackage", "stats", "standardStats", "estimated.sample.size")
+#' @param rm.na.col Logical. If TRUE removes all columns with only NA in extracted standard statistics
 #' @export
 
 study.character<-function(x,
@@ -24,15 +26,17 @@ study.character<-function(x,
                   estimateZ=FALSE,
                   T2t=FALSE,
                   R2r=FALSE,
+                  selectStandardStats=NULL,
                   captions=TRUE,
                   text.mode=1,
                   update.package.list=FALSE,
                   add.software=NULL,
                   quantileDF=.75,
                   N.max.only=FALSE,
-                  output="all"){
+                  output="all",
+                  rm.na.col=TRUE){
 
-                  caps<-character(0)
+caps<-character(0)
 # check if x is xml file or list else stop
 if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0&!is.list(x)) stop("file is not in XML nor NISO-JATS format nor a JATSdecoder result")
 # if x is file readLines else copy to temp
@@ -163,11 +167,11 @@ if(length(grep("!DOCTYPE",temp[1:10]))>0){
 }else{n.studies<-NA} # End no !DOCTYPE
 # get characteristics
 if(sum(is.element(c("all","methods"),output))>0){ methods<-get.method(both,cermine=cermine) }else{methods<-NA}
-if(sum(is.element(c("all","alpha.error"),output))>0){ alpha.error<-get.alpha.error(method) }else{alpha.error<-NA}
+if(sum(is.element(c("all","alpha.error"),output))>0){ alpha.error<-get.alpha.error(both) }else{alpha.error<-NA}
 if(sum(is.element(c("all","multi.comp"),output))>0){ multi.comp<-get.multi.comparison(both) }else{multi.comp<-NA}
 if(sum(is.element(c("all","power"),output))>0){ power<-get.power(both) }else{power<-NA}
 if(sum(is.element(c("all","assumptions"),output))>0){ assumptions<-get.assumptions(both) }else{assumptions<-NA}
-if(sum(is.element(c("all","outlier"),output))>0){ outlier<- get.outlier.def(both) }else{outlier<-NA}
+if(sum(is.element(c("all","OutlierRemovalInSD"),output))>0){ outlier<- get.outlier.def(both) }else{outlier<-NA}
 if(sum(is.element(c("all","InteractionModeratorMediatorEffect"),output))>0){ InteractionModeratorMediatorEffect<-has.interaction(both) }else{InteractionModeratorMediatorEffect<-NA}
 if(sum(is.element(c("all","test.direction","standardStats"),output))>0){ test.direction<-get.test.direction(both) }else{test.direction<-NA}
 if(sum(is.element(c("all","software"),output))>0){ software<-get.software(both,add.software=add.software) }else{software<-NA}
@@ -185,7 +189,7 @@ if(sum(is.element(c("all","standardStats"),output))>0){
 # set direction to "both" for alternative if has one sided hypotheses/tests
 if(length(grep("^one ",test.direction))>0){
    direction<-"both"}else{direction<-"undirected"}
-   standardStats<-standardStats(stats,stats.mode=stats.mode,recalculate.p=recalculate.p,alternative=direction,T2t=T2t,R2r=R2r,estimateZ=estimateZ)
+   standardStats<-standardStats(stats,stats.mode=stats.mode,recalculate.p=recalculate.p,alternative=direction,T2t=T2t,R2r=R2r,estimateZ=estimateZ,rm.na.col=rm.na.col,select=selectStandardStats)
 }else standardStats<-NA
 }else{
  stats<-NA;standardStats<-NA}

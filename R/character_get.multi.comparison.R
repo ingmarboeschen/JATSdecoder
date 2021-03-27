@@ -8,19 +8,22 @@
 #' get.multi.comparison(x)
 
 get.multi.comparison<-function(x){
+# convert to sentences if has length 1
+if(length(x)==1) x<-text2sentences(x)
 # procedure search terms
-proc<-c("Boole","Bonferroni|Bonf| bonfer","Holm","[^A-Z]FDR[^A-Z]","AlphaSim|Alpha[- ]Sim","[\U0160S]id[a\U00E1]k","Tukey","Benjamini","Hochberg","Dunnett|Dunet","Duncan","Newman","Keuls","Scheff[e\U00E9\U00E8]|Schef[e\U00E9\U00E8]")
+proc<-c("Boole[^a-z]","Bonferroni|Bonf| bonfer","Holm[^a-z]","[^A-Z]FDR[^A-Z]","AlphaSim|Alpha[- ]Sim","[\U0160S]id[a\U00E1]k","Tukey|Tuckey",
+        "Benjamini","Hochberg","Dunnett[^a-z]|Dunn*et","Duncan","Newman","Keuls","Scheff[e\U00E9\U00E8]|Schef[e\U00E9\U00E8]|Scheff[^a-z]|Sheff[e\U00E9\U00E8]")
 # reduce to relavant lines
-res<-lapply(x,get.sentence.with.pattern,"corrected|correction|corrected| adjust|multiple|[Pp]ost[- ][Hh]oc",tolower=F)
+res<-grep("[Cc]orrected|[Cc]orrection|[Cc]orrected| *[Aa]djust|[Mm]ultiple|[Pp]ost[- ][Hh]oc",x,value=T)
 # split lines
-res<-lapply(res,function(x) unlist(strsplit(x,", |; ")))
+res<-unlist(strsplit(res,", |; "))
 # remove lines that negate the use of a method
-res<-lapply(res,function(x) grep("[Ii]nstead of| not |n[^ a-z]t|Since | since |rather than",x,invert=T,value=T))
+res<-grep("[Ii]nstead of| not |n[^ a-z]t|Since | since |rather than",res,invert=T,value=T)
 # wich procedure is used
-res<-unlist(lapply(res,which.term,tolower=F,hits=T,proc))
-
+res<-which.term(res,terms=proc,tolower=F,hits=T)
 # clean up
 res<-gsub("\\[\\^A-Z\\]","",res)
+res<-gsub("\\[\\^a-z\\]","",res)
 res<-gsub("\\[\U0160S\\]","\U0160",res)
 res<-gsub("\\[e\U00E9\U00E8\\]","\U00E9",res)
 res<-gsub("\\[a\U00E1\\]","\U00E1",res)

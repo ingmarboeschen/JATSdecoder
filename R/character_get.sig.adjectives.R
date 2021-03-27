@@ -41,6 +41,16 @@ insig<-names(unlist(insig)[unlist(insig)>0])
 sig<-gsub("^ ","",sig)
 insig<-gsub("^ |\\|.*","",insig)
 
+# unify some uses
+sig<-gsub("marginal ","marginally",sig)
+insig<-gsub("marginal ","marginally",insig)
+sig<-gsub("remained ","remain",sig)
+insig<-gsub("remained ","remain",insig)
+sig<-gsub("near ","nearly",sig)
+insig<-gsub("near ","nearly",insig)
+sig<-gsub("toward ","towards",sig)
+insig<-gsub("toward ","towards",insig)
+
 return(list(sig_adjective=sig,insig_adjective=insig))
 
 }

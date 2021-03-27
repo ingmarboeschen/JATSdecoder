@@ -2,7 +2,7 @@
 #'
 #' Return search term hit vector for all search patterns
 #' @param x text to process
-#' @param patterns search terms
+#' @param patterns search terms as vector
 #' @param tolower Logical. If TRUE converts search terms and text to lower case
 #' @export
 #' @examples
@@ -15,7 +15,7 @@
 has.pattern<-function(x,patterns=c(""),tolower=TRUE){
 res<-NULL
 for(i in 1:length(patterns)){
-if(tolower==T) res[i]<-ifelse(length(grep(patterns[i],tolower(x)))>0,1,0)
+if(tolower==T) res[i]<-ifelse(length(grep(tolower(patterns[i]),tolower(x)))>0,1,0)
 if(tolower!=T) res[i]<-ifelse(length(grep(patterns[i],x))>0,1,0)
 }
 names(res)<-patterns

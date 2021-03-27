@@ -8,33 +8,34 @@
 #' get.outlier.def(x)
 
 get.outlier.def<-function(x){
+# convert to sentences if has length 1
+if(length(x)==1) x<-text2sentences(x)
+# lowerize
 x<-tolower(x)
 # Extract potential lines with "Outlier removal"
-out<-unlist(lapply(x,function(x) grep("outlier|extreme|remove|exclud|correct|preclude|except",x,value=TRUE)))
-# reduce to relevant ones
-#out<-lapply(out,get.sentence.with.pattern,"remove|exclud|correct|preclude|except")
+out<-grep("outlier|extreme|remove|delete|discard|exclud|correct|preclude|except| omit",x,value=TRUE)
 # that also contain standard deviation
-out<-unlist(lapply(out,get.sentence.with.pattern,"sd|standard d"))
+out<-grep("[^a-z]sd[^a-z]|standard dev",out,value=TRUE)
+# and a number
+# convert text2num and select lines with number
+out<-grep("[0-9]",text2num(out),value=TRUE)
 if(length(out)>0){
-# remove html
-temp<-lapply(out,function(x) gsub("<[a-z].*?.*[a-z\"]>","",x))
-# split at sd
-temp<-lapply(temp,function(x) unlist(strsplit(x,"SD|sd|standard d")))
-# select first element
-temp<-lapply(temp,"[",1)
-# convert textual number to digit number
-temp<-lapply(temp,function(x) text2num(unlist(x)))
-# select lines with number
-temp<-unlist(lapply(temp,function(x) grep("[0-9]$",x,value=TRUE)))
-# remove spaces
-temp<-lapply(temp,function(x) gsub(" ","",x))
-# remove text in front of number
-temp<-lapply(temp,function(x) gsub(".*[a-zA-Z%]","",x))
-# clean up front till first number or "."
-temp<-unlist(lapply(temp,function(x) gsub(".*[^0-9\\.]","",x)))
-# set text as numeric vector
-if(length(temp)>0) temp<-unique(as.numeric(temp))
-} else temp<-out
-if(length(temp)==0) temp<-character(0)
-return(unique(temp))
+  # remove html
+  temp<-gsub("<[a-z].*?.*[a-z\"]>","",out)
+# unify standard deviation
+  temp<-gsub("standard deviation|standard deviations","sd",temp)
+  # if has number behind sd and not in front change order
+  temp<-gsub("[^0-9] sd ([0-9\\.]*)"," \\1 sd",temp)  
+  # extract number in front of sd
+  temp<-suppressWarnings(as.numeric(gsub(".* ([0-9\\.]*?) sd.*","\\1",temp)))
+    # select non NAs
+  temp<-temp[!is.na(temp)]
+  # extract unique values
+  if(length(temp)>0){
+    temp<-unique(temp)
+  } else temp<-character(0)
+} else temp<-character(0)
+
+return(temp)
 }
+

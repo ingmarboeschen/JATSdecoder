@@ -23,9 +23,9 @@ text2num<-function(x,exponent=TRUE,percentage=TRUE,fraction=TRUE,e=TRUE,product=
 # convert textual representations of numbers
 if(exponent==TRUE)   x<-unlist(lapply(x,hight2num))
 if(percentage==TRUE)    x<-unlist(lapply(x,percent2number))
-if(fraction==TRUE)   x<-unlist(lapply(x,frac2num))
+if(fraction==TRUE)   x<-unlist(lapply(x,function(y) tryCatch(frac2num(y),error=function(e) return(y))))
 if(e==TRUE)          x<-unlist(lapply(x,e2num))    
-if(product==TRUE)    x<-unlist(lapply(x,prod2num))    
+if(product==TRUE)    x<-unlist(lapply(x,function(y) tryCatch(prod2num(y),error=function(e) return(y))))    
 if(words==TRUE)      x<-unlist(lapply(x,text2digit))
 if(words==TRUE&percentage==TRUE)    x<-unlist(lapply(x,percent2number))
 # output
@@ -87,7 +87,8 @@ text<-paste(text,collapse=" ")
 #text<-gsub("([0-9]) thousand ","\\1",text)
 
 # remove space before coma, bracket and point
-text<-gsub(" [.]","\\.",gsub(" [,]",",",text))
+text<-gsub(" [.]([^0-9])","\\.\\1",gsub(" [,]",",",text))
+text<-gsub("([0-9]) ([.][0-9])","\\1\\2",text)
 text<-gsub(" [)]","\\)",gsub("[(] ","\\(",text))
 } else text<-NA
 return(text)
@@ -227,6 +228,7 @@ if(length(grep("[0-9][Ee][-\\+\\.0-9]",x))>0){
 
 # convert fraction to digit number
 frac2num<-function(x){
+tryCatch({
 if(length(grep("/[-\\.0-9]|/ [-\\.0-9]",x))>0){
     x<-unlist(strsplit2(x,"\\.$","before"))
     x<-gsub("([0-9]) /([-\\.0-9])","\\1/\\2",x)
@@ -240,21 +242,27 @@ if(length(grep("/[-\\.0-9]|/ [-\\.0-9]",x))>0){
     if(length(ind)>0){
         # get num/num
         frac<-regmatches(x[ind],regexpr("[-\\.0-9]*/[-\\.0-9]*",x[ind]))
-        # recompute num=num/num
+        # recompute num=num/num if num/num
+        isfrac<-grep("[0-9]/[0-9]",gsub("[-\\.]","",frac))
+        ind<-ind[isfrac]
+        if(length(ind)>0){
+            # recompute num=num/num
         num<-sapply(frac, function(x) eval(parse(text=x)))
         num<-as.character(round(num,4))
         # insert num
         for(i in 1:length(ind)) x[ind[i]]<-gsub("([-\\.0-9]*/[-\\.0-9]*)",num[i],x[ind[i]])
-    }
+    }}
     # collapse and clean up
     x<-gsub("  "," ",gsub("  "," ",gsub(" $","",paste(x,collapse=" "))))
     x<-gsub(" , ",", ",x)
     x<-gsub(" \\.$",".",x)
 }
     return(x)
+},error=function(e) return(x))
 }
 # convert product to digit number
 prod2num<-function(x){
+tryCatch({
 if(length(grep("\\*[-\\.0-9]|\\* [-\\.0-9]",x))>0){
     x<-unlist(strsplit2(x,"\\.$","before"))
     x<-gsub("([0-9]) \\*([-\\.0-9])","\\1*\\2",x)
@@ -280,4 +288,5 @@ if(length(grep("\\*[-\\.0-9]|\\* [-\\.0-9]",x))>0){
     x<-gsub(" \\.$",".",x)
 }
     return(x)
+},error=function(e) return(x))
 }
