@@ -39,7 +39,7 @@ study.character<-function(x,
 caps<-character(0)
 # check if x is xml file or list else stop
 if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0&!is.list(x)) stop("file is not in XML nor NISO-JATS format nor a JATSdecoder result")
-# if x is file readLines else copy to temp
+# if x is xml file readLines else copy to temp
 if(length(grep("\\.nxml$|cermxml$|\\.xml$|XML$",x[1]))==1){
   temp<-readLines(x,warn=F)
   }else temp<-x
@@ -51,7 +51,7 @@ if(is.element("standardStats",output)) output<-unique(c("stats",output))
 # check if input is made by cermine
 ifelse(length(grep("cermxml$",x[1]))==1, cermine<-TRUE,  cermine<-FALSE)
 
-## get method and result text
+## get method and result text from plain xml text
 if(length(grep("!DOCTYPE",temp[1:5]))>0|sum(is.element(c("sections","text"),names(temp)))==2){
 # for JATS coded xml
 if(length(grep("!DOCTYPE",temp[1:5]))>0){
@@ -167,13 +167,13 @@ if(length(grep("!DOCTYPE",temp[1:10]))>0){
 }else{n.studies<-NA} # End no !DOCTYPE
 # get characteristics
 if(sum(is.element(c("all","methods"),output))>0){ methods<-get.method(both,cermine=cermine) }else{methods<-NA}
-if(sum(is.element(c("all","alpha.error"),output))>0){ alpha.error<-get.alpha.error(both) }else{alpha.error<-NA}
-if(sum(is.element(c("all","multi.comp"),output))>0){ multi.comp<-get.multi.comparison(both) }else{multi.comp<-NA}
-if(sum(is.element(c("all","power"),output))>0){ power<-get.power(both) }else{power<-NA}
+if(sum(is.element(c("all","alpha.error"),output))>0){ alpha.error<-get.alpha.error(c(both,caps)) }else{alpha.error<-NA}
+if(sum(is.element(c("all","multi.comp"),output))>0){ multi.comp<-get.multi.comparison(c(both,caps)) }else{multi.comp<-NA}
+if(sum(is.element(c("all","power"),output))>0){ power<-get.power(c(both,caps)) }else{power<-NA}
 if(sum(is.element(c("all","assumptions"),output))>0){ assumptions<-get.assumptions(both) }else{assumptions<-NA}
 if(sum(is.element(c("all","OutlierRemovalInSD"),output))>0){ outlier<- get.outlier.def(both) }else{outlier<-NA}
 if(sum(is.element(c("all","InteractionModeratorMediatorEffect"),output))>0){ InteractionModeratorMediatorEffect<-has.interaction(both) }else{InteractionModeratorMediatorEffect<-NA}
-if(sum(is.element(c("all","test.direction","standardStats"),output))>0){ test.direction<-get.test.direction(both) }else{test.direction<-NA}
+if(sum(is.element(c("all","test.direction","standardStats"),output))>0){ test.direction<-get.test.direction(c(both,caps)) }else{test.direction<-NA}
 if(sum(is.element(c("all","software"),output))>0){ software<-get.software(both,add.software=add.software) }else{software<-NA}
 if(sum(is.element(c("all","Rpackage"),output))>0){ Rpackage<-get.R.package(both,update.package.list=update.package.list) }else{Rpackage<-NA}
 

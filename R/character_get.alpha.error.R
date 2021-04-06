@@ -13,17 +13,21 @@
 #' get.alpha.error(x)
 
 get.alpha.error<-function(x){
+  # convert to sentences if x is of length 1
+  if(length(x)==1) x<-text2sentences(x)
   # select lines with numbers  
   x<-grep("[0-9]",x,value=TRUE)
-  # convert to sentences if has length 1
-  if(length(x)==1) x<-text2sentences(x)
   ## unify
   # tolower
   x<-tolower(x)
   # remove alpha-num
   x<-gsub("alpha[-][0-9]|alpha [-][0-9]","",x)
+  # intervals and bounds to interval
+  x<-gsub("intervall*s*|bounds*","interval",x)
   # remove html
   x<-gsub("<[/a-z\\].*?[a-z]>","",x)
+  # convert less synonyms to '<'
+  x<-gsub("less equal | smaller | smaller than | below | lower than | lower "," < ",x)
   # convert "-" to space
   x<-gsub("  *"," ",gsub("[-]"," ",x))
   # remove hyphens
@@ -31,44 +35,68 @@ get.alpha.error<-function(x){
   # convert plural singular to alpha error 
   x<-gsub("values","value",x)
   x<-gsub("errors","error",x)
-  x<-gsub("was set","set",x)
+  x<-gsub(" was set| is set"," set",x)
   x<-gsub("([a-z])(\\.[0-9])","\\1 \\2",x)
   # convert synonyms to alpha error 
-  x<-gsub("alpha error level|alpha error probability|type 1 error|type i error|significance criterion|statistical threshold|criterion of significance|significance threshold","alpha error",x)
+  x<-gsub("alpha error level|alpha error probability|type 1 error|type i error|significance criterion|criterion of significance|statistical threshold|significance threshold","alpha error",x)
   #all operators to '='
   x<-gsub("[=][=]*","=",gsub("[<=>]","=",x)) 
-
-  ## unify alpha error representation
+  # remove years
+  x<-gsub("[ \\(][1-2][0-9]{3}[^0-9]"," ",x)
+  # select lines with numbers  
+  x<-grep("[0-9]",x,value=TRUE)
+  # unify probability of to 'p ='
+  x<-gsub("probability [ao][tf] ","p =",x)
+  # convert 'p value' to 'p'  
+  x<-gsub("p value [oa][ft] *[<=>]*|p value *[<=>]*","p =",x)
+  # 10% to 0.1
+  x<-gsub("([^0-9])10[ ]*\\%","\\10.1",x)
+  # 5% to 0.05
+  x<-gsub("([^0-9])5[ ]*\\%","\\10.05",x)
+  # 1% to 0.01
+  x<-gsub("([^0-9])1[ ]*\\%","\\10.01",x)
+  
+## unify alpha error representation
   # if has no alpha error yet
   if(length(grep("alpha error",x))==0){
     x<-gsub("alpha set to|two tailed alpha at a|alpha was set at|was set at alpha|two tailed alpha at|alpha level of|alpha level was|with alpha set to|alpha level of|criterion for statistical significance","alpha error",x)
-    x<-gsub("level of alpha|alpha level|significance level|level for significance|level of significance|level for statistical significance|level of statistical significance|significance criterion|significant at alpha","alpha error",x)
+    x<-gsub("level of alpha|alpha level|significance level|level of significance|level for significance|level for statistical significance|level of statistical significance|significance criterion|significant at alpha|level of significan[a-z]*","alpha error",x)
     x<-gsub("corrected error probability","corrected alpha error probability",x)
   }
-  # if still has no alpha error yet but .0[15], 0.1 or 0.001 convert alpha to alpha error
+# if still has no alpha error yet but .0[15], 0.1 or 0.001 or bonf|tukey|holm|FRD|hochberg|scheff convert alpha to alpha error
   if(length(grep("alpha error",x))==0){
-    ind<-grep("\\.0[15]|\\.1[^0-9]|\\.001",x)
-    x[ind]<-gsub("alpha .*(\\.1[^0-9])|alpha .*(\\.0[15][^0-9])|alpha .*(\\.001[^0-9])","alpha error=\\1\\2",x[ind])
+    ind<-grep("\\.0[15]|\\.1[^0-9]|\\.001|cohen|bonff*err*on|tukey[^a-z]|post[- ]hoc|false discovery rate|[^a-z]fdr|[^a-z]hsd",x)
+    x[ind]<-gsub("alpha *=* *.*(\\.1[^0-9])|alpha *=* *(\\.0[15][^0-9])|alpha .*=* *(\\.001[^0-9])","alpha error=\\1\\2",x[ind])
   }  
   # if line has 'alpha' and 'power, CI' or similar but no 'error|item|scale' add 'error' behind alpha
   i1<-grep("alpha",x)
-  i2<-grep("power analy|power of|[0-9\\%] power|confidence interval|significance criterion|false discovery rate|FDR|two[ -]tailed|significance level|multiple comparison|significance at alpha|post[ -]hoc|a[ -]priori|significant at alpha|bonferroni correct|level of significance|consider[^0-9,;\\(]* significant",x)
-  #  confidence level?
+  i2<-grep("power analy|power of|[0-9\\%] power|confidence interval|significance criterion|two[ -]tailed|one[ -]tailed|bonff*err*on|tukey[^a-z]|post[- ]hoc|false discovery rate|significance level|multiple comparison|significance at alpha|post hoc|a priori|significant at alpha|level of significance|consider[^0-9,;\\(]* significant",x)
+  #  
   i3<-grep("error|item|scale| fail| reach",x,invert=T)
   i4<-i1[is.element(i1,i2)]
   i<-i4[is.element(i4,i3)]
   if(length(i>0)) x[i]<-gsub("alpha|alpha value|alpha value","alpha error",x[i])
-  # if line has 'p-value' and 'alpha error' synonym but no 'alpha error' convert p to alpha error
-  i1<-grep("[^a-z]p value|[^a-z]p[^a-z]|probability of",x)
-  i2<-grep("significance criterion|significance level|consider[^0-9,;\\(]* signif|significant at p|level of signif|criterion for .*signific",x)
-  #confidence level|?
+
+  # remove word between alpha error and number if no number is in front
+  x<-gsub("([^0-9]*)alpha error [^=\\.0-9,;]* ([\\.0-9])","\\1alpha error=\\2",x)
+
+  ###################################
+  ## convert p value to alpha error
+  # remove p values with star/s in front
+  x<-gsub("\\*\\** *p *[<=>]* *[0-9\\.]*","",x)
+  # if line has 'p-value' and 'alpha error' synonym or 'correction' author but no 'alpha error' convert only standard p to alpha error
+  i1<-grep("[^a-z]p[^a-z]",x)
+  i2<-grep("alpha error|significance criterion|significance level|statistical significance|consider[^0-9,;\\(]* signif|significant at |level of signif|criterion for .*signific|[^a-z]cohen[^a-z]|bonff*err*on|tukey[^a-z]|false discovery rate|[^a-z]fdr|[^a-z]hsd",x)
   i3<-i1[is.element(i1,i2)]
-  # exclude if has
+  # exclude if has pattern
   i4<-grep("alpha error|scale|item| fail| reach",x,invert=T)
   i<-i3[is.element(i3,i4)]
-  if(length(i)>0) x[i]<-gsub("[^a-z]p value|[^a-z]p[^a-z]|probability [ao][tf]"," alpha error ",x[i])
+  # include only those lines with standard p values
+  i5<-grep("[ \\(]p[<=> 0]*\\.1[^0-9]|[ \\(]p[<=> 0]*\\.05[^0-9]|[ \\(]p[<=> 0]*\\.01[^0-9]",x)
+  i<-i[is.element(i,i5)]
+  if(length(i)>0) x[i]<-gsub("  *"," ",gsub("[ \\(]p[<=> 0]*(\\.1)[^0-9]|[ \\(]p[<=> 0]*(\\.05)[^0-9]|[ \\(]p[<=> 0]*(\\.01)[^0-9]"," alpha error \\1\\2\\3 ",x[i]))
   # remove lines with patterns  
-  x<-grep("[^a-z]meta |[^a-z]meta-|amplitude|[^a-z]hz",x,invert=TRUE,value=TRUE)
+  x<-grep("[^a-z]meta |[^a-z]meta-|amplitude|[^a-z]hz|[^a-z]volt|[^a-z]ampere",x,invert=TRUE,value=TRUE)
   # correct error of alpha
   x<-gsub("error [ao][ft] alpha","alpha error",x)
   x<-gsub("alpha error of p","alpha error",x)
@@ -81,8 +109,7 @@ get.alpha.error<-function(x){
   x<-gsub("[=] [=]","=",x)
   x<-gsub("  "," ",x)
   x<-gsub("[\\:] ([0-9\\.])","= \\1",x)
-  # probability of to
-  x<-gsub("probability of ","p =",x)
+
   # clean up
   x<-gsub("is set [at][to]|was set [at][to]|set [at][to]|set [at][to]|level [ao][tf]| was ([\\.0-9])| is ([\\.0-9])","= \\1\\2",x)
   x<-gsub("alpha error [ato][tof]","alpha error=",x)
@@ -101,6 +128,8 @@ get.alpha.error<-function(x){
   if(length(grep("alpha error =|alpha error=",x))==0){
     x<-gsub("([0-9\\.]*) alpha error."," alpha error=\\1 ",x)
   }
+  
+  ############
   # unify standard alphas (.1,.05,.01,.001) with no brackets
   x<-gsub("alpha [<=] *0.1([^0-9])","alpha error = 0.1\\1",x)
   x<-gsub("alpha [<=] *.1([^0-9])","alpha error = 0.1\\1",x)
@@ -108,14 +137,21 @@ get.alpha.error<-function(x){
   x<-gsub("alpha [<=] *.0([15][^0-9])","alpha error = 0.0\\1",x)
   x<-gsub("alpha [<=] *0.00([1][^0-9])","alpha error = 0.00\\1",x)
   x<-gsub("alpha [<=] *.00([1][^0-9])","alpha error = 0.00\\1",x)
+# only select lines with alpha error or CI
+  x<-grep("alpha error|[^a-z]ci[^a-rt-z]|[^a-z]ci$|confidence interval",x,value=TRUE)
   # all operators to =
   x<-gsub("[=<>][=<>]*","=",x)
   x<-gsub(" *[=<>] *","=",x)
+  
+# remove brackets from numbered %
+#  x<-gsub("\\(([0-9][0-9]*\\%)\\)","\\1",x)
+#  x<-gsub("\\[([0-9][0-9]*\\%)\\]","\\1",x)
+  
   # split 
   x<-unlist(strsplit(x," and | with |, |; | \\(|\\)"))
   
-  ## mark corrected alpha if has 'correction' but no standard alpha
-  if(length(grep("correct|adjust|bonf|holm|tukey|benjamin|hochberg|hsd",x))>0){
+## mark corrected alpha if has 'correction' but no standard alpha
+  if(length(grep("correct|adjust|bonff*err*on|holm[^a-z]|tukey|benjamini|hochberg|hsd|fdr",x))>0){
     # lines with alpha error/s
     i1<-grep("alpha error",x)
     # lines without standard alpha levels
@@ -233,6 +269,8 @@ get.corrected<-function(x){
     corrected<-gsub("[^0-9]*$","",corrected)
     # numerise and round
     corrected<-round(suppressWarnings(as.numeric(corrected)),5)
+    # exclude values < .05
+    corrected<-corrected[which(corrected<.05)]
     # only include 0 < alpha <= 1 and not NA
     corrected<-suppressWarnings(corrected[corrected>0&corrected<=1])
     corrected<-suppressWarnings(corrected[!is.na(corrected)])
@@ -242,15 +280,37 @@ return(unique(corrected))
 
 ## get alpha from 1-x% Confidence Intervall
 get.ci<-function(x){
-ci<-grep("[^a-z]ci[^a-rt-z]|[^a-z]ci$|confidence interval",x,value=TRUE)
+# if line has standard CI but no % -> collapse with line in front
+i1<-grep("[89][095]\\%",x)
+i2<-grep("[^a-z]*ci[^a-rt-z]|[^a-z]*ci$|confidence interval",x)
+# remove indices that appear in both results
+i2<-i2[!is.element(i2,i1)]
+# has % after ci
+i<-i2[is.element(i2,i1-1)]
+if(length(i)>0){
+  x[i]<-paste(x[i],x[i+1],collapse=" ")
+  x<-x[-(i+1)]
+}
+# if has % before ci paste
+i<-i2[is.element(i2-1,i1)]
+if(length(i)>0){
+  x[i-1]<-paste(x[i-1],x[i],collapse=" ")
+  x<-x[-i]
+}
+# select lines with CI
+x<-grep("[^a-z]ci[^a-rt-z]|[^a-z]ci$|confidence interval",x,value=TRUE)
+# remove text between % and CI
+x<-gsub("(\\% ).*[^a-z](ci[^a-rt-z]*)|(\\% ).*( confidence interval)","\\1\\2\\3\\4",x)
+# if has number behind CI but none in front change order
+x<-gsub("([^0-9][^\\%]* [^a-z]*)ci[^a-rt-z]* ([0-9\\.]*?\\%)","\\1 \\2 ci",x)
 # correct missing %
-ci<-gsub("([^\\.0-9][8-9][0-9])( confidence inter)","\\1%\\2",ci)
-ci<-gsub("([^\\.0-9][8-9][0-9])( ci[^a-rt-z])","\\1%\\2",ci)
+x<-gsub("([^\\.0-9][8-9][0-9])( confidence inter)","\\1%\\2",x)
+x<-gsub("([^\\.0-9][8-9][0-9])( ci[^a-rt-z])","\\1%\\2",x)
 # convert .95 to 95%
-ci<-gsub("0*\\.([0-9][0-9]*)( confidence inter)","\\1%\\2",ci)
-ci<-gsub("0*\\.([0-9][0-9]*)( ci[^a-rt-z])","\\1%\\2",ci)
+x<-gsub("0*\\.([0-9][0-9]*)( confidence inter)","\\1%\\2",x)
+x<-gsub("0*\\.([0-9][0-9]*)( ci[^a-rt-z])","\\1%\\2",x)
 # select lines with % or .num
-ci<-grep("[\\%]|\\.[987]",ci,value=TRUE)
+ci<-grep("[\\%]|\\.[987]",x,value=TRUE)
 # remove space in front of %
 ci<-gsub(" [%]","%",ci)
 # remove text after %

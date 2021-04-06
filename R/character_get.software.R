@@ -24,9 +24,9 @@ x<-which.term(x,.software_names,tolower=FALSE,hits_only=TRUE)
 # remove second and further software name definitions after "|"
 x<-gsub("\\|.*","",x)
 # convert specific names
-x[grep("\\[\\^A-Za-z\\]\\[Mm\\]\\[P",x)]<-"M-Plus"
+x[grep("\\[\\^A-Za-z\\]\\[Mm\\]\\[P",x)]<-"Mplus"
 x[grep("\\E \\[pP\\]rime",x)]<-"E-Prime"
-x<-gsub("G *Powe.*","G*Power",x)
+x<-gsub(".* *G \\*Powe.*","G*Power",x)
 # remove or convert [] in software names
 x<-gsub("\\[\\^A-Z\\]|\\[\\^a-z\\]| $","",x)
 x<-gsub("\\[DA\\]\\[AD\\]","DA",gsub("\\[Kk\\]","K",x))
@@ -51,23 +51,20 @@ return(unique(unlist(x)))
 "[^A-Z]SPM[1-9]|[^A-Z]SPM.[0-9]|^SPM[1-9]|^SPM.[0-9]|Statistical Parametric Mapping|statistical parametric mapping",
 "Stata[^a-z]|STATA[^A-Z]",
 "SAS Institute|Statistical Analysis Software|Statistical Analysis System|[\\( ]SAS [Vv]ersion [1-9]|with SAS [Vv]ersion| in SAS [1-9]|with SAS [1-9]|SAS PROC",
-"E [pP]rime|E[pP]rime",
 "Statistica |STATISTICA|StatSoft",
 "MATLAB|Matlab",
 "N[Vv]ivo|N Vivo",
-"Qualtrics|QUALTRICS",
 "MAXQ[DA][AD]|MAXqda",
 "Acq[Kk]nowledge",
 "AFNI",
 "Free[Ss]urfer|Free Surfer",
 "Graph[Pp]ad|Graph Pad",
-"Tobii|TOBII",
 "[^A-Z]REST[^A-Z]",
-"Image J|ImageJ",
-"JMP",
+"ImageJ|Image J[^a-z]",
+"JMP[^a-z]",
 "Excel[^a-z]|[^A-Z]EXCEL|XLSTAT",
 "[Ff]MRIB|[^A-Z]FSL[^A-Z]",
-"G Power|GPower",
+"[^A-Za-z]G *Power|^G *Power",
 "[^A-Z]PASS[^A-Z]",
 "[^A-Z]NCSS[^A-Z]",
 "Praat|PRAAT",
@@ -83,7 +80,7 @@ return(unique(unlist(x)))
 "MRI[Cc]ro[Nn]",
 "MRI[Cc]ro[^Nn]",
 "StudSize",
-"Psych [Tt]oolbox|Psych[tT]oolbox",
+"Psychtoolbox|Psych [Tt]oolbox|Psych[tT]oolbox",
 "Psy[Ss]cope|Psy [Ss]cope",
 "Systat|SigmaPlot|SigmaStat|SYSTAT",
 "MLwiN|ML[wW][Ii][nN]",
@@ -110,8 +107,11 @@ return(unique(unlist(x)))
 
 ## software to present experiments/gather data
 #"Presentation",
+#"Tobii|TOBII",
+#"E [pP]rime|E[- ]*[pP]rime",
 #"LimeSurvey|Lime[- ]*[Ss]urvey",
 #"SurveyMonkey|[Ss]urvey[- ]*[Mm]onkey",
+#"Qualtrics|QUALTRICS",
 #"Super[Ll]ab|SUPERLAP",
 #"Amazon Mechanical Turk|[mM]echanical [tT]urk|Amazon MT",
 

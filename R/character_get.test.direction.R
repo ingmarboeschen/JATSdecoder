@@ -8,26 +8,35 @@ get.test.direction<-function(x){
 # remove punctuation and double spaces than lowerize
 x<-tolower(gsub("^ *|(?<= ) | *$", "",gsub("[[:punct:]]"," ",x), perl = TRUE))
 # get index of lines with test|hypothes etc. or test result
-i1<-grep(" test|hypoth[ie]s|[<=>] [0-9\\.]|[<=>][0-9\\.]|signific|analys|effect|relation",x)
+# hypoth[ie]s|
+i1<-grep(" test|[<=>] [0-9\\.]|[<=>][0-9\\.]|signific|analys|effect|relation",x)
 # get index of lines with sided or tailed/tails
 i2<-grep("sided|tailed|tails",x)
 # select lines
 x<-x[unique(c(i1,i2))]
+# remove lines with 'no' in lines without 'significant'
+i<-grep("signific",x,invert=T)
+x[i]<-grep(" no |^no | not |insetead of|n't ",x[i],value=TRUE,invert=TRUE)
 # unify
 red<-gsub(" uni | 1 "," one ",x)
 red<-gsub(" bi | un | 2 | both "," two ",red)
+
 # unifi 'directional' -> 'sided' if has test or hypothesis
-i<-grep("hypothes| test|relation",red)
+i<-grep("directional[^ ]* [a-z]* *[a-z]* *hypothes|directional[^ ]* [a-z]* *[a-z]* *test",red)
 if(length(i>0)){
- red[i]<-gsub("un directional|undirectional|two directional","two sided",red[i])
- red[i]<-gsub(" directional|unidirectional|^directional","one sided",red[i])
- red[i]<-gsub("directional","sided",red[i])
+  red[i]<-gsub("un directional|bidirectional|undirectional|two directional"," two sided",red[i])
+  red[i]<-gsub("unidirectional","one sided",red[i])
+  red[i]<-gsub("[^m][^u][^l][^t][^i] directional|unidirectional|^directional"," one sided",red[i])
+#  red[i]<-gsub("directional","sided",red[i])
 }
 # 'tailed' -> 'sided'
-red<-gsub("tailed|tails","sided",red)
+red<-gsub("  *"," ",gsub("tailed|tails","sided",red))
 
 # get lines with sided
 red<-grep("sided",red,value=TRUE)
+# remove lines with patterns
+red<-grep("[^a-z]path[s]* |pathway|interact| book| page|questionaire| paper| medal| form[^a-z]",red,value=TRUE,invert=TRUE)
+
 # correct/unify uni- and bisided
 red<-gsub("unisided|uni sided|onesided","one sided",red)
 red<-gsub("bisided|bi sided|twosided|bothsided|unsided","two sided",red)

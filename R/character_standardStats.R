@@ -8,6 +8,7 @@
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
 #' @param T2t Logical. If TRUE capital letter T is treated as t-statistic
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation
+#' @param select Select specific standard statistics only (e.g.: c("t","F","Chi2"))
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA
 #' @importFrom stats pf pchisq pt pnorm
 #' @export
@@ -17,7 +18,7 @@
 #' BF(01)<=>4","chi=3.2, r(34)<=>-.7, p<.01, R2=76%.")
 #' standardStats(x)
 
-standardStats<-function(x,stats.mode="all",recalculate.p=TRUE,alternative="undirected",estimateZ=FALSE,T2t=FALSE,R2r=FALSE,rm.na.col=TRUE){
+standardStats<-function(x,stats.mode="all",recalculate.p=TRUE,alternative="undirected",estimateZ=FALSE,T2t=FALSE,R2r=FALSE,select=NULL,rm.na.col=TRUE){
 # set warning massages to FALSE
 warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.d<-FALSE;warn.eta<-FALSE;warn.multi.p<-FALSE
    x<-unlist(x)
@@ -938,9 +939,6 @@ recalculatedPZ[is.na(recalculatedPZ)]<-recalculatedPZest[is.na(recalculatedPZ)]
 recalculatedPZl[is.na(recalculatedPZl)]<-recalculatedPZlest[is.na(recalculatedPZl)]
 recalculatedPZg[is.na(recalculatedPZg)]<-recalculatedPZgest[is.na(recalculatedPZg)]
 
-
-
-
 # take the most conservative (highest) p value if 2 or more were calculated
 d<-data.frame(recalculatedPt,recalculatedPF,recalculatedPr,recalculatedPchi,recalculatedPZ,recalculatedPH,recalculatedPG2,recalculatedPQ)
 # has multiple recomputable p-values
@@ -980,6 +978,19 @@ colnames(res)<-cnames
 
 # convert no character capture to NA
 for(i in 1:dim(res)[2]) res[res[,i]=="",i]<-NA
+
+# select specific stats only
+if(length(select>0)){
+  temp<-res[,grep(paste(paste0("^",tolower(select),"$"),collapse="|"),tolower(colnames(res)))]
+  if(!is.matrix(temp)) temp<-matrix(temp,ncol=1)
+  if(is.null(dim(temp))) for(i in select) temp[,i]<-as.numeric(temp[,i])
+  res<-res[rowSums(!is.na(temp))>0,]
+  }
+# convert to matrix
+if(is.vector(res)){
+  res<-matrix(res,ncol=length(res))
+  colnames(res)<-cnames
+}
 
 # only select stats with recomputable p value
 if(stats.mode=="computable") res<-res[!is.na(res[,"recalculatedP"]),]
@@ -1089,7 +1100,17 @@ if(warn.d==TRUE) report<-c(report,"- A rather big effect was detected. One or mo
 if(warn.eta==TRUE) report<-c(report,"- A rather big effect was detected. One or more eta^2-values > .3.\n")
 if(warn.multi.p==TRUE) report<-c(report,"- There are one or more results with several recomputable test statistics. Please split the result manually and proceed checking.\n")
 if(!is.null(report)) warning(report)
-return(res)
+   
+   # prepare output
+   stats<-res
+stats<-data.frame(stats,stringsAsFactors=FALSE)
+if(dim(stats)[1]>0){
+  # numerise stats and p values
+if(length(grep("_op|result",names(stats),invert=TRUE))>0){
+  for(i in grep("_op|result",names(stats),invert=TRUE)) stats[,i]<-as.numeric(stats[,i],warn=F)
+}
+}else stats<-character(0)
+return(stats)
 
 }
 
