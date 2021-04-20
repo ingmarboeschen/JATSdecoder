@@ -16,6 +16,6 @@ Extract mentioned software from text by dictionary search for 63 software names 
 }
 \examples{
 get.software(
- x<-"We used the R Software and Excel 4.0 to analyse our data."
+x<-"We used the R Software and Excel 4.0 to analyse our data."
 )
 }

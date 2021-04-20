@@ -13,6 +13,7 @@ get.stats(
   estimateZ = FALSE,
   T2t = FALSE,
   R2r = FALSE,
+  select = NULL,
   rm.na.col = TRUE,
   cermine = FALSE
 )
@@ -33,6 +34,8 @@ get.stats(
 \item{T2t}{Logical. If TRUE capital letter T is treated as t-statistic}
 
 \item{R2r}{Logical. If TRUE capital letter R is treated as correlation}
+
+\item{select}{Select specific standard statistics only (e.g.: c("t","F","Chi2"))}
 
 \item{rm.na.col}{Logical. If TRUE removes all columns with only NA from standardStats}
 

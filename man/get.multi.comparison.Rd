@@ -10,7 +10,7 @@ get.multi.comparison(x)
 \item{x}{text to process}
 }
 \description{
-Extract alpha-/p-value correction method for multiple comparisons from list with 14 correction methods
+Extracts alpha-/p-value correction method for multiple comparisons from list with 15 correction methods
 }
 \examples{
 x<-"We used Bonferroni corrected p-values."

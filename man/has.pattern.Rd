@@ -9,7 +9,7 @@ has.pattern(x, patterns = c(""), tolower = TRUE)
 \arguments{
 \item{x}{text to process}
 
-\item{patterns}{search terms}
+\item{patterns}{search terms as vector}
 
 \item{tolower}{Logical. If TRUE converts search terms and text to lower case}
 }

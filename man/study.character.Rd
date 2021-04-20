@@ -12,13 +12,17 @@ study.character(
   estimateZ = FALSE,
   T2t = FALSE,
   R2r = FALSE,
+  selectStandardStats = NULL,
+  p2alpha = FALSE,
+  alpha_output = "list",
   captions = TRUE,
   text.mode = 1,
   update.package.list = FALSE,
   add.software = NULL,
   quantileDF = 0.75,
   N.max.only = FALSE,
-  output = "all"
+  output = "all",
+  rm.na.col = TRUE
 )
 }
 \arguments{
@@ -36,6 +40,12 @@ study.character(
 
 \item{R2r}{Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats()}
 
+\item{selectStandardStats}{Select specific standard statistics only (e.g.: c("t","F","Chi2"))}
+
+\item{p2alpha}{Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections)}
+
+\item{alpha_output}{One of "list" (list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min), vector with unique alpha errors but no distinction of types}
+
 \item{captions}{Logical. If TRUE captions text will be scanned for statistical results}
 
 \item{text.mode}{text parts to extract statistical results from (text.mode=1: abstract and full text, text.mode=2: method and result section, text.mode=3: result section only)}
@@ -49,6 +59,8 @@ study.character(
 \item{N.max.only}{return only maximum of estimated sample sizes}
 
 \item{output}{output selection of specific results c("all", "doi", "title", "year", "n.studies", "methods", "alpha.error", "power", "multi.comparison.correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test.direction", "sig.adjectives", "software", "Rpackage", "stats", "standardStats", "estimated.sample.size")}
+
+\item{rm.na.col}{Logical. If TRUE removes all columns with only NA in extracted standard statistics}
 }
 \description{
 extracts study characteristics out of a JATS coded XML file or JATSdecoder result
