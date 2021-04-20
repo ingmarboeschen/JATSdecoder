@@ -6,6 +6,7 @@ Its function `JATSdecoder()` extracts metadata, sectioned text and reference lis
 Wheras `study.character()` uses the `JATSdecoder()` result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text and others. 
 
 Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
+
 Note too: A minimal web app to extract statistical results from written resources with get.stats() is hosted at [www.get-stats.app](www.get-stats.app).
 
 **JATSdecoder** supplies some convenient functions to work with textual input in general. 
