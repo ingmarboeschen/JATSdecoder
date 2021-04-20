@@ -14,9 +14,13 @@ i1<-grep(" test|[<=>] [0-9\\.]|[<=>][0-9\\.]|signific|analys|effect|relation",x)
 i2<-grep("sided|tailed|tails",x)
 # select lines
 x<-x[unique(c(i1,i2))]
+
 # remove lines with 'no' in lines without 'significant'
-i<-grep("signific",x,invert=T)
-x[i]<-grep(" no |^no | not |insetead of|n't ",x[i],value=TRUE,invert=TRUE)
+i1<-grep(" no |^no | not |instead of|n't ",x)
+i2<-grep("signific",x,invert=TRUE)
+i<-i1[is.element(i1,i2)]
+x<-x[-i]
+
 # unify
 red<-gsub(" uni | 1 "," one ",x)
 red<-gsub(" bi | un | 2 | both "," two ",red)
@@ -35,7 +39,7 @@ red<-gsub("  *"," ",gsub("tailed|tails","sided",red))
 # get lines with sided
 red<-grep("sided",red,value=TRUE)
 # remove lines with patterns
-red<-grep("[^a-z]path[s]* |pathway|interact| book| page|questionaire| paper| medal| form[^a-z]",red,value=TRUE,invert=TRUE)
+red<-grep("[^a-z]path[s]* |pathway|interact| book| page|questionaire| paper| coin| medal| form[^a-z]",red,value=TRUE,invert=TRUE)
 
 # correct/unify uni- and bisided
 red<-gsub("unisided|uni sided|onesided","one sided",red)

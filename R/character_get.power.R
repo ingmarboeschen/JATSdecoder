@@ -21,10 +21,17 @@ x<-gsub("([^0-9])1-b([^a-z])","\\11-beta\\2",x)
 x<-gsub("\\(1 *- *\\) *([\\.0-9])","(1-beta) \\1",x)
 # correct missing beta in 1- = num
 x<-gsub("1 *- *= *([\\.0-9])","1-beta = ",x)
+x<-gsub("1 b[^a-z]","1-b\\1",x)
+x<-gsub("  *"," ",gsub("[(]1 *- *[^0-9a-z]","",x))
+# remove number in bracket
+x<-gsub("[(][0-9]*[)]","",x)
+# remove number after second dot in badly captured numbers
+x<-gsub("([0-9]*\\.[0-9]*)\\.[0-9]*","\\1",x)
+
 # get lines with power/beta error
 x<-get.sentence.with.pattern(x,"[^a-z]power[^a-z]|1[- ]*beta|1-b[^a-z]|type[- ]*2[- ]*error|type[- ]ii[- ]error|beta[- ]*error")
 # exclude lines with patterns
-x<-grep("mW|Hz|m\U00FCM|to the power|predicti|[0-9] *ms *|[0-9] [Ww]att|[0-9] W[^a-z]|[Pp]ower [1-9]\\.[0-9]|ship power|total power|factor of power",x,value=TRUE,invert=TRUE)
+x<-grep("mW|Hz|m\U00FCM|to the power|predicti|[0-9] *ms *|Volt[ a]| [Vv]olt[ a]|[0-9] [Ww]att|[0-9] W[^a-z]|[Pp]ower [1-9]\\.[0-9]|ship power|total power|factor of power",x,value=TRUE,invert=TRUE)
 # unify
 x<-gsub("was set","is set",x)
 x<-gsub(" a[n]* | the "," ",x)
@@ -33,8 +40,10 @@ x<-gsub(" percent| \\%","\U0025",x)
 x<-gsub("([0-9\\.]*\\%) power","power=\\1",x)
 
 if(length(x)>0){
-# extract lines with power and 1-type 2 error
+# extract lines with power and 1-beta error
 p<-grep("[^a-z][Pp]ower[^a-z]|^Power[^a-z]|1[- ][- ][Bb]eta|1-[Bb]eta|beta[- ]error",x,value=TRUE)
+# unify power
+p<-gsub("1[- ]*beta|1-b[^a-z]","power",p)
 
 # split lines into a priori power and observed power
 # exclude as a priori power
@@ -50,7 +59,7 @@ power<-lapply(power,function(x) gsub(" \\\U0025","\U0025",x))
 
 # unify use of % and 2 numbers (num-num)
 # "68.7-74.4\U0025" to "68.7\U0025-74.4\U0025" ## weak!?
-power<-lapply(power,function(x) gsub("([0-9][0-9]\\.[0-9])[^\U0025]","\\1\U0025 ",x))
+power<-lapply(power,function(x) gsub("([0-9][0-9]\\.[0-9]*)[^0-9\U0025]","\\1\U0025 ",x))
 power<-lapply(power,function(x) gsub("([0-9][0-9]\\.[0-9])$","\\1\U0025 ",x))
 
 power<-lapply(power,function(x) gsub("([0-9])-[0-9][0-9].*?\\\U0025","\\1\U0025",x))
@@ -90,8 +99,8 @@ power<-lapply(power,function(x) gsub(" is set [ta][to] | set [ta][to] | was set 
 beta<-lapply(beta,function(x) gsub(" is set [ta][to] | set [ta][to] | was set [ta][to] | was |is ","=",x))
 
 # add '=' to power+number
-power<-lapply(power,function(x) gsub("power ([0-9])","power=\\1",x))
-beta<-lapply(beta,function(x) gsub("betaerror ([0-9])","betaerror=\\1",x))
+power<-lapply(power,function(x) gsub("power ([\\.0-9])","power=\\1",x))
+beta<-lapply(beta,function(x) gsub("betaerror ([\\.0-9])","betaerror=\\1",x))
 # add '=' to nonumber+power+word+number
 power<-lapply(power,function(x) gsub("([^0-9]*) power [a-z]* [aoi][fts] ([\\.0-9])","\\1 power=\\2",x))
 power<-lapply(power,function(x) gsub("([^0-9]*) power [a-z]* [aoi][fts] ([\\.0-9])","\\1 power=\\2",x))
@@ -124,9 +133,9 @@ beta<-lapply(beta,function(x) grep("[0-9]",x,value=TRUE))
 power<-lapply(power,function(x) gsub("\\\U0025","e-2",x))
 beta<-lapply(beta,function(x) gsub("\\\U0025","e-2",x))
 # convert to numeric
-power<-(lapply(power,as.numeric,warn=F))
+power<-suppressWarnings(lapply(power,as.numeric))
 # calculate 1-beta
-beta<-1-unlist(lapply(beta,as.numeric,warn=F))
+beta<-suppressWarnings(1-unlist(lapply(beta,as.numeric)))
 
 # merge results of "power" and "1-beta" 
 power[["power"]]<-c(power[["power"]],beta)
@@ -134,7 +143,7 @@ power[["power"]]<-c(power[["power"]],beta)
 power["power"]<-lapply(power["power"],unique)
 power<-lapply(power,function(x) x[!is.na(x)])
 # only keep values [0;1]
-power<-lapply(power,function(x) x[which(x>=0&x<=1)])
+power<-lapply(power,function(x) unique(x[which(x>=0&x<=1)]))
 }else power<-list(power=numeric(0),observed_power=numeric(0))
 return(power)
 }

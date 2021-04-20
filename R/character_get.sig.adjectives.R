@@ -24,7 +24,14 @@ a<-lapply(a,function(x) gsub("statistical ","",x))
 a<-lapply(a,function(x) gsub("  "," ",x))
 
 # adjectives
-words<-c("marginal","marginally","almost","highly","higher","lower","very","moderately","barely","strong","strongly","close to","remain","remaine[sd]","even","potentially","weakly", "nearly","near","near to","slightly","still","most","mostly","least","more","less","fewer","borderline","practically","clinically","trend","trend toward","trend towards","tend[eds]* to be *[a-z]*","similarly","close to","approach[esd]* *[a-z]*")
+words<-c("marginal","marginally","almost","highly","higher",
+         "lower","very","moderately","barely","strong","strongly",
+         "close to","remain","remaine[sd]","even","potentially","weakly", 
+         "nearly","near","near to","slightly","still","most","mostly",
+         "least","more","less","fewer","borderline","practically",
+         "clinically","trend","trend toward","trend towards",
+         "tend[eds]* to be *[a-z]*",
+         "similarly","close to","approach[esd]* *[a-z]*")
 
 words<-sort(words)
 # sig words

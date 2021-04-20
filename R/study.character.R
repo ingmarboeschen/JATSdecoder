@@ -11,6 +11,8 @@
 #' @param T2t Logical. If TRUE capital letter T is treated as t-statistic when extracting statistics with get.stats()
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats()
 #' @param selectStandardStats Select specific standard statistics only (e.g.: c("t","F","Chi2"))
+#' @param p2alpha Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections) 
+#' @param alpha_output One of "list" (list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min), vector with unique alpha errors but no distinction of types
 #' @param update.package.list if TRUE updates available R packages with available.packages() function
 #' @param add.software additional software names to detect as vector
 #' @param quantileDF quantile of (df1+1)+(df2+1) to extract for estimating sample size
@@ -27,6 +29,8 @@ study.character<-function(x,
                   T2t=FALSE,
                   R2r=FALSE,
                   selectStandardStats=NULL,
+                  p2alpha=FALSE, 
+                  alpha_output="list",
                   captions=TRUE,
                   text.mode=1,
                   update.package.list=FALSE,
@@ -167,9 +171,9 @@ if(length(grep("!DOCTYPE",temp[1:10]))>0){
 }else{n.studies<-NA} # End no !DOCTYPE
 # get characteristics
 if(sum(is.element(c("all","methods"),output))>0){ methods<-get.method(both,cermine=cermine) }else{methods<-NA}
-if(sum(is.element(c("all","alpha.error"),output))>0){ alpha.error<-get.alpha.error(c(both,caps)) }else{alpha.error<-NA}
+if(sum(is.element(c("all","alpha.error"),output))>0){ alpha.error<-get.alpha.error(c(both,caps),p2alpha=p2alpha,output=alpha_output) }else{alpha.error<-NA}
 if(sum(is.element(c("all","multi.comp"),output))>0){ multi.comp<-get.multi.comparison(c(both,caps)) }else{multi.comp<-NA}
-if(sum(is.element(c("all","power"),output))>0){ power<-get.power(c(both,caps)) }else{power<-NA}
+if(sum(is.element(c("all","power"),output))>0){ power<-get.power(c(fulltext,caps)) }else{power<-NA}
 if(sum(is.element(c("all","assumptions"),output))>0){ assumptions<-get.assumptions(both) }else{assumptions<-NA}
 if(sum(is.element(c("all","OutlierRemovalInSD"),output))>0){ outlier<- get.outlier.def(both) }else{outlier<-NA}
 if(sum(is.element(c("all","InteractionModeratorMediatorEffect"),output))>0){ InteractionModeratorMediatorEffect<-has.interaction(both) }else{InteractionModeratorMediatorEffect<-NA}
@@ -200,9 +204,9 @@ if(length(grep("^one ",test.direction))>0){
  sig.adjectives<-NA)
  
 # SAMPLE SIZE
-# if(sum(is.element(c("all","sample.size"),output))>0){
-# sample.size<-est.ss(abstract=abstract,text=both,quantileDF=quantileDF,max.only=N.max.only)
-# }else sample.size<-NA
+ if(sum(is.element(c("all","sample.size"),output))>0){
+ sample.size<-est.ss(abstract=abstract,text=both,quantileDF=quantileDF,max.only=N.max.only)
+ }else sample.size<-NA
 
 ## output
 res<-list(
@@ -222,8 +226,8 @@ res<-list(
           software=software,
           Rpackage=Rpackage,
           stats=stats,
-          standardStats=standardStats#,
- #         estimated.sample.size=sample.size
+          standardStats=standardStats,
+          estimated.sample.size=sample.size
           )
 
 if(nostat==TRUE)  output<-output[output!="stats"]

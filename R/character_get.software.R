@@ -38,6 +38,7 @@ x<-gsub("\\[\\+\\]","+",x)
 x<-gsub(" \\[1-9\\]","",x)
 x<-gsub(" Core| Institute","",x)
 x<-gsub(" \\[1\\-9vV\\]","",x)
+x<-gsub("\\[- \\]\\*","-",x)
 
 return(unique(unlist(x)))
 
@@ -47,7 +48,7 @@ return(unique(unlist(x)))
 .software_names<-c(
 # software to process and analyse data
 "SPSS|Statistical Package for the Social Sciences|PASW|Predictive Analytics Soft[Ww]are",
-"R Core|using R[,\\.]| in R[,\\.]|\\.[Rr] [Pp]roject|oftware 'R'|[A-Za-z]R Foundation| with R[,\\.]|R Development Core|[^A-Z0-9] R \\([Vv1-4]| R [0-9]\\.[0-9]| R[0-9]\\.[0-9]|[Ss]oftware R[^a-zA-z]|[^a-zA-Z]R [Ss]oftware|anguage R|R [Ff]oundation|in R [Vv]ersion|with R [Vv]ersion| in R with ",
+"R Core|using R[,\\.]| in R[,\\.]|[^a-zA-Z][Rr] [Pp]roject|oftware '*R'*[^a-zA-Z]|[A-Za-z]R Foundation| with R[,\\.]|R Development Core|[^A-Z0-9] R \\([Vv1-4]| R [0-9]\\.[0-9]| R[0-9]\\.[0-9]|[Ss]oftware R[^a-zA-z]|[^a-zA-Z]R [Ss]oftware|anguage R|R [Ff]oundation|in R [Vv]ersion|with R [Vv]ersion| in R with ",
 "[^A-Z]SPM[1-9]|[^A-Z]SPM.[0-9]|^SPM[1-9]|^SPM.[0-9]|Statistical Parametric Mapping|statistical parametric mapping",
 "Stata[^a-z]|STATA[^A-Z]",
 "SAS Institute|Statistical Analysis Software|Statistical Analysis System|[\\( ]SAS [Vv]ersion [1-9]|with SAS [Vv]ersion| in SAS [1-9]|with SAS [1-9]|SAS PROC",
@@ -84,7 +85,7 @@ return(unique(unlist(x)))
 "Psy[Ss]cope|Psy [Ss]cope",
 "Systat|SigmaPlot|SigmaStat|SYSTAT",
 "MLwiN|ML[wW][Ii][nN]",
-"WINanalyze|WinAnalyze|Win Analyze",
+"WINanalyze|Win[- ]*Analyze",
 "C[+][+]",
 "Tanagra",
 "OptoGait",
@@ -96,9 +97,9 @@ return(unique(unlist(x)))
 "MindWare|Mindware|MINDWARE",
 "Cartool",
 "RDSAT",
-"PROCESS MACRO|PROCESS *[Mm]acro|PROCESS [Mm]odul|Process *[Mm]acro|PROCESS *[Tt]oolbox|PROCESS mediation tool",
+"PROCESS MACRO|PROCESS *[Mm]acro|PROCESS [Mm]odul|PROCESS .*Hayes|Hayes.*PROCESS|Process *[Mm]acro|PROCESS *[Tt]oolbox|PROCESS mediation tool",
 "FACTOR|oftware Factor|Factor [Ss]oftware|Factor [1-9]\\.[0-9]|Factor [1-9][0-9]\\.[0-9]",
-"METAWIN",
+"METAWIN|META[- ]*WIN",
 "Review Manager|REVIEW MANAGER",
 "HLM [1-9vV]|HLM[Pp]rogram|HLM [Ss]oft|[Hh]ierarchical [Ll]inear [Mm]odeling [Pp]rogram|[Hh]ierarchical [Ll]inear [Mm]odeling [Ss]oft",
 "QtiPlot",

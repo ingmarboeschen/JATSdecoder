@@ -13,6 +13,7 @@ if(length(x)==1) x<-text2sentences(x)
 # procedure search terms
 proc<-c(
         "AlphaSim|Alpha[- ]Sim",
+        "[^a-z]FWER*[^a-z]|[Ff]amily[- ]*[Ww]ise [Ee]rror [Rr]ate",
         "[^A-Z]FDR[^A-Z]|[fF]alse [dD]iscovery [rR]ate",
         "Boole[^a-z]",
         "Bonferroni|[Bb]onff*err*onn*i",
