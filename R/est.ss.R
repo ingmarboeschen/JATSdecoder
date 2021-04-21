@@ -35,8 +35,12 @@ est.ss<-function(abstract=NULL,text=NULL,quantileDF=.75,max.only=FALSE,max.parts
   suppressWarnings({if(length(abstract)>0) a<-est.ss.n(abstract) else a<-NA})
   # get SS from first 10 lines max of text input (POS-tagging leads to overload in JAVA heap space)
   suppressWarnings({if(length(text)>0){
+    # convert to sentences
+    if(length(text)==1) text<-text2sentences(text)
+    # remove lines with bootstrap|iteration
+    text<-grep("[Bb]ootstrap|[Ii]teration|[Rr]epetition",text,value=TRUE,invert=TRUE)
 #    t<-est.ss.text(text,max.only=max.parts)
-    stats<-get.stats(text)
+    stats<-unlist(get.stats(text,output="stats"))
     standardStats<-standardStats(stats)
   } else{t<-NA;stats<-NULL;standardStats<-NULL}
   })
@@ -46,9 +50,10 @@ est.ss<-function(abstract=NULL,text=NULL,quantileDF=.75,max.only=FALSE,max.parts
   res<-c(SSabstract=a[length(a)],SSstats=s[length(s)],SSstandardStats=ss[length(ss)])
   # find max of estimates
   max<-max(suppressWarnings(as.numeric(res)),na.rm=T,warnings=F)
+  if(max==0) max<-NA
   # output of estimate/s
-  if(max.only==T) return(unname(c(estimatedSS=max)))
-  if(max.only==F) return(c(SSabstract=a,SSstats=s,SSstandardStats=ss,estimatedSS=max))
+  if(max.only==T) return(unname(c(estimated.sample.size=max)))
+  if(max.only==F) return(c(SSabstract=a,SSstats=s,SSstandardStats=ss,estimated.sample.size=max))
 }#,SStext=t
 
 #######################################################
@@ -145,6 +150,9 @@ est.ss.standardStats<-function(standardStats,quantileDF=.75,quantile.only=F){
       colnames(matrix)<-n
     }
     
+    # if line has t-value round up df2
+    if(length(grep("^t$",colnames(matrix)))==1&length(grep("df2",colnames(matrix)))==1&nrow(matrix)>0) matrix[is.numeric(matrix[,"t"]),"df2"]<-ceiling(matrix[is.numeric(matrix[,"t"]),"df2"])
+    
     # remove corrected df's: set df1 and df2 to NA if one of both contains a "." (correction)
     if(length(grep("df1|df2",colnames(matrix)))==2){ 
       matrix[grep("\\.",paste(factor(matrix[,"df1"]):factor(matrix[,"df2"]))),c("df1","df2")]<-NA
@@ -154,6 +162,8 @@ est.ss.standardStats<-function(standardStats,quantileDF=.75,quantile.only=F){
     if(length(grep("df1",colnames(matrix)))==1) matrix[grep("\\.",paste(matrix[,"df1"])),"df1"]<-NA
     # if only contains df2
     if(length(grep("df2",colnames(matrix)))==1) matrix[grep("\\.",paste(matrix[,"df2"])),"df2"]<-NA
+    # remove lines with Chi2
+    if(length(grep("Chi2",colnames(matrix)))==1) matrix<-matrix[is.na(matrix[,"Chi2"]),]
     
     
     # get df1 values and subtract 1
@@ -174,16 +184,16 @@ est.ss.standardStats<-function(standardStats,quantileDF=.75,quantile.only=F){
     ## To do: remove overly high captures (e.g. Box Sperizity test, in repeated measure design) instead of quantile
     
     # calculate quantile
-    quantileDF<-stats::quantile(sumdf,quantileDF,na.rm=T,type=7)
-    if(length(grep("[^0-9\\.]",quantileDF))>0) quantileDF<-NA
+    quantDF<-stats::quantile(sumdf,quantileDF,na.rm=T,type=7)
+    if(length(grep("[^0-9\\.]",quantDF))>0) quantDF<-NA
   }
   else{
-    sumdf<-NA;quantileDF<-NA
+    sumdf<-NA;quantDF<-NA
   }
   # set Zero result to NA if is not NA already
-  if(!is.na(quantileDF)) if(quantileDF==0) quantileDF<-NA
+  if(!is.na(quantDF)) if(quantDF==0) quantDF<-NA
   
-  if(quantile.only==F) return(c(sumdf,quantileDF=quantileDF))
-  if(quantile.only==T) return(c(quantileDF=quantileDF))
+  if(quantile.only==F) return(c(sumdf,quantileDF=quantDF))
+  if(quantile.only==T) return(c(quantileDF=quantDF))
   
 }

@@ -347,7 +347,7 @@ x<-gsub("(\\()t"," t",x)
 x<-gsub("( )t[0-9]*?\\(([1-9])|^t[0-9]*?\\(([1-9])","\\1t(\\2\\3",x)
 x<-gsub("( )t[a-zA-Z]\\(([1-9])|^t[a-zA-Z]\\(([1-9])","\\1t(\\2\\3",x)
 # lines with t values
-index<-grep(" t[<>=]|^t[<>=]| t[(][0-9 df=]*[)]|^t[(][0-9 df=]*[)]",x)
+index<-grep(" t[<>=]|^t[<>=]| t[(][\\.0-9 df=]*[)]|^t[(][\\.0-9 df=]*[)]",x)
 if(length(index>0)){
   tval<-x[index]
 # remove till first t value if has 2
