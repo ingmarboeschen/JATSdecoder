@@ -4,7 +4,7 @@
 \alias{get.sig.adjectives}
 \title{get.sig.adjectives}
 \usage{
-get.sig.adjectives(x, unique_only = TRUE)
+get.sig.adjectives(x, unique_only = FALSE)
 }
 \arguments{
 \item{x}{text to process}
