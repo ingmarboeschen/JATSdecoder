@@ -165,8 +165,8 @@ study.character<-function(x,
          n.studies.text<-get.n.studies(gsub("second [Ss]tudy","Study 2",reduced),tolower=FALSE)
       }else n.studies.text<-1
       # take maximum 
-      #     n.studies<-max(n.studies,n.studies.abstract,na.rm=T)
-      n.studies<-max(n.studies,n.studies.abstract,n.studies.text,na.rm=TRUE)
+      n.studies<-max(n.studies,n.studies.abstract,na.rm=T)
+      #n.studies<-max(n.studies,n.studies.abstract,n.studies.text,na.rm=TRUE)
       # End n.studies==1
    }else{n.studies<-NA} # End no !DOCTYPE
    # get characteristics

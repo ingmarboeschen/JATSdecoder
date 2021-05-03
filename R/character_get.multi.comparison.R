@@ -36,7 +36,7 @@ res<-unlist(strsplit(res,", |; "))
 # remove lines that negate the use of a method
 res<-grep("[Ii]nstead of| not |n[^ a-z]t|Since | since |rather than",res,invert=T,value=T)
 # wich procedure is used
-res<-which.term(res,terms=proc,tolower=F,hits=T)
+res<-which.term(res,terms=proc,tolower=F,hits_only=T)
 # clean up
 res<-gsub("\\[\\^A-Z\\]","",res)
 res<-gsub("\\[\\^a-z\\]","",res)

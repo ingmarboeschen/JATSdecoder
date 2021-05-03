@@ -9,7 +9,7 @@
 #'  x<-"We found very highly significance for type 1 effect"
 #' )
 
-get.sig.adjectives<-function(x,unique_only=TRUE){
+get.sig.adjectives<-function(x,unique_only=FALSE){
 # preperation/split/uniformisation
 a<-lapply(x,function(x) tolower(unlist(strsplit(x," and |,|;| or |as well| but | where| while|although"))))
 a<-lapply(a,get.sentence.with.pattern,c("significant|significally|significanc"))
@@ -22,6 +22,8 @@ a<-lapply(a,function(x) gsub("-"," ",x))
 # remove "statistical "
 a<-lapply(a,function(x) gsub("statistical ","",x))
 a<-lapply(a,function(x) gsub("  "," ",x))
+# add space in front
+a<-lapply(a,function(x) paste0(" ",x))
 
 # adjectives
 words<-c("marginal","marginally","almost","highly","higher",

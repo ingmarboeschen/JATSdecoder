@@ -5,6 +5,7 @@
 #' @export
 
 get.test.direction<-function(x){
+if(length(x)==1) x<-text2sentences(x)
 # remove punctuation and double spaces than lowerize
 x<-tolower(gsub("^ *|(?<= ) | *$", "",gsub("[[:punct:]]"," ",x), perl = TRUE))
 # get index of lines with test|hypothes etc. or test result
@@ -43,7 +44,7 @@ red<-grep("[^a-z]path[s]* |pathway|interact| book| page|questionaire| paper| coi
 
 # correct/unify uni- and bisided
 red<-gsub("unisided|uni sided|onesided","one sided",red)
-red<-gsub("bisided|bi sided|twosided|bothsided|unsided","two sided",red)
+red<-gsub("bi *sided|twosided|bothsided|unsided","two sided",red)
 # add "sided" to "one and two sided"
 red<-gsub("one and two sided","one sided and two sided",red)
 # split text lines
