@@ -51,8 +51,8 @@ The contained functions are listed below. For a detailed description see the ful
   - text2num() # converts spelled out numbers, fractions, potencies, percentages and numbers denoted with e+num to decimals
   - ngram() # creates &plusmn;n-gram bag of words around a pattern match in text 
   - strsplit2() # splits text at pattern match with option "before" or "after" and without removing the pattern match 
-  - grep2() # extension of grep(). Allows to connect multiple search patterns with AND
-  - letter.convert() # converts and unifies many hexadecimal and HTML characters to unicode and performs CERMINE specific error correction
+  - grep2() # extension of grep(). Allows to connect multiple search patterns with logical AND operator
+  - letter.convert() # unifies many and converts most hexadecimal and HTML characters to unicode and performs CERMINE specific error correction
   - which.term() # returns hit vector for a set of patterns to search for in text (can be reduced to hits only)
 
 ### Built With
