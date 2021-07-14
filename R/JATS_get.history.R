@@ -72,9 +72,9 @@ if(sum(is.na(d))<length(d)){
 if(pubyear==Inf&length(date)==1) pubyear<-substr(date,1,4)
 
 # calculate time to accept/publish
-time2accept<-suppressWarnings(format(as.Date(hist["accepted"])-as.Date(min(c(as.Date(hist["received"])),as.Date(hist["submitted"]),na.rm=TRUE))))
-time2publish<-suppressWarnings(format(as.Date(pubDate)-as.Date(hist["accepted"])))
-submit2publish<-suppressWarnings(format(as.Date(pubDate)-as.Date(min(c(as.Date(hist["received"])),as.Date(hist["submitted"]),na.rm=TRUE))))
+time2accept<-tryCatch(suppressWarnings(format(as.Date(hist["accepted"])-as.Date(min(c(as.Date(hist["received"])),as.Date(hist["submitted"]),na.rm=TRUE)))),error=function(e) NA)
+time2publish<-tryCatch(suppressWarnings(format(as.Date(pubDate)-as.Date(hist["accepted"]))),error=function(e) NA)
+submit2publish<-tryCatch(suppressWarnings(format(as.Date(pubDate)-as.Date(min(c(as.Date(hist["received"])),as.Date(hist["submitted"]),na.rm=TRUE)))),error=function(e) NA)
 
 if(substr(time2accept,1,2)=="NA") time2accept<-NA
 if(substr(time2publish,1,2)=="NA") time2publish<-NA
