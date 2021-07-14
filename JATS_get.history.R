@@ -76,9 +76,9 @@ time2accept<-tryCatch(suppressWarnings(format(as.Date(hist["accepted"])-as.Date(
 time2publish<-tryCatch(suppressWarnings(format(as.Date(pubDate)-as.Date(hist["accepted"]))),error=function(e) "NA")
 submit2publish<-tryCatch(suppressWarnings(format(as.Date(pubDate)-as.Date(min(c(as.Date(hist["received"])),as.Date(hist["submitted"]),na.rm=TRUE)))),error=function(e) "NA")
 
-if(substr(time2accept,1,2)=="NA") time2accept<-NA
-if(substr(time2publish,1,2)=="NA") time2publish<-NA
-if(substr(submit2publish,1,2)=="NA") submit2publish<-NA
+if(!is.na(time2accept)) if(substr(time2accept,1,2)=="NA") time2accept<-NA
+if(!is.na(time2publish)) if(substr(time2publish,1,2)=="NA") time2publish<-NA
+if(!is.na(submit2publish)) if(substr(submit2publish,1,2)=="NA") submit2publish<-NA
 
 # remove NAs
 if(remove.na==T) hist<-hist[!is.na(hist)]
