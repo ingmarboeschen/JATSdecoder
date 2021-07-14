@@ -70,8 +70,8 @@ tables     <- ifelse(sum(is.element(c("all","tables"),output))>0,          get.t
 captions   <- ifelse(sum(is.element(c("all","captions"),output))>0,      captions, NA)
 references <- ifelse(sum(is.element(c("all","references"),output))>0,  get.references(x,letter.convert=letter.convert,remove.html=T), NA)
 
-countryconnections <- ifelse(countryconnection==TRUE, get.cons(country), NA)
-authorconnections <- ifelse(authorconnection==TRUE, get.cons(author,max.items=50), NA)
+ifelse(countryconnection==TRUE, countryconnections<-get.cons(country), countryconnections<-NA)
+ifelse(authorconnection==TRUE, authorconnections<-get.cons(author,max.items=25), authorconnections<-NA)
 
 # create list
 res<-list(
