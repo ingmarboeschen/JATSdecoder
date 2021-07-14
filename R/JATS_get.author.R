@@ -93,8 +93,11 @@ x<-gsub("\\\\","",x)
   authors<-gsub(".*> ", "", authors)  # remove till name
   authors<-gsub(" $", "", authors)  # remove space at end
   authors<-gsub(" [^a-zA-Z\\.]*$","",authors) # remove numbers at end
-  authors<-gsub("\\\"","",authors)
-
+  authors<-unique(gsub("\\\"","",authors))
+  
+  # remove email address
+  authors<-gsub("[^ ]*@[^ ]*","",authors)
+  authors<-gsub(" $|, $","",authors)
 }else authors<-NA
 
 return(authors)

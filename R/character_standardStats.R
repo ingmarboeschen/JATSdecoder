@@ -22,7 +22,7 @@ standardStats<-function(x,stats.mode="all",recalculate.p=TRUE,alternative="undir
 # set warning massages to FALSE
 warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.d<-FALSE;warn.eta<-FALSE;warn.multi.p<-FALSE
    x<-unlist(x)
-# convert with get.stats() if has " [<=>] [0-9\\.-]"
+# convert with all.stats() if has " [<=>] [0-9\\.-]"
 if(length(grep(" [<=>] [0-9\\.-]|[<=>] [0-9\\.-]",x))>0) x<-allStats(x)
 if(length(x)>0){
 # take copy for raw output
@@ -55,9 +55,12 @@ x<-gsub("[A-Za-z]chi[a-z]","",x)
    x<-gsub("\\[","(", x)
    x<-gsub("\\]",")", x)
 
-# remove label from one letter statistic
+   # remove label from one letter statistic
    x<-gsub("( [ZtFr]) [a-zA-Z]* (\\([0-9])","\\1\\2",x)
    x<-gsub("^([ZtFr]) [a-zA-Z]* (\\([0-9])","\\1\\2",x)
+   
+   # convert "num*10^num"-> "num e num"
+   x<-gsub("([0-9]) *?[\\*x] *?10\\^","\\1e",x)
    
 # function to convert percent to number   
 percent2number<-function(x){
@@ -84,7 +87,7 @@ if(length(grep("\\%|[0-9] percent",x))>0){
     }
     return(x)
 }
-# use function to convert %
+# use function to convert % to number
 x<-unlist(lapply(x,percent2number))
    # remove ^ from "letter^2"
    x<-gsub("([a-zA-Z])[\\^]2","\\12",x)

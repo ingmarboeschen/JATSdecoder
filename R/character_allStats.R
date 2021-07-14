@@ -15,6 +15,11 @@ if(length(x)>0) x[is.na(x)]<-""
 if(sum(length(x)>0&nchar(x)>2)>0){
 # letter convert x
 x<-letter.convert(x,greek2text=T)
+
+# correct potencies
+x<-gsub("([0-9]e) *-* *([1-9])","\\1-\\2",x)
+x<-gsub("([0-9]) *\\^ *(-*[1-9])","\\1^\\2",x)
+
 # convert space before/after bracket
 x<-gsub("[\\(\\[] ","(",x)
 x<-gsub(" [\\)\\]]",")",x)
@@ -174,6 +179,7 @@ stats<-unlist(strsplit(stats,"[a-z]{5}, "))
 # escape 2: go on if something left else go return character(0)
 if(length(stats)>0){
 stats<-unlist(strsplit(stats," a | as | also | but | in | so | for | were | was | all other | and | or | nor | of | with | respectively| that |versus|which | not | where | than |whereas| factors| condition| [0-9] [0-9] | [0-9]\\. [0-9]\\. | [A-Za-z] [A-Za-z] [A-Za-z] "))
+stats<-unlist(strsplit2(stats,"mean [a-zA-Z]","before"))
 # if line starts with eta paste to line in front
 if(length(grep("^eta",stats))>0){
  i<-grep("^eta",stats)
@@ -498,8 +504,9 @@ stats<-grep("^at p[<]",stats,invert=TRUE,value=TRUE)
 # remove text till [:,;] if no number exists in front of [:,;]
 i<-grep("[0-9]",gsub("[:,;].*","",stats),invert=TRUE)
 stats[i]<-sub(".*?[:,;]","",stats[i])
-# remove lines with stars
-stats<-grep("\\*",stats,invert=TRUE,value=TRUE)
+# remove lines with stars not followed by [-0-9]
+stats<-gsub(" \\*|\\* | \\* ","*",stats)
+stats<-grep("\\*[^-0-9]",stats,invert=TRUE,value=TRUE)
 # remove space in front
 stats<-gsub("^ ","",stats)
 # remove from "; [Ss]ee"

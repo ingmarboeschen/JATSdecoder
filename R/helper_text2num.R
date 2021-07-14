@@ -5,7 +5,7 @@
 #' @param exponent Logical. If TRUE values with exponent are converted to a digit representation
 #' @param percentage Logical. If TRUE percentages are converted to a digit representation
 #' @param fraction Logical. If TRUE fractions are converted to a digit representation
-#' @param e Logical. If TRUE values denoted with num e+num (e.g. '2e+2') are converted to a digit representation
+#' @param e Logical. If TRUE values denoted with num e+num (e.g. '2e+2') or num*10^num are converted to a digit representation
 #' @param product Logical. If TRUE values products are converted to a digit representation
 #' @param words Logical. If TRUE written numbers are converted to a digit representation
 #' @export
@@ -23,11 +23,12 @@ text2num<-function(x,exponent=TRUE,percentage=TRUE,fraction=TRUE,e=TRUE,product=
 # convert textual representations of numbers
 if(exponent==TRUE)   x<-unlist(lapply(x,hight2num))
 if(percentage==TRUE)    x<-unlist(lapply(x,percent2number))
-if(fraction==TRUE)   x<-unlist(lapply(x,function(y) tryCatch(frac2num(y),error=function(e) return(y))))
 if(e==TRUE)          x<-unlist(lapply(x,e2num))    
 if(product==TRUE)    x<-unlist(lapply(x,function(y) tryCatch(prod2num(y),error=function(e) return(y))))    
 if(words==TRUE)      x<-unlist(lapply(x,text2digit))
 if(words==TRUE&percentage==TRUE)    x<-unlist(lapply(x,percent2number))
+if(fraction==TRUE)   x<-unlist(lapply(x,function(y) tryCatch(frac2num(y),error=function(e) return(y))))
+
 # output
 return(x)
 }
@@ -206,6 +207,10 @@ x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?\\^[-\\.0-9]","before"))
 
 # function to convert e num
 e2num<-function(x){
+    
+    # convert "num*10^num"-> "num e num"
+    x<-gsub("([0-9]) *?[\\*x] *?10\\^","\\1e",x)
+    
 if(length(grep("[0-9][Ee][-\\+\\.0-9]",x))>0){
     x<-gsub("([0-9])[Ee]([0-9])","\\1e+\\2",x)
     x<-gsub("([0-9])E([-\\+\\.0-9])","\\1e\\2",x)
@@ -247,8 +252,8 @@ if(length(grep("/[-\\.0-9]|/ [-\\.0-9]",x))>0){
         ind<-ind[isfrac]
         if(length(ind)>0){
             # recompute num=num/num
-        num<-sapply(frac, function(x) eval(parse(text=x)))
-        num<-as.character(round(num,4))
+        num<-sapply(frac, function(x) format(eval(parse(text=x)),scientific=FALSE))
+#        num<-as.character(round(num,4))
         # insert num
         for(i in 1:length(ind)) x[ind[i]]<-gsub("([-\\.0-9]*/[-\\.0-9]*)",num[i],x[ind[i]])
     }}
@@ -262,6 +267,7 @@ if(length(grep("/[-\\.0-9]|/ [-\\.0-9]",x))>0){
 }
 # convert product to digit number
 prod2num<-function(x){
+    x<-gsub("([0-9]) *?[\\*] *?","\\1*",x)
 tryCatch({
 if(length(grep("\\*[-\\.0-9]|\\* [-\\.0-9]",x))>0){
     x<-unlist(strsplit2(x,"\\.$","before"))
@@ -277,8 +283,8 @@ if(length(grep("\\*[-\\.0-9]|\\* [-\\.0-9]",x))>0){
         # get num/num
         prod<-regmatches(x[ind],regexpr("[-\\.0-9]*\\*[-\\.0-9]*",x[ind]))
         # recompute num=num*num
-        num<-sapply(prod, function(x) eval(parse(text=x)))
-        num<-as.character(round(num,4))
+        num<-sapply(prod, function(x) format(eval(parse(text=x)),scientific=FALSE))
+#        num<-as.character(round(num,4))
         # insert num
         for(i in 1:length(ind)) x[ind[i]]<-gsub("([-\\.0-9]*\\*[-\\.0-9]*)",num[i],x[ind[i]])
     }

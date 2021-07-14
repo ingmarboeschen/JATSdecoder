@@ -25,11 +25,11 @@ if(remove.html==T) aff<-gsub("<label>.*</label>",", ",aff)
 if(remove.html==T) aff<-gsub("^ | $","",gsub(".*>","",gsub(" ,|, [;,]",",",gsub("  "," ",gsub("<.*?.*>"," ",gsub("</*?.*>",", ",aff))))))
 # remove doubled spaces
   aff<-gsub("^ *|(?<= ) | *$", "", aff, perl = TRUE)  
- # coma clean up 
-  aff<-gsub(" ,|,,",",",aff)
+  if(letter.convert==TRUE) aff<-letter.convert(aff)
+  # coma clean up 
+  aff<-gsub(",[ ,]*",", ",aff)
   aff<-gsub(", $|,$|^, ","",aff)
-aff<-gsub("^>","",aff)
-if(letter.convert==TRUE) aff<-letter.convert(aff)
+aff<-gsub("^>|^ ","",aff)
 }else aff<-character(0)
 return(aff)  
 }

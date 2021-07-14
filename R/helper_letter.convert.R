@@ -1371,5 +1371,6 @@ uconv <- function(chars) intToUtf8(strtoi(chars, 16L))
   string <- paste(replacement, collapse='')
   # reconvert @@ -> |
   string<-gsub("@@","|",string)
+
   return(string)
 }

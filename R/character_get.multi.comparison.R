@@ -13,16 +13,16 @@ if(length(x)==1) x<-text2sentences(x)
 # procedure search terms
 proc<-c(
         "AlphaSim|Alpha[- ]Sim",
-        "[^a-z]FWER*[^a-z]|[Ff]amily[- ]*[Ww]ise [Ee]rror [Rr]ate",
-        "[^A-Z]FDR[^A-Z]|[fF]alse [dD]iscovery [rR]ate",
+        "[^a-z]FWER*[^a-z]|[Ff]amily[- ]*?[Ww]ise[- ]*?[Ee]rror[- ]*?[Rr]ate",
+        "[^A-Z]FDR[^A-Z]|[fF]alse[- ]*?[dD]iscovery[- ]*?[rR]ate",
         "Boole[^a-z]",
         "Bonferroni|[Bb]onff*err*onn*i",
-        "Fisher LSD|[Ll][Ss][Dd][^A-Za-z].*post[- ]hoc|post[- ]hoc.*[^a-zA-Z][Ll][Ss][Dd]|LSD[^a-z].*Fisher|Fisher[^a-z].*LSD[^a-z]|[lL]east significant difference",
+        "Fisher LSD|[Ll][Ss][Dd][^A-Za-z].*post[- ]*?hoc|post[- ]*?hoc.*[^a-zA-Z][Ll][Ss][Dd]|LSD[^A-Z].*Fisher|Fisher[^a-z].*LSD[^A-Z]|[Ll]east [Ss]ignificant [Dd]ifference",
         "Holm[^a-z]",
         "Tukey|Tuckey",
         "Benjamini",
         "Hochberg",
-        "Dunnett[^a-z]|Dunn*et",
+        "Dunnett[^a-z]|Dunn*et[^a-z]",
         "Duncan",
         "Newman",
         "Keuls",
@@ -38,7 +38,7 @@ res<-grep("[Ii]nstead of| not |n[^ a-z]t|Since | since |rather than",res,invert=
 # wich procedure is used
 res<-which.term(res,terms=proc,tolower=F,hits_only=T)
 # clean up
-res<-gsub("\\[\\^A-Z\\]","",res)
+res<-gsub("\\[\\^A-Z\\]|\\*","",res)
 res<-gsub("\\[\\^a-z\\]","",res)
 res<-gsub("\\[\U0160S\\]","\U0160",res)
 res<-gsub("\\[e\U00E9\U00E8\\]","\U00E9",res)

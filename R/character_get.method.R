@@ -21,6 +21,8 @@ method<-tolower(method)
 #remove html
 method<-gsub("<.*?.*>]","",method)
 
+method<-gsub(" indices"," index",method)
+
 # split lines
 method<- unlist(strsplit(method,"\\, |; | or |\\: | and | as | by | to | is | are | have | has | was | were | be | in | on | also | with |/| [(\\[]| based on | beside"))
   # set "-" to space
@@ -35,7 +37,7 @@ method<- unlist(strsplit(method,"\\, |; | or |\\: | and | as | by | to | is | ar
   
 ## Extract potential lines with "method" used
 # define methods to look out for
-patterns<-"regression|anova|ancova|correlation|model|analys[ie]s|test|estimator|estimates|estimation|coefficient|algorithm|simulation|intervall|statistic[^a]|statistic$|index|imputation|bootstrap|interval|method|theorem|review|informationcriterion|bayes|curve|matrix"
+patterns<-"regression|anova|ancova|correlation|model|analys[ie]s|test|estimator|estimates|estimation|coefficient|algorithm|simulation|statistic[^a]|statistic$|index|imputation|bootstrap|interval|method|theorem|review|informationcriterion|bayes|curve|matrix"
 # add new patterns
 if(!is.null(add)) patterns<-paste(c(patterns,add),collapse="|")
 # reduce to sentences with patterns
@@ -62,11 +64,16 @@ if(sum(nchar(method))>4){
   # some plural to singular
   method<- gsub("analyses","analysis",method)
   method<- gsub("anovas","anova",method)
+  method<- gsub("indexes","index",method)
   method<- gsub("correlations","correlation",method)
   method<- gsub("models","model",method)
+  method<- gsub("curves","curve",method)
+  method<- gsub("algrorithms","algrorithm",method)
   method<- gsub("regressions","regression",method)
   method<- gsub("methods|methodology","method",method)
   method<- gsub("coefficients","coefficient",method)
+  method<- gsub("imputations","imputation",method)
+  method<- gsub("bayes factors","bayes factor",method)
   
   method<- gsub("tests","test",method)
   # unify anova/ancova
@@ -125,7 +132,7 @@ if(sum(nchar(method))>4){
   prewords1<-c("a","an","as","also","and","are","s","its","to","the","these","those","this","that","which","thus","at","but","than","then","through","no","were","by","on","in","all","so","for","from","each","we","our","their","with","or","normal","simple","new","next","via", "whether","unknown","another", "such","strongest")
   prewords2<-c("previous","preliminary","relevant","possible","potential","whenever","whereas","whoose","average", "initial","because","other","into","similar","several","common","moderate","strong","high","low","higher","lower","positive", "pre","not","excellent", "pilot","about","after","institutional")
   #,"first","second","third","fourth","fifth","lowest"
-  prewords3<-c("final","while","when","where","weak","weaker","weakest","various","further","true","traditional","any","accordingly", "nvivo", "conventional","main","primary","later","until","recent","detailed","either","particular","subsequent","trails","how", "other","additional")
+  prewords3<-c("final","while","when","where","weak","weaker","weakest","various","further","true","traditional","any","accordingly", "nvivo", "conventional","main","primary","later","until","recent","detailed","either","particular","subsequent","trails","how", "other","additional","although")
   prewords4<-c("collection","before","statistical","statistically","greatest","latest","pre","same","simple","both","would", "appropriate","some","original","hypothesis","either","current","accross","stranger","every","see","significant","insignificant", "nonsignificant","significantly","consequently") 
   ngram<-lapply(ngram,function(x) rm.prewords(x,prewords1))
   ngram<-lapply(ngram,function(x) rm.prewords(x,prewords2))
@@ -185,11 +192,13 @@ if(sum(nchar(method))>4){
   ngram<-lapply(ngram,function(x) gsub("^of ","",x))
   ngram<-lapply(ngram,function(x) gsub(".*article title source ","",x))
   ngram<-lapply(ngram,function(x) gsub("^statistical analysis|statistical method|statistical model","",x))
-     
+  ngram<-lapply(ngram,function(x) gsub("regression analys[ei]s|regression model|regression modelling","regression",x))
+  ngram<-lapply(ngram,function(x) gsub("(anc*?ova) analys[ei]s|(anc*?ova) model","\\1\\2",x))
+  
   # remove some bad captured and empty cells
   ngram<-lapply(ngram,function(x) grep("[a-z_]test$|[a-z_]test[a-z1-9_]|^test[a-z_]|\\|^[0-9] test$|^[0-9][0-9] test$",unlist(x),invert=TRUE,value=TRUE))
   ngram<-lapply(ngram,function(x) grep("^na na|vilanova|villanova|velanova|^$",x,invert=TRUE,value=TRUE))
-  ngram<-lapply(ngram,function(x) grep("secsec",x,invert=TRUE,value=TRUE))
+  ngram<-lapply(ngram,function(x) grep("secsec|[a-z][a-z][a-z]anova$|tanova$",x,invert=TRUE,value=TRUE))
   # remove space in front of line and double space to single space
   ngram<-lapply(ngram,function(x) gsub("  "," ",gsub("  "," ",x)))
   ngram<-lapply(ngram,function(x) gsub("^ |^  ","",x))
@@ -245,8 +254,19 @@ if(sum(nchar(method))>4){
   # remove method specific pattern
   ngram<-grep("^different method$",ngram,invert=TRUE,value=TRUE)
   ngram<-grep(  paste0("^",c("second","full","best","one","overall")," model$",collapse="|"),ngram,invert=TRUE,value=TRUE)
-  ngram<-grep(  paste0("^",c("highest","lowest","best","negative","positive")," correlat$",collapse="|"),ngram,invert=TRUE,value=TRUE)
-  # correct within[a-z], factorial[a-z]
+  ngram<-gsub(  paste0("^",c("highest","lowest","best","negative","positive")," correlation$",collapse="|"),"correlation",ngram)
+  ngram<-gsub(  paste0("^",c("single","within","above","if","third","gender")," anova$",collapse="|"),"anova",ngram)
+  nums<-c("one","two","three","four","five","six","seven","eight","nine")
+  ngram<-gsub(  paste0("^",nums," anova$",collapse="|"),"anova",ngram)
+  ngram<-gsub(  paste0("^",nums," manova$",collapse="|"),"manova",ngram)
+  ngram<-gsub(  paste0("^",nums," ancova$",collapse="|"),"ancova",ngram)
+  ngram<-gsub(  paste0("^",nums," algorithm$",collapse="|"),"algorithm",ngram)
+  ngram<-gsub(  paste0("^",nums," curve$",collapse="|"),"curve",ngram)
+  ngram<-gsub(  paste0("^",nums," regression$",collapse="|"),"regression",ngram)
+  ngram<-gsub(  paste0("^",nums," linear regression$",collapse="|"),"linear regression",ngram)
+  ngram<-gsub(  paste0("^",1:9," anova$",collapse="|"),"anova",ngram)
+  
+    # correct within[a-z], factorial[a-z]
   ngram<-gsub("within([a-z])","within \\1",ngram)
   ngram<-gsub("factorial([a-z])","factorial \\1",ngram)
   
@@ -259,6 +279,7 @@ if(sum(nchar(method))>4){
 # reconvert "bayesfactor" to "bayes factor"
   ngram<- gsub("informationcriterion","information criterion",gsub("bayesfactor","bayes factor",ngram))
   ngram<- gsub("areaunderthe curve","area under the curve",ngram)
+  ngram<- gsub("^gof |( )gof ","\\1goodness of fit ",ngram)
 
   # remove elements with test[a-z]
   pat<-"test[a-z]"

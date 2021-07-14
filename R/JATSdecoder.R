@@ -10,11 +10,14 @@
 #' @param warning Logical. If TRUE outputs a warning if processing CERMINE converted PDF files
 #' @param unify.country.name Logical. If TRUE tries to unify country name/s with list of country names from worldmap() 
 #' @param greek2text Logical. If TRUE converts and unifies several greek letters to textual representation, e.g.: alpha
+#' @param countryconnection Logical. If TRUE outputs country connections as vector c("A - B","A - C", ...)
+#' @param authorconnection Logical. If TRUE outputs connections of a maximum of 50 involved authors as vector c("A - B","A - C", ...)
 #' @export
 
 # define function
 JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experiment","conclu","implica","discussion"),grepsection="",
-                         sentences=FALSE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE){
+                         sentences=FALSE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,
+                      countryconnection=FALSE,authorconnection=FALSE){
 # presettings
 rm.na.history<-TRUE
 rm.xref.text<-TRUE
@@ -56,17 +59,21 @@ ifelse(sum(is.element(c("all","volume"),output))>0,      volume<-get.vol(x),    
 ifelse(sum(is.element(c("all","editor"),output))>0,     editor<-get.editor(x,letter.convert=letter.convert),  editor<-NA)
 ifelse(sum(is.element(c("all","doi"),output))>0,        doi<-get.doi(x),                                    doi<-NA)
 ifelse(sum(is.element(c("all","type"),output))>0,        type<-get.type(x),                                    type<-NA)
-ifelse(sum(is.element(c("all","history"),output))>0,     history<-get.history(x,remove.na=rm.na.history),      history<-NA)
-ifelse(sum(is.element(c("all","country"),output))>0,     country<-get.country(get.aff(x)),                     country<-NA)
+ifelse(sum(is.element(c("all","history"),output))>0,     history<-as.list(get.history(x,remove.na=rm.na.history)),      history<-NA)
+ifelse(sum(is.element(c("all","country"),output))>0,     country<-get.country(get.aff(x),unifyCountry=unify.country.name),                     country<-NA)
 ifelse(sum(is.element(c("all","subject"),output))>0,     subject<-get.subject(x,letter.convert=letter.convert),subject<-NA)
 ifelse(sum(is.element(c("all","keywords"),output))>0,    keywords<-get.keywords(x,letter.convert=letter.convert),keywords<-NA)
 ifelse(sum(is.element(c("all","abstract"),output))>0,    abstract<-text2sentences(get.abstract(x,sentences=sentences,letter.convert=letter.convert,cermine=cerm)), abstract<-NA)
-ifelse(sum(is.element(c("all","sections"),output))>0,    sections<-sections,                                   sections<-NA)
-ifelse(sum(is.element(c("all","text"),output))>0,        text<-text,                                           text<-NA)
-ifelse(sum(is.element(c("all","tables"),output))>0,    tables<-get.tables(x),                                   tables<-NA)
-ifelse(sum(is.element(c("all","captions"),output))>0,    captions<-captions,                                   captions<-NA)
-ifelse(sum(is.element(c("all","references"),output))>0,  references<-get.references(x,letter.convert=letter.convert,remove.html=T),references<-NA)
+sections   <- ifelse(sum(is.element(c("all","sections"),output))>0,      sections, NA)
+text       <- ifelse(sum(is.element(c("all","text"),output))>0,              text, NA)
+tables     <- ifelse(sum(is.element(c("all","tables"),output))>0,          get.tables(x), NA)
+captions   <- ifelse(sum(is.element(c("all","captions"),output))>0,      captions, NA)
+references <- ifelse(sum(is.element(c("all","references"),output))>0,  get.references(x,letter.convert=letter.convert,remove.html=T), NA)
 
+countryconnections <- ifelse(countryconnection==TRUE, get.cons(country), NA)
+authorconnections <- ifelse(authorconnection==TRUE, get.cons(author,max.items=50), NA)
+
+# create list
 res<-list(
  file=file,
  title=title,
@@ -86,9 +93,14 @@ res<-list(
  text=text,
  tables=tables,
  captions=captions,
- references=references
+ references=references,
+ countryconnections=countryconnections,
+ authorconnections=authorconnections
 )
-if(unify.country.name==TRUE&sum(is.element(c("all","country"),output))>0) res$country=.unifyCountry(unlist(res$country))
+
+if(countryconnection!=TRUE) res<-within(res,rm("countryconnections"))
+if(authorconnection!=TRUE) res<-within(res,rm("authorconnections"))
+
 # remove NULL results
 #res<-res[!unlist(lapply(lapply(res,"[",1),is.na))]
 
@@ -101,3 +113,24 @@ return(res)
 if(cerm==TRUE&warning==TRUE)  warning("CERMINE specific letter conversion was used to correct for some conversion errors. '<=>' was inserted by letter.convert() to make statistics readable. The minus sign rarely gets converted to '2' what cannot always be handled correctly.")  
 }
 
+# create connection vector
+get.net<-function(x,max.items=Inf){
+    n<-NULL
+    if(is.character(x)&!is.null(x)){
+        if(length(x)>1){
+            if(is.null(max.items)|length(x)<=max.items){
+                x<-sort(x)
+                for(i in 1:(length(x)-1)){
+                    for(j in (i+1):length(x)){
+                        n<-cbind(rbind(n,c(x[i],x[j])))
+                    }}
+            }# end remove max.conn
+        }}
+    return(n)
+}
+
+get.cons<-function(x,max.items=Inf){
+    connection<-get.net(x,max.items=max.items)
+    connection<-paste(connection[,1],connection[,2],sep=" - ")
+    return(connection)
+}

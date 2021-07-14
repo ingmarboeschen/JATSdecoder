@@ -6,9 +6,7 @@
 #' @export
 
 #' @examples
-#' get.software(
-#'x<-"We used the R Software and Excel 4.0 to analyse our data."
-#' )
+#' get.software("We used the R Software and Excel 4.0 to analyse our data.")
 
 get.software<-function(x,add.software=NULL){
 # convert / * and - to space
@@ -39,6 +37,7 @@ x<-gsub(" \\[1-9\\]","",x)
 x<-gsub(" Core| Institute","",x)
 x<-gsub(" \\[1\\-9vV\\]","",x)
 x<-gsub("\\[- \\]\\*","-",x)
+x<-gsub("\\[1-9\\]","",x)
 
 return(unique(unlist(x)))
 
@@ -90,20 +89,20 @@ return(unique(unlist(x)))
 "Tanagra",
 "OptoGait",
 "Statgraphics|StatGraphics",
-"EQS",
+"EQS[^A-Z]",
 "Smart PLS|SmartPLS",
 "Warp PLS|WarpPLS",
 "Winsteps|WinSteps|WINSTEPS",
 "MindWare|Mindware|MINDWARE",
 "Cartool",
 "RDSAT",
-"PROCESS MACRO|PROCESS *[Mm]acro|PROCESS [Mm]odul|PROCESS .*Hayes|Hayes.*PROCESS|Process *[Mm]acro|PROCESS *[Tt]oolbox|PROCESS mediation tool",
+"PROCESS MACRO|PROCESS *[Mm]acro|PROCESS [Mm]odul|PROCESS .*Hayes|Hayes.*PROCESS|Process *[Mm]acro|PROCESS *[Tt]oolbox|PROCESS [a-z]* *tool",
 "FACTOR|oftware Factor|Factor [Ss]oftware|Factor [1-9]\\.[0-9]|Factor [1-9][0-9]\\.[0-9]",
 "METAWIN|META[- ]*WIN",
 "Review Manager|REVIEW MANAGER",
 "HLM [1-9vV]|HLM[Pp]rogram|HLM [Ss]oft|[Hh]ierarchical [Ll]inear [Mm]odeling [Pp]rogram|[Hh]ierarchical [Ll]inear [Mm]odeling [Ss]oft",
 "QtiPlot",
-"Grapher",
+"Grapher[^a-z]",
 "Open[- ]*MX"
 
 ## software to present experiments/gather data

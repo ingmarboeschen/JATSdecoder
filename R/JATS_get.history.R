@@ -71,10 +71,29 @@ if(sum(is.na(d))<length(d)){
 
 if(pubyear==Inf&length(date)==1) pubyear<-substr(date,1,4)
 
-hist<-c(hist,pubDate,pubyear)
-names(hist)[(length(hist)-1):length(hist)]<-c("pubDate","pubyear")
-hist<-gsub("Inf",NA,hist)
+# calculate time to accept/publish
+time2accept<-suppressWarnings(format(as.Date(hist["accepted"])-as.Date(min(c(as.Date(hist["received"])),as.Date(hist["submitted"]),na.rm=TRUE))))
+time2publish<-suppressWarnings(format(as.Date(pubDate)-as.Date(hist["accepted"])))
+submit2publish<-suppressWarnings(format(as.Date(pubDate)-as.Date(min(c(as.Date(hist["received"])),as.Date(hist["submitted"]),na.rm=TRUE))))
+
+if(substr(time2accept,1,2)=="NA") time2accept<-NA
+if(substr(time2publish,1,2)=="NA") time2publish<-NA
+if(substr(submit2publish,1,2)=="NA") submit2publish<-NA
+
+# remove NAs
 if(remove.na==T) hist<-hist[!is.na(hist)]
+
+# add puDate/year, time to accept/publish
+hist<-c(hist,pubyear,pubDate)
+names(hist)[(length(hist)-1):length(hist)]<-c("pubyear","pubDate")
+hist<-gsub("Inf|-Inf",NA,hist)
+
+hist<-c(hist,time2accept,time2publish,submit2publish)
+names(hist)[(length(hist)-2):length(hist)]<-c("time2accept","time2publish","submit2publish")
+
+hist<-gsub("-Inf|Inf",NA,hist)
+hist<-gsub("Inf|Inf",NA,hist)
+
 return(hist)
 }
 

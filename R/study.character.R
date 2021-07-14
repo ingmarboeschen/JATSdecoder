@@ -39,7 +39,7 @@ study.character<-function(x,
                           N.max.only=FALSE,
                           output="all",
                           rm.na.col=TRUE){
-   
+   # prepare captions object
    caps<-character(0)
    # check if x is xml file or list else stop
    if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0&!is.list(x)) stop("file is not in XML nor NISO-JATS format nor a JATSdecoder result")
@@ -139,6 +139,7 @@ study.character<-function(x,
       doi<-as.character(unlist(temp["doi"]))
       title<-as.character(unlist(temp["title"]))
       year<-as.numeric(unlist(lapply(temp["history"],"[","pubyear")))
+      history<-unlist(temp["history"])
       abstract<-text2sentences(as.character(unlist(temp["abstract"])))
       temp<-"!DOCTYPE"
    }else{
@@ -146,8 +147,19 @@ study.character<-function(x,
       doi<-get.doi(temp)
       title<-get.title(temp)
       year<-as.numeric(get.history(temp)["pubyear"])
+      history<-get.history(temp)
       abstract<-text2sentences(get.abstract(temp,cermine=cermine))
    }
+   
+   # compute time to publish &  time to accept
+#   pubDate<-suppressWarnings(as.Date(history["pubDate"]))
+#   sub<-suppressWarnings(min(as.Date(history[c("submitted","nihms_submitted")]),na.rm=T))
+#   accept<-suppressWarnings(as.Date(history[c("accepted")]))
+#   time2publish<-pubDate-sub
+#   time2accept<-pubDate-accept
+#   if(time2publish==-Inf) time2publish<-NA
+#   if(time2accept==-Inf) time2accept<-NA
+   
    
    # get n studies from sections
    if(length(grep("!DOCTYPE",temp[1:10]))>0){
@@ -171,9 +183,10 @@ study.character<-function(x,
    }else{n.studies<-NA} # End no !DOCTYPE
    # get characteristics
    if(sum(is.element(c("all","methods"),output))>0){ methods<-get.method(both,cermine=cermine) }else{methods<-NA}
+   if(sum(is.element(c("all","methods"),output))>0){ categorized.methods<-categorize.methods(methods) }else{categorized.methods<-NA}
    if(sum(is.element(c("all","alpha.error"),output))>0){ alpha.error<-get.alpha.error(c(both,caps),p2alpha=p2alpha,output=alpha_output) }else{alpha.error<-NA}
    if(sum(is.element(c("all","multi.comp"),output))>0){ multi.comp<-get.multi.comparison(c(both,caps)) }else{multi.comp<-NA}
-   if(sum(is.element(c("all","power"),output))>0){ power<-get.power(c(fulltext,caps)) }else{power<-NA}
+   if(sum(is.element(c("all","power"),output))>0){ power<-unname(unlist(get.power(c(fulltext,caps)))) }else{power<-NA}
    if(sum(is.element(c("all","assumptions"),output))>0){ assumptions<-get.assumptions(both) }else{assumptions<-NA}
    if(sum(is.element(c("all","OutlierRemovalInSD"),output))>0){ outlier<- get.outlier.def(both) }else{outlier<-NA}
    if(sum(is.element(c("all","InteractionModeratorMediatorEffect"),output))>0){ InteractionModeratorMediatorEffect<-has.interaction(both) }else{InteractionModeratorMediatorEffect<-NA}
@@ -181,7 +194,7 @@ study.character<-function(x,
    if(sum(is.element(c("all","software"),output))>0){ software<-get.software(both,add.software=add.software) }else{software<-NA}
    if(sum(is.element(c("all","Rpackage"),output))>0){ Rpackage<-get.R.package(both,update.package.list=update.package.list) }else{Rpackage<-NA}
    
-   if(sum(is.element(c("all","stats"),output))>0){
+   if(sum(is.element(c("all","stats","statsOnStats"),output))>0){
       if(text.mode==1) stats<-c("\u2022 Results in abstract and full text:",allStats(c(abstract,fulltext)))
       if(text.mode==2) stats<-c("\u2022 Results in methods and results sections:",allStats(both))
       if(text.mode==3) stats<-c("\u2022 Results in results section/s:",allStats(result))
@@ -189,7 +202,7 @@ study.character<-function(x,
       if(captions==TRUE) stats<-c(stats,"\u2022 Results in captions:",allStats(caps))   
       
       # get standard stats if output is desired
-      if(sum(is.element(c("all","standardStats"),output))>0){
+      if(sum(is.element(c("all","statsOnStats","standardStats"),output))>0){
          # set direction to "both" for alternative if has one sided hypotheses/tests
          if(length(grep("^one ",test.direction))>0){
             direction<-"both"}else{direction<-"undirected"}
@@ -198,14 +211,35 @@ study.character<-function(x,
    }else{
       stats<-NA;standardStats<-NA}
    
-   ifelse(sum(is.element(c("all","sig.adjectives"),output))>0,
-          sig.adjectives<-get.sig.adjectives(both) ,
+# compute statsOnStats if output is desired
+   if(sum(is.element(c("all","statsOnStats"),output))>0){
+   if(is.element("p",colnames(standardStats))){
+      nPvalues<-sum(!is.na(standardStats[,"p"]))
+   }else nPvalues<-NA
+   if(is.element("recalculatedP",colnames(standardStats))){
+      nPcomp<-sum(!is.na(standardStats[,"recalculatedP"]))
+   }else nPcomp<-NA
+   if(sum(is.element(c("p","recalculatedP"),colnames(standardStats)))==2){
+      nPcheck<-sum(!is.na(standardStats[,"p"])&!is.na(standardStats[,"recalculatedP"]))
+   }else nPcheck<-NA
+   }else{
+   nPvalues<-NA;nPcheck<-NA;nPcomp<-NA
+   }
+   statsOnStats<-list(nPvalues=nPvalues,nPcomputable=nPcomp,nPcheckable=nPcheck)
+   # adjectives in front of significant/insignificant
+   if(sum(is.element(c("all","sig.adjectives","insig.adjectives"),output))>0){
+          sig.adjectives<-get.sig.adjectives(both)$sig_adjective
+          insig.adjectives<-get.sig.adjectives(both)$insig_adjective
           # else
-          sig.adjectives<-NA)
-   
+          }else{
+             sig.adjectives<-NA
+             insig.adjectives<-NA
+          }
+          
    # SAMPLE SIZE
    if(sum(is.element(c("all","estimated.sample.size"),output))>0){
-      sample.size<-est.ss(abstract=abstract,text=both,quantileDF=quantileDF,max.only=N.max.only)
+      out<-est.ss(abstract=abstract,text=both,quantileDF=quantileDF,max.only=N.max.only)
+      sample.size<-list(SSabstractNsum=unname(out[1]),SSstats=unname(out[2]),SSstandardStats=unname(out[3]),estimatedSampleSize=unname(out[4]))
    }else sample.size<-NA
    
    ## output
@@ -213,21 +247,24 @@ study.character<-function(x,
       doi=doi,
       title=title,
       year=year,
-      n.studies=n.studies,
+      Nstudies=n.studies,
       methods=methods,
-      alpha.error=alpha.error,
+      categorized_methods=categorized.methods,
+      alpha_error=alpha.error,
       power=power,
-      multi.comparison.correction=multi.comp,
+      multi_comparison_correction=multi.comp,
       assumptions=assumptions,
       OutlierRemovalInSD=outlier,
       InteractionModeratorMediatorEffect=InteractionModeratorMediatorEffect,
-      test.direction=test.direction,
-      sig.adjectives=sig.adjectives,
+      test_direction=test.direction,
+      sig_adjectives=sig.adjectives,
+      insig_adjectives=insig.adjectives,
       software=software,
       Rpackage=Rpackage,
       stats=stats,
       standardStats=standardStats,
-      estimated.sample.size=sample.size
+      statsOnStats=statsOnStats,
+      estimated_sample_size=sample.size
    )
    
    if(nostat==TRUE)  output<-output[output!="stats"]
@@ -237,4 +274,88 @@ study.character<-function(x,
    
    return(res)
 }
+
+
+categorize.methods<-function(x){
+   names<-c("descriptive statistics|descriptive analysis|descriptives",
+            "permutation test|permutation.*? test|permutation.*? model",
+            "neural network","machine learning","random forest","random trees|random.* trees*",
+            "single case",
+            "sequential analysis|sequential.* test|sequential.* model",
+            "distributional analysis|distribution analysis|distribution fitting",
+            "inter rater reliability|inter.*rater.*reliability|kappa|intraclass correlation|intra class correlation",
+            "reliable change index|reliable change ind",
+            "gini index",
+            "pearson correlation|pearson product|moment correla|zero order correlation|^correlation$",
+            "spearman correlation|spearman brown|spearman coef|spearman rank|spearman rho",
+            "cramer v",
+            "somer d",
+            "contingency table|contingency coef",
+            "^chi square|[^d] chi square", 
+            "wald test|wald chi square",
+            "power analysis|power estima|power analys",
+            "bootstrap",
+            "confidence interval",
+            "highest density interval",
+            "fisher exact","fisher z","mcnemar","cochran q","z statistic",
+            "mann whitney u test|mann *?whitney|u test",
+            "wilcoxon sign rank test|signe*?d*? rank|wilcoxon",
+            "kruskal wallis test",
+            "friedman test",
+            "one sample t test|single sample t test",
+            "^t test$|[^n][^e] t test|independent t test|two sample t test", 
+            "paired t test|paired samples*? t test",
+            " anova|^anova",
+            "repeated measures anova|repeated measure.* anova",
+            " ancova|^ancova",
+            "manova|mancova",
+            "path analysis|path model|path coefficient|path estimate",
+            "structural equation",
+            "multilevel structural equation",
+            "growth curve|growth model",
+            "multilevel growth|multigroup.*?growth",
+            "confirmatory factor analysis|confirmatory factor",
+            "exploratory factor analysis|exploratory factor",
+            "cronbach alpha|reliability coeff|cronbach coeff",
+            "mc donald omega coefficient|omega estimate|mcdonald|mc donald",
+            "test retest reliability|test retest corr",
+            "convergent validity|discriminant validity|[^a-z]ave |^ave |msv",
+            "sensitivity","specificity","specifity",
+            "spatial model|spatial.*?analys|spatial.*?model",
+            "item analysis|items analysis",
+            "item response analysis|dif analysis",
+            "cluster analysis|cluster.* analysis",
+            "roc curve|receiver operat",
+            "markov|marcov",
+            "bayes|baysian",
+            "simulation",
+            "multiple imputation",
+            "regression",
+            "OLS regression|ols regression|ordinary.least.square",
+            "maximum likelihood|maximum.*?likelihoo*?d",
+            "hierarchical regression|hie*?r[ia].*regression|hie*?r[ia].*model",
+            "^non linear| non.*linear|^non.*?linear",
+            "non parametric statistic|non.*?parametric",
+            "longitudinal|^paneli*?[zs]*?e*?d*? | paneli*?[zs]*?e*?d*? ",
+            "multilevel regression|multi.*?level.*?regres|multi.*?level.*?model|mixed.*?regres|nested.*?regress|nested.*?model",
+            "multivariate regresion|multivariate.*?regres|multiple*?regres",
+            "poisson regression|poisson.*?regres",
+            "logistic regression|log[ia][rst].*regression|log[ia][rst].*model|binary.*regression",
+            "probit regression|probit.*model|probit.*regression",
+            "multilevel logistic regression|multi.*?level logistic|logistic multilevel",
+            "multinomial regresion|multinom.*?regres",
+            "systematic review",
+            "literature review",
+            "meta analysis|meta analyses",
+            "allgorithm",
+            "propensity score",
+            "goodness of fit|^gof | gof ",
+            "network analysis",
+            "ordinal regression|ordinal model|rank regression",
+            "drift diffusion model|drift diffusion|ddm",
+            "generalized estimation equation|^gee | gee "
+   )
+   methodsCat<-unlist(lapply(x,function(x) gsub("\\|.*|^ |\\^|\\$","",which.term(x,names,hits=T))))
+   return(methodsCat)
+   }
 
