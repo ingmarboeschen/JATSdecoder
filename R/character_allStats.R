@@ -11,7 +11,7 @@
 #' allStats(x)
 allStats<-function(x){
 if(length(x)>0) x[is.na(x)]<-""
-if(length(grep("^</[a-z]*>$",x))>0) x<-x[length(grep("^</[a-z]*>$",x))==0]
+if(length(grep("^</*?[a-z]*>$",x))>0) x<-x[length(grep("^</*?[a-z]*>$",x))==0]
 # escape 1:
 if(sum(length(x)>0&nchar(x)>2)>0){
 # letter convert x
