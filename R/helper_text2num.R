@@ -149,6 +149,7 @@ word2num <- function(word){
 # function to convert percent to number   
 percent2number<-function(x){
 if(length(grep("\\%|[0-9] percent",x))>0){
+    x<-gsub("\\\\","",x)
     x<-gsub("([0-9]) percent","\\1%",x)
     x<-gsub("([0-9]) \\%","\\1%",x)
     x<-unlist(strsplit2(x,"[0-9][%]","after"))

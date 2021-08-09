@@ -192,7 +192,7 @@ if(sum(nchar(method))>4){
   ngram<-lapply(ngram,function(x) gsub("^of ","",x))
   ngram<-lapply(ngram,function(x) gsub(".*article title source ","",x))
   ngram<-lapply(ngram,function(x) gsub("^statistical analysis|statistical method|statistical model","",x))
-  ngram<-lapply(ngram,function(x) gsub("regression analys[ei]s|regression model|regression modelling","regression",x))
+  ngram<-lapply(ngram,function(x) gsub("regression analys[ei]s|regression model|regression modelling|regression method","regression",x))
   ngram<-lapply(ngram,function(x) gsub("(anc*?ova) analys[ei]s|(anc*?ova) model","\\1\\2",x))
   
   # remove some bad captured and empty cells
@@ -254,17 +254,24 @@ if(sum(nchar(method))>4){
   # remove method specific pattern
   ngram<-grep("^different method$",ngram,invert=TRUE,value=TRUE)
   ngram<-grep(  paste0("^",c("second","full","best","one","overall")," model$",collapse="|"),ngram,invert=TRUE,value=TRUE)
-  ngram<-gsub(  paste0("^",c("highest","lowest","best","negative","positive")," correlation$",collapse="|"),"correlation",ngram)
+  ngram<-gsub(  paste0("^",c("highest","lowest","best","negative","positive","good","low","high")," correlation$",collapse="|"),"correlation",ngram)
   ngram<-gsub(  paste0("^",c("single","within","above","if","third","gender")," anova$",collapse="|"),"anova",ngram)
   nums<-c("one","two","three","four","five","six","seven","eight","nine")
   ngram<-gsub(  paste0("^",nums," anova$",collapse="|"),"anova",ngram)
   ngram<-gsub(  paste0("^",nums," manova$",collapse="|"),"manova",ngram)
+  ngram<-gsub(  paste0("^",nums," correlation analysis$",collapse="|"),"correlation",ngram)
   ngram<-gsub(  paste0("^",nums," ancova$",collapse="|"),"ancova",ngram)
+  ngram<-gsub(  paste0("^",nums," coefficient$",collapse="|"),"coefficient",ngram)
   ngram<-gsub(  paste0("^",nums," algorithm$",collapse="|"),"algorithm",ngram)
+  ngram<-gsub(  paste0("^",nums," algorithms$",collapse="|"),"algorithm",ngram)
   ngram<-gsub(  paste0("^",nums," curve$",collapse="|"),"curve",ngram)
+  ngram<-gsub(  paste0("^",nums," test$",collapse="|"),"curve",ngram)
   ngram<-gsub(  paste0("^",nums," regression$",collapse="|"),"regression",ngram)
   ngram<-gsub(  paste0("^",nums," linear regression$",collapse="|"),"linear regression",ngram)
   ngram<-gsub(  paste0("^",1:9," anova$",collapse="|"),"anova",ngram)
+  ngram<-gsub(  paste0("^",1:9," model$",collapse="|"),"model",ngram)
+  ngram<-gsub(  paste0("^",nums," model$",collapse="|"),"model",ngram)
+  ngram<-gsub(  paste0("^",nums," distinct ",collapse="|"),"",ngram)
   
     # correct within[a-z], factorial[a-z]
   ngram<-gsub("within([a-z])","within \\1",ngram)
@@ -287,6 +294,10 @@ if(sum(nchar(method))>4){
   ngram<- ngram[!is.element(ngram,p)]
   if(sum(is.null(ngram))==1) ngram<-character()
   ngram<-stats::na.omit(ngram)
+  
+  # remove further single detection with certain uninfomative patterns
+  ngram<-grep("^model$|^test$|^analysis$|^algorithm$|^index$|^statistic$|^method$|^estimation$|^interval$|^intervals$|^review$|^reviews$|^curve$|^curves$",ngram,invert=TRUE,value=TRUE)
+  
   # reduce nested list to simple list
   #ngram<-mapply(c,ngram)
  } else ngram<-character() 
