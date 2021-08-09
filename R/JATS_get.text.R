@@ -286,8 +286,20 @@ if(sum(section==""&textred=="")>0){
 if(sentences==TRUE) textred<-lapply(textred,text2sentences) 
 if(sentences==TRUE) captions<-lapply(captions,text2sentences) 
 
+# remove if text only contains html tag  
+textred<-lapply(textred,function(x){
+  out<-x[length(grep("^</*?[a-z]*>$|^</*?[a-z]*></*?[a-z]*>$",x))==0]
+  if(length(out)==0) out<-""
+  return(out)
+})
 
+captions<-lapply(captions,function(x){
+  out<-x[length(grep("^</*?[a-z]*>$|^</*?[a-z]*></*?[a-z]*>$",x))==0]
+  if(length(out)==0) out<-""
+  return(out)
+})
 
+# output as list
 list(section=section,text=textred,captions=captions)
 }
 
