@@ -10,8 +10,12 @@
 #' "the correlation of x and y was r=.37.")
 #' allStats(x)
 allStats<-function(x){
+# remove non result lines
 if(length(x)>0) x[is.na(x)]<-""
 if(length(grep("^</*?[a-z]*>$",x))>0) x<-x[length(grep("^</*?[a-z]*>$",x))==0]
+# only lines that have letters
+x<-grep("[a-zA-Z]",x,value=TRUE)
+
 # escape 1:
 if(sum(length(x)>0&nchar(x)>2)>0){
 # letter convert x
