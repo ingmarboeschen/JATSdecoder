@@ -1,6 +1,6 @@
 #' study.character
 #'
-#' extracts study characteristics out of a JATS coded XML file or JATSdecoder result
+#' Extracts study characteristics out of a NISO-JATS coded XML file or JATSdecoder result
 #' @param x JATS coded XML file or JATSdecoder result
 #' @param text.mode text parts to extract statistical results from (text.mode=1: abstract and full text, text.mode=2: method and result section, text.mode=3: result section only)
 #' @param captions Logical. If TRUE captions text will be scanned for statistical results
@@ -41,6 +41,10 @@ study.character<-function(x,
                           rm.na.col=TRUE){
    # prepare captions object
    caps<-character(0)
+   # create empty objects
+   both<-NULL
+   t<-NULL
+   
    # check if x is xml file or list else stop
    if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0&!is.list(x)) stop("file is not in XML nor NISO-JATS format nor a JATSdecoder result")
    # if x is xml file readLines else copy to temp
@@ -355,7 +359,7 @@ categorize.methods<-function(x){
             "drift diffusion model|drift diffusion|ddm",
             "generalized estimation equation|^gee | gee "
    )
-   methodsCat<-unlist(lapply(x,function(x) gsub("\\|.*|^ |\\^|\\$","",which.term(x,names,hits=T))))
+   methodsCat<-unlist(lapply(x,function(x) gsub("\\|.*|^ |\\^|\\$","",which.term(x,names,hits_only=T))))
    return(methodsCat)
    }
 
