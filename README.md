@@ -1,9 +1,9 @@
 # JATSdecoder
 A metadata and text extraction and manipulation tool set for the statistical programming language [R](www.r-project.org). 
 
-**JATSdecoder** facilitates text mining projects on scientific reasearch papers by enabeling an individual selection of metadata and text parts. 
+**JATSdecoder** facilitates text mining projects on scientific research papers by enabling an individual selection of metadata and text parts. 
 Its function `JATSdecoder()` extracts metadata, sectioned text and reference list from [NISO-JATS](https://jats.nlm.nih.gov/publishing/tag-library/1.1d2/index.html) coded XML files. 
-The function `study.character()` uses the `JATSdecoder()` result to perform fine tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text and others. 
+The function `study.character()` uses the `JATSdecoder()` result to perform fine-tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text and others. 
 
 Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
 
@@ -13,9 +13,9 @@ Note too: A minimal web app to extract statistical results from textual resource
 Its function `text2sentences()` is especially designed to break floating text with scientific content (references, results) into sentences. 
 `text2num()` unifies representations of written numbers and special annotations (percent, fraction, e+10) into digit numbers. 
 You can extract adjustable n words around a pattern match in a sentence with `ngram()`. 
-`letter.convert()` unifies hexadecimal to unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated CERMXML files are processed, special error correction and special letter uniformisation is performed, which is extremely relevant for `get.stats()`'s ability to extract and recompute statistical results in text. 
+`letter.convert()` unifies hexadecimal to Unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated CERMXML files are processed, special error correction and special letter uniformization is performed, which is extremely relevant for `get.stats()`'s ability to extract and recompute statistical results in text. 
 
-The contained functions are listed below. For a detailed description see the full [manual](https://github.com/ingmarboeschen/JATSdecoder/blob/main/JATSdecoder_1.0.1.pdf).
+The contained functions are listed below. For a detailed description, see the full [manual](https://github.com/ingmarboeschen/JATSdecoder/blob/main/JATSdecoder_1.0.1.pdf).
 
 - **JATSdecoder::JATSdecoder()** uses functions that can be applied stand alone on NISO-JATS coded XML files or text input:
   - get.title()      # extracts title                
@@ -41,18 +41,18 @@ The contained functions are listed below. For a detailed description see the ful
   - get.stats()  # extracts statistical results reported in text (abstract and full text, method and result section, result section only) 
   - get.software()  # extracts software name/s mentioned in method and result section with dictionary search
   - get.R.package()  # extracts mentioned R package/s in method and result section with dictionary search on all available R packages created with `available.packages()`
-  - get.power()  # extracts power (1-beta-error) if mentoioned in text
+  - get.power()  # extracts power (1-beta-error) if mentioned in text
   - get.assumption()  # extracts mentioned assumptions from method and result section with dictionary search
   - get.multiple.comparison()  # extracts correction method for multiple testing from method and result section with dictionary search
-  - get.sig.adjectives()  # extracts common inadequate adjectives used before *signignificant* and *not significant* 
+  - get.sig.adjectives()  # extracts common inadequate adjectives used before *significant* and *not significant* 
 
-- **JATSdecoder helper functions** are helpfull for many text mining projects and straight forward to use on any textual input:
+- **JATSdecoder helper functions** are helpful for many text mining projects and straight forward to use on any textual input:
   - text2sentences() # breaks floating text into sentences
   - text2num() # converts spelled out numbers, fractions, potencies, percentages and numbers denoted with e+num to decimals
   - ngram() # creates &plusmn;n-gram bag of words around a pattern match in text 
   - strsplit2() # splits text at pattern match with option "before" or "after" and without removing the pattern match 
-  - grep2() # extension of grep(). Allows to connect multiple search patterns with logical AND operator
-  - letter.convert() # unifies many and converts most hexadecimal and HTML characters to unicode and performs CERMINE specific error correction
+  - grep2() # extension of grep(). Allows connecting multiple search patterns with logical AND operator
+  - letter.convert() # unifies many and converts most hexadecimal and HTML characters to Unicode and performs CERMINE specific error correction
   - which.term() # returns hit vector for a set of patterns to search for in text (can be reduced to hits only)
 
 ### Built With
@@ -88,7 +88,7 @@ install_github("ingmarboeschen/JATSdecoder")
 
 <!-- USAGE EXAMPLES -->
 ## Usage for a single XML file
-Here a simple download of a NISO-JATS coded XML file is performed with `download.file()`:
+Here, a simple download of a NISO-JATS coded XML file is performed with `download.file()`:
 ``` r
 # load package
 library(JATSdecoder)
@@ -113,14 +113,14 @@ checkHTML("file.xml")
 ```
 
 ## Usage for a collection of XML files
-The PubMed Central data base offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/). 
+The PubMed Central database offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/). 
 
 1. Get file names from working directory
 ``` r
 setwd("/home/PMC") # May be you would like to choose a certain journal folder instead for testing
 files<-list.files(pattern="XML$|xml$",recursive=TRUE)
 ``` 
-2. Apply extraction of article content to all files (replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing)
+2. Apply extraction of article content to all files (replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multicore processing)
 ``` r
 library(JATSdecoder)
 # extract full article content
@@ -166,10 +166,10 @@ lapply(text,text2num)
 ``` 
 
 ## Exemplary analysis of some NISO-JATS tags
-Next some example analysis are performed on the full PMC article collection. As each variable is very memory consuming you might want to reduce your analysis to a smaller amount of articles. 
+Next, some example analysis are performed on the full PMC article collection. As each variable is very memory consuming, you might want to reduce your analysis to a smaller amount of articles. 
 
 1. Extract JATS for article collection 
-Replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multi core processing.
+Replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multicore processing.
 ```r
 # load package
 library(JATSdecoder)
@@ -181,7 +181,7 @@ files<-list.files(patt="xml$|XML$")
 JATS<-lapply(files,JATSdecoder)
 ```
 
-2. Analyse distribution of publishing year
+2. Analyze distribution of publishing year
 ```r
 # extract and numerize year of publication from history tag
 year<-unlist(lapply(lapply(JATS,"[[","history") ,"[","pubyear"))
@@ -197,7 +197,7 @@ barplot(cumsum(table(year)),las=1,xlab="year",main="cummulative number of publis
 ``` 
 ![](articlesperyear.png)
 
-3. Analyse distribution of document type
+3. Analyze distribution of document type
 ```r
 # extract document type
 type<-unlist(lapply(JATS ,"[","type"))
@@ -212,7 +212,7 @@ par(mar=c(5,4,4,2)+.1)
 
 4. Find most frequent authors
 
-NOTE: author names are not stored fully consistent. Some first and middle names are abbreviated, first names are follwed by last names and vice versa!
+NOTE: author names are not stored fully consistent. Some first and middle names are abbreviated, first names are followed by last names and vice versa!
 
 ```r
 # extract author
