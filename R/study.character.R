@@ -232,8 +232,8 @@ study.character<-function(x,
    statsOnStats<-list(nPvalues=nPvalues,nPcomputable=nPcomp,nPcheckable=nPcheck)
    # adjectives in front of significant/insignificant
    if(sum(is.element(c("all","sig.adjectives","insig.adjectives"),output))>0){
-          sig.adjectives<-get.sig.adjectives(both)$sig_adjective
-          insig.adjectives<-get.sig.adjectives(both)$insig_adjective
+          sig.adjectives<-unique(get.sig.adjectives(both)$sig_adjective)
+          insig.adjectives<-unique(get.sig.adjectives(both)$insig_adjective)
           # else
           }else{
              sig.adjectives<-NA
