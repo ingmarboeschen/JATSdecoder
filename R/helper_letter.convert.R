@@ -1,6 +1,6 @@
 #' letter.convert
 #'
-#' Convert and unify most hex and some html coded letters in text to unicode characters and correct CERMINE specific errors in captured statistical results.
+#' Convert and unify most hexadecimal and some HTML coded letters in text to Unicode characters and correct CERMINE specific errors in captured statistical results.
 #' @param x text to process
 #' @param cermine Logical. If TRUE CERMINE specific error handling and letter conversion will be applied
 #' @param greek2text Logical. If TRUE some greek letters and special characters will be unified to textual representation. (important to extract stats)
@@ -14,6 +14,11 @@
 letter.convert<-function(x,cermine=FALSE,greek2text=FALSE,warning=TRUE){
 # clean up white spaces
 x<-gsub("^ *|(?<= ) | *$", "", x, perl = TRUE)
+# right/left quotation mark
+x<-gsub("\u2019","'",x)
+x<-gsub("\u2018","'",x)
+# unify "-"
+x<-gsub("\u2012","-", x)
 
 # if has hex letters convert to simplified letter
 if(length(grep("&#",x))>0){
@@ -1082,9 +1087,7 @@ if(cermine==TRUE){
 check<-x
   # clean up white spaces
   x<-gsub("^ *|(?<= ) | *$", "", x, perl = TRUE)
-  # unify "-"
-  x<-gsub("\u2012","-", x)
-  
+ 
   # clean up cermines captures of degree of freedom as reference if input is cermine JATS
   # for "[ <xref.*"
   x<-gsub("([^a-zA-Z][FRrzZTt2])\\[ <xref.*?>([0-9,;\\. ]*)</xref> \\]","\\1(\\2)",x)

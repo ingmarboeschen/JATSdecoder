@@ -3,7 +3,7 @@
 #' Extract keyword tag/s from NISO-JATS coded XML file or text as vector of keywords
 #' @param x a NISO-JATS coded XML file or text
 #' @param paste if paste!="" author vector is collapsed to one cell
-#' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
 #' @param include.max a maximum number of keywords to extract
 #' @export
 #' @examples

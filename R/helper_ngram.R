@@ -1,10 +1,12 @@
 #' ngram
 #'
-#' Extract an ngram of words around a pattern match in a text string
-#' @param x text to process
-#' @param pattern a search string pattern to build the ngram
-#' @param ngram a vector of length=2 that defines the number of gram on left and right side of pattern word match
+#' Extract ngram bag of words around a pattern match in a text vector. 
+#' Note: If an input contains the search pattern twice, only the ngram bag of words of the last hit is detected. Consider individual text splitting with text2sentences() or strsplit2() before applying ngram().
+#' @param x vector of text to process
+#' @param pattern a search term pattern to extract the ngram bag of words
+#' @param ngram a vector of length=2 that defines the number of words to extract from left and right side of pattern match
 #' @param tolower Logical. If TRUE converts text and pattern to lower case
+#' @param split Logical. If TRUE splits text input at "[.,;:] " before processing. Note: You may consider other text splits before
 #' @param exact Logical. If TRUE only exact word matches will be proceses
 #' @export
 #' @examples
@@ -12,13 +14,14 @@
 #' that was administred in thirteen clinics."
 #' ngram(text,pattern="study",ngram=c(-1,2))
 
-ngram<-function(x,pattern,ngram=c(-3,3),tolower=FALSE,exact=FALSE){
+ngram<-function(x,pattern,ngram=c(-3,3),tolower=FALSE,split=FALSE,exact=FALSE){
 temp<-NA
 if(length(x)>0){
-text<-x
-if(tolower==TRUE){ pattern<-tolower(pattern); text<-tolower(text)}
-if(length(grep(pattern,text))>0){
-   text<-unlist(text)
+   text<-unlist(x)
+   #text<-text2sentences(x)
+   if(split==TRUE) text<-unlist(strsplit(text,"[:;,.] "))
+   if(tolower==TRUE){ pattern<-tolower(pattern); text<-tolower(text)}
+   if(length(grep(pattern,text))>0){
    if(sum(!is.na(text))>0){
     # select lines
     text<-text[grep(pattern,text)]
@@ -40,14 +43,17 @@ if(length(grep(pattern,text))>0){
   }
  }
 }
-return(unlist(temp))
+temp<-unlist(temp)
+# only select cells with characters
+temp<-temp[nchar(temp)>0]
+return(temp)
 }
 
 # Function to convert text to vector of words
-vectorize.text<-function(x){
-x<-unlist(x)
-x<-strsplit(x," ")
-#lapply(x,function(x) paste(x,collapse=" "))
-return(x)
-}
+#vectorize.text.gram<-function(x){
+#x<-unlist(x)
+#x<-strsplit(x," ")
+##lapply(x,function(x) paste(x,collapse=" "))
+#return(x)
+#}
 

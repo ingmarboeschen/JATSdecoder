@@ -1,6 +1,7 @@
 #' allStats
 #'
-#' Extract statistical results from text with some uniformisation
+#' Extract any statistical results from text with some uniformizations.
+#' 
 #' @param x text to extract statistical results from
 #' @export
 #' @examples
@@ -159,7 +160,7 @@ stats<-unlist(strsplit(stats,"[^a-zA-Z]see "))
 # remove mathjax fomula by splitting, cleaning and collapsing lines with documentclass
 stats<-unlist(lapply(lapply(strsplit(stats,"\\\\documentclass|documentclass"),function(x) gsub(".*?\\\\end\\{document\\}","",x)),paste,collapse=" "))
 
-# get lines with stats
+# get lines with operator
 stats<-get.sentence.with.pattern(stats,"[=<>]",tolower=FALSE)
 # convert " ^" -> "^" 
 stats<-gsub(" [\\^]","^",stats)

@@ -1,12 +1,12 @@
 #' JATSdecoder
 #'
-#' Function to extract and structure NISO-JATS coded XML file or text into a list
+#' Function to extract and restructure NISO-JATS coded XML file or text into a list with metadata and text as selectable elements
 #' @param x a NISO-JATS coded XML file or text
-#' @param sectionsplit search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")
-#' @param grepsection search pattern to reduce text to specific section namings only
+#' @param sectionsplit search patterns for section split of text parts (forced to lower case), e.g. c("intro","method","result","discus")
+#' @param grepsection search pattern in regex to reduce text to specific section only
 #' @param sentences Logical. IF TRUE text is returned as sectioned list with sentences
 #' @param output selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "tables", "captions", "references")
-#' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
 #' @param warning Logical. If TRUE outputs a warning if processing CERMINE converted PDF files
 #' @param unify.country.name Logical. If TRUE tries to unify country name/s with list of country names from worldmap() 
 #' @param greek2text Logical. If TRUE converts and unifies several greek letters to textual representation, e.g.: alpha
@@ -64,11 +64,14 @@ ifelse(sum(is.element(c("all","country"),output))>0,     country<-get.country(ge
 ifelse(sum(is.element(c("all","subject"),output))>0,     subject<-get.subject(x,letter.convert=letter.convert),subject<-NA)
 ifelse(sum(is.element(c("all","keywords"),output))>0,    keywords<-get.keywords(x,letter.convert=letter.convert),keywords<-NA)
 ifelse(sum(is.element(c("all","abstract"),output))>0,    abstract<-text2sentences(get.abstract(x,sentences=sentences,letter.convert=letter.convert,cermine=cerm)), abstract<-NA)
-sections   <- ifelse(sum(is.element(c("all","sections"),output))>0,      sections, NA)
-text       <- ifelse(sum(is.element(c("all","text"),output))>0,              text, NA)
+
+if(sum(is.element(c("all","sections"),output))>0) sections<-sections else sections<-NA
+if(sum(is.element(c("all","text"),output))>0) text<-text else text<-NA
+
 tables     <- ifelse(sum(is.element(c("all","tables"),output))>0,          get.tables(x), NA)
 captions   <- ifelse(sum(is.element(c("all","captions"),output))>0,      captions, NA)
-references <- ifelse(sum(is.element(c("all","references"),output))>0,  get.references(x,letter.convert=letter.convert,remove.html=T), NA)
+
+    if(sum(is.element(c("all","references"),output))>0) references<-as.vector(get.references(x,letter.convert=letter.convert,remove.html=T)) else references<-NA
 
 ifelse(countryconnection==TRUE, countryconnections<-get.cons(country), countryconnections<-NA)
 ifelse(authorconnection==TRUE, authorconnections<-get.cons(author,max.items=25), authorconnections<-NA)

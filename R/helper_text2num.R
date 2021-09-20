@@ -1,5 +1,6 @@
 #' text2num
-#' Convert special annotated number and written numbers in a text string to a fully digit representation 
+#'
+#' Converts special annotated number and written numbers in a text string to a fully digit representation.
 #' Can handle numbers with exponent, fraction, percent, e+num, products and written representation (e.g. 'fourtys-one') of all absolut numbers till 99,999 (Note: gives false returns for higher numbers). Process is performed in the same order as its arguments.
 #' @param x text to process
 #' @param exponent Logical. If TRUE values with exponent are converted to a digit representation

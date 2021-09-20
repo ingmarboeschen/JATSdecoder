@@ -1,7 +1,7 @@
 #' est.ss
 #'
 #' Function to estimate studies sample size by maximizing different conservative estimates.
-#' Performs 4 different heuristical searches for sample size in abstract, text, stats and standardStats.
+#' Performs 4 different heuristic driven search tasks for reoprted sample size in abstract, text, stats and standardStats.
 #' 
 #' Sample size extraction from abstract:\cr
 #' - Extracts N= from abstract if possible

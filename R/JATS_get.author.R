@@ -4,7 +4,7 @@
 #' @param x a NISO-JATS coded XML file or text
 #' @param paste if "" author list is exported as vector with length of number of authors, else collapsed to one cell
 #' @param short.names Logical. If TRUE fully available first names will be reduced to one letter abbreviation
-#' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
 #' @export
 
 get.author<-function(x,paste="",short.names=FALSE,letter.convert=FALSE){

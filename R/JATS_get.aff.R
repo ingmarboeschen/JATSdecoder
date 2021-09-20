@@ -3,7 +3,7 @@
 #' Extract affiliation tag/s from NISO-JATS coded XML file or text as vector of affiliations
 #' @param x a NISO-JATS coded XML file or text
 #' @param remove.html Logical. If TRUE removes all html tags
-#' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
 #' @export
 #' @examples
 #' x<-"Some text <aff>Some affiliation</aff> some text"

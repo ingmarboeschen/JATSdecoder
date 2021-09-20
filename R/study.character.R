@@ -318,6 +318,7 @@ categorize.methods<-function(x){
             "multilevel structural equation",
             "growth curve|growth model",
             "multilevel growth|multigroup.*?growth",
+            "principal component analysis|principal component analyses",
             "confirmatory factor analysis|confirmatory factor",
             "exploratory factor analysis|exploratory factor",
             "cronbach alpha|reliability coeff|cronbach coeff",
@@ -360,6 +361,6 @@ categorize.methods<-function(x){
             "generalized estimation equation|^gee | gee "
    )
    methodsCat<-unlist(lapply(x,function(x) gsub("\\|.*|^ |\\^|\\$","",which.term(x,names,hits_only=T))))
-   return(methodsCat)
+   return(unique(methodsCat))
    }
 

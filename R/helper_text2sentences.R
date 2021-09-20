@@ -1,6 +1,6 @@
 #' text2sentences
 #'
-#' Convert floating text to a vector with sentences via fine tuned regular expressions or NLP sentence tokenization
+#' Converts floating text to a vector with sentences via fine-tuned regular expressions
 #' @param x text to process
 #' @export
 #' @examples
@@ -10,14 +10,16 @@
 # Depends on strsplit2, NLP & openNLP
 text2sentences<-function(x){
 x[is.na(x)]<-""
-t<-x
-  # unify
-  temp<-gsub("  "," ",gsub("  "," ",t))
+#t<-x
+helper<-function(x){
+  # unify some spacing errors
+  temp<-gsub("  *"," ",x)
   temp<-gsub(" \\. ","\\. ",gsub(" \\, ","\\, ",temp))
   # break lines after "[a-z\\)]\\. [A-Z|0-9|<]"
   temp<-unlist(strsplit2(temp,";;|[A-Za-z\\)0-9\\%\\.\\'\\>]\\. [A-Z0-9\\<]|</fig> [A-Z0-9<]|\\]\\. [A-Z]|['`]\\. [A-Z]|[^0-9]\\. [(]|\\.\\) [A-Z]","after",T))
+  
   # only clean up if line splitted to sentences
-if(length(temp)>1){
+  if(length(temp)>1){
   # extract last character and paste to front of line
   temp[-1]<-paste(substr(temp,nchar(temp),nchar(temp))[-length(temp)],temp[-1],sep="")
   # remove last 2 characters at end of lines
@@ -29,8 +31,8 @@ if(length(temp)>1){
     temp<-temp[-(ind+1)]
     }
     
-# correct dot in first position and move to row above
-movedot<-function(x){
+  # correct dot in first position and move to row above
+  movedot<-function(x){
   # lines ending without dot
   e<-grep("[^\\.]$",x)
   # lines starting with dot
@@ -51,8 +53,11 @@ temp<-movedot(temp)
     temp[ind]<-paste(temp[ind],temp[ind+1])
     temp<-temp[-(ind+1)]
    }
-} 
-  sentences<-temp
+  } 
+  return(temp)
+}
+  # apply for each cell in x
+  sentences<-unlist(lapply(x,helper))
   return(sentences)
 }
 

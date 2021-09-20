@@ -4,7 +4,7 @@
 #' @param x a NISO-JATS coded XML file or text
 #' @param sectionsplit search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")
 #' @param grepsection search pattern to reduce text to specific section namings only
-#' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
 #' @param greek2text Logical. If TRUE some greek letters and special characters will be unified to textual representation. (important to extract stats)
 #' @param sentences Logical. IF TRUE text is returned as sectioned list with sentences
 #' @param cermine Logical. If TRUE CERMINE specific error handling and letter conversion will be applied. If set to "auto" file name ending with 'cermxml$' will set cermine=TRUE

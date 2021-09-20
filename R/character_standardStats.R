@@ -1,7 +1,7 @@
 #' standardStats
 #'
-#' Extract and standard statistical results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values
-#' @param x result of get.stats()
+#' Extract and restructure standard statistical results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values to a matrix. Performs a recomputation of p-values if possible.
+#' @param x result of allStats()
 #' @param stats.mode Select subset of standard stats. One of: "all", "checkable", "computable", "uncomputable"
 #' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible
 #' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected","directed","both")
@@ -25,6 +25,8 @@ warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.
 # convert with all.stats() if has " [<=>] [0-9\\.-]"
 if(length(grep(" [<=>] [0-9\\.-]|[<=>] [0-9\\.-]",x))>0) x<-allStats(x)
 if(length(x)>0){
+# convert 10-num to 10^-num
+x<-gsub("([^0-9]10)(-[1-9]*)$","\\1^\\2",x)  
 # take copy for raw output
 y<-x
 # remove space between letter and (

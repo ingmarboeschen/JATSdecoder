@@ -4,7 +4,7 @@
 #' @param x a NISO-JATS coded XML file or text
 #' @param sentences Logical. If TRUE abstract is returned as vector of sentences
 #' @param remove.title Logical. If TRUE removes section titles in abstract
-#' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
 #' @param cermine Logical. If TRUE and letter.convert=TRUE performs CERMINE specific text correction
 #' @export
 #' @examples

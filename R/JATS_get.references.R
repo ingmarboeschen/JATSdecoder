@@ -2,8 +2,8 @@
 #'
 #' Extract reference list from NISO-JATS coded XML file or text as vector of references
 #' @param x a NISO-JATS coded XML file or text
-#' @param letter.convert Logical. If TRUE converts hex and html coded characters to unicode
-#' @param remove.html Logical. If TRUE removes all html tags
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
+#' @param remove.html Logical. If TRUE removes all HTML tags
 #' @param extract part of refernces to extract (one of "full" or "title")
 #' @export
 get.references<-function(x,letter.convert=FALSE, remove.html=FALSE,extract="full"){ 

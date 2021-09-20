@@ -12,10 +12,12 @@ get.outlier.def<-function(x){
 if(length(x)==1) x<-text2sentences(x)
 # lowerize
 x<-tolower(x)
+# remove numbers with percent sign
+x<-gsub("[0-9\\.]* *%","",x)
 # SDs to SD
 x<-gsub("([^a-z])sds([^a-z])|([^a-z])sd[' ]*s([^a-z])","\\1\\3sd\\2\\4",x)
 # Extract potential lines with "Outlier removal"
-out<-grep("outlier|extreme|remove|delete|discard|[^a-z]drop|exclud|correct|preclude|except| omit",x,value=TRUE)
+out<-grep("outlier|extreme|remove|delete|discard| drop| exclud|correct|preclude|except| omit",x,value=TRUE)
 # that also contain standard deviation
 out<-grep("[^a-z]sd[^a-z]|standard dev",out,value=TRUE)
 # and a number
