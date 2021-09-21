@@ -4,21 +4,31 @@
 \alias{ngram}
 \title{ngram}
 \usage{
-ngram(x, pattern, ngram = c(-3, 3), tolower = FALSE, exact = FALSE)
+ngram(
+  x,
+  pattern,
+  ngram = c(-3, 3),
+  tolower = FALSE,
+  split = FALSE,
+  exact = FALSE
+)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{vector of text to process}
 
-\item{pattern}{a search string pattern to build the ngram}
+\item{pattern}{a search term pattern to extract the ngram bag of words}
 
-\item{ngram}{a vector of length=2 that defines the number of gram on left and right side of pattern word match}
+\item{ngram}{a vector of length=2 that defines the number of words to extract from left and right side of pattern match}
 
 \item{tolower}{Logical. If TRUE converts text and pattern to lower case}
+
+\item{split}{Logical. If TRUE splits text input at "[.,;:] " before processing. Note: You may consider other text splits before}
 
 \item{exact}{Logical. If TRUE only exact word matches will be proceses}
 }
 \description{
-Extract an ngram of words around a pattern match in a text string
+Extract ngram bag of words around a pattern match in a text vector. 
+Note: If an input contains the search pattern twice, only the ngram bag of words of the last hit is detected. Consider individual text splitting with text2sentences() or strsplit2() before applying ngram().
 }
 \examples{
 text<-"One hundred twenty-eight students participated in our Study, 
