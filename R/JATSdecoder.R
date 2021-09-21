@@ -68,8 +68,8 @@ ifelse(sum(is.element(c("all","abstract"),output))>0,    abstract<-text2sentence
 if(sum(is.element(c("all","sections"),output))>0) sections<-sections else sections<-NA
 if(sum(is.element(c("all","text"),output))>0) text<-text else text<-NA
 
-tables     <- ifelse(sum(is.element(c("all","tables"),output))>0,          get.tables(x), NA)
-captions   <- ifelse(sum(is.element(c("all","captions"),output))>0,      captions, NA)
+if(sum(is.element(c("all","tables"),output))>0)          tables<-as.vector(get.tables(x)) else tables<-NA
+if(sum(is.element(c("all","captions"),output))>0)     captions<-as.vector(captions) else captions<-NA
 
     if(sum(is.element(c("all","references"),output))>0) references<-as.vector(get.references(x,letter.convert=letter.convert,remove.html=T)) else references<-NA
 
@@ -116,6 +116,8 @@ return(res)
 if(cerm==TRUE&warning==TRUE)  warning("CERMINE specific letter conversion was used to correct for some conversion errors. '<=>' was inserted by letter.convert() to make statistics readable. The minus sign rarely gets converted to '2' what cannot always be handled correctly.")  
 }
 
+
+## helper functions
 # create connection vector
 get.net<-function(x,max.items=Inf){
     n<-NULL
