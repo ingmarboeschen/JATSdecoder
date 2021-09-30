@@ -246,6 +246,17 @@ In International Journal on Document Analysis and Recognition (IJDAR), 2015,
 vol. 18, no. 4, pp. 317-335, doi: 10.1007/s10032-015-0249-8. 
 [https://github.com/CeON/CERMINE/].
 </div>
+
+
+<div id="JATSdecoder">
+- Böschen, I. (2021) The JATSdecoder package: Extract metadata, abstract and sectioned text from NISO-JATS coded XML documents (in press).
+</div>
+  
+<div id="get.stats">
+- Böschen, I. (2021). Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports. Scientific Reports **11**, 19525. https://doi.org/10.1038/s41598-021-98782-3
+</div>
+  
+
 </div>
 
 <!-- ACKNOWLEDGEMENTS -->
