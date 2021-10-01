@@ -7,7 +7,8 @@ The function `study.character()` uses the `JATSdecoder()` result to perform fine
 
 Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
 
-Note too: A minimal web app to extract statistical results from textual resources with get.stats() is hosted at [https://get-stats.app](https://get-stats.app).
+Note too: A minimal web app to extract statistical results from textual resources with get.stats() is hosted at:
+[https://get-stats.app](https://get-stats.app).
 
 **JATSdecoder** supplies some convenient functions to work with textual input in general. 
 Its function `text2sentences()` is especially designed to break floating text with scientific content (references, results) into sentences. 
@@ -64,6 +65,10 @@ The contained functions are listed below. For a detailed description, see the fu
 ### How to cite JATSdecoder
 ```
 JATSdecoder: A metadata and text extraction and manipulation tool set. Ingmar Böschen (2021). R package version 1.1.
+```
+### Resources
+```
+Böschen, I. (2021). Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports. Scientific Reports <b>11</b>, 19525. [https://doi.org/10.1038/s41598-021-98782-3](https://doi.org/10.1038/s41598-021-98782-3)
 ```
 
 <!-- GETTING STARTED -->
