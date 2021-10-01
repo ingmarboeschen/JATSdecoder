@@ -124,9 +124,9 @@ checkHTML("file.xml")
 ## Usage for a collection of XML files
 The PubMed Central database offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/). 
 
-1. Get file names from working directory
+1. Get XML file names from working directory
 ``` r
-setwd("/home/PMC") # May be you would like to choose a certain journal folder instead for testing
+setwd("/home/PMC") # May be you would like to choose a specific journal folder for testing instead
 files<-list.files(pattern="XML$|xml$",recursive=TRUE)
 ``` 
 2. Apply extraction of article content to all files (replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multicore processing)
