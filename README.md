@@ -57,9 +57,9 @@ The contained functions are listed below. For a detailed description, see the fu
   - which.term() # returns hit vector for a set of patterns to search for in text (can be reduced to hits only)
 
 ### Built With
-* [R Core 3.6](https://www.r-project.org){:target="_blank"}
-* [RKWard](https://rkward.kde.org/){:target="_blank"}
-* [devtools](https://github.com/r-lib/devtools){:target="_blank"} package
+* [R Core 3.6](https://www.r-project.org){target="_blank"}
+* [RKWard](https://rkward.kde.org/){target="_blank"}
+* [devtools](https://github.com/r-lib/devtools){target="_blank"} package
 
 
 ### How to cite JATSdecoder
@@ -69,11 +69,11 @@ JATSdecoder: A metadata and text extraction and manipulation tool set. Ingmar B�
 ### Resources
 **Articles:**
 
-Böschen, I. (2021). Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports. Scientific Reports <b>11</b>, 19525. [https://doi.org/10.1038/s41598-021-98782-3](https://doi.org/10.1038/s41598-021-98782-3){:target="_blank"}
+Böschen, I. (2021). Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports. Scientific Reports <b>11</b>, 19525. [https://doi.org/10.1038/s41598-021-98782-3](https://doi.org/10.1038/s41598-021-98782-3){target="_blank"}
 
 **Evaluation data and code:** 
 
-[https://github.com/ingmarboeschen/JATSdecoderEvaluation/](https://github.com/ingmarboeschen/JATSdecoderEvaluation/){:target="_blank"}
+[https://github.com/ingmarboeschen/JATSdecoderEvaluation/](https://github.com/ingmarboeschen/JATSdecoderEvaluation/){target="_blank"}
 
 <!-- GETTING STARTED -->
 ## Getting Started
