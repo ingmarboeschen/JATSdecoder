@@ -17,7 +17,7 @@
 #' @param add.software additional software names to detect as vector
 #' @param quantileDF quantile of (df1+1)+(df2+1) to extract for estimating sample size
 #' @param N.max.only return only maximum of estimated sample sizes
-#' @param output output selection of specific results c("all", "doi", "title", "year", "n.studies", "methods", "alpha.error", "power", "multi.comparison.correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test.direction", "sig.adjectives", "software", "Rpackage", "stats", "standardStats", "estimated.sample.size")
+#' @param output output selection of specific results c("all", "doi", "title", "year", "Nstudies", "methods", "alpha_error", "power", "multi_comparison_correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test_direction", "sig_adjectives", "software", "Rpackage", "stats", "standardStats", "estimated_sample_size")
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA in extracted standard statistics
 #' @export
 
@@ -187,14 +187,14 @@ study.character<-function(x,
    }else{n.studies<-NA} # End no !DOCTYPE
    # get characteristics
    if(sum(is.element(c("all","methods"),output))>0){ methods<-get.method(both,cermine=cermine) }else{methods<-NA}
-   if(sum(is.element(c("all","methods"),output))>0){ categorized.methods<-categorize.methods(methods) }else{categorized.methods<-NA}
-   if(sum(is.element(c("all","alpha.error"),output))>0){ alpha.error<-get.alpha.error(c(both,caps),p2alpha=p2alpha,output=alpha_output) }else{alpha.error<-NA}
-   if(sum(is.element(c("all","multi.comp"),output))>0){ multi.comp<-get.multi.comparison(c(both,caps)) }else{multi.comp<-NA}
+   if(sum(is.element(c("all","categorized_methods"),output))>0){ categorized_methods<-categorize.methods(methods) }else{categorized_methods<-NA}
+   if(sum(is.element(c("all","alpha_error"),output))>0){ alpha.error<-get.alpha.error(c(both,caps),p2alpha=p2alpha,output=alpha_output) }else{alpha.error<-NA}
+   if(sum(is.element(c("all","multi_comparison_correction"),output))>0){ multi.comp<-get.multi.comparison(c(both,caps)) }else{multi.comp<-NA}
    if(sum(is.element(c("all","power"),output))>0){ power<-unname(unlist(get.power(c(fulltext,caps)))) }else{power<-NA}
    if(sum(is.element(c("all","assumptions"),output))>0){ assumptions<-get.assumptions(both) }else{assumptions<-NA}
    if(sum(is.element(c("all","OutlierRemovalInSD"),output))>0){ outlier<- get.outlier.def(both) }else{outlier<-NA}
    if(sum(is.element(c("all","InteractionModeratorMediatorEffect"),output))>0){ InteractionModeratorMediatorEffect<-has.interaction(both) }else{InteractionModeratorMediatorEffect<-NA}
-   if(sum(is.element(c("all","test.direction","standardStats"),output))>0){ test.direction<-get.test.direction(c(both,caps)) }else{test.direction<-NA}
+   if(sum(is.element(c("all","test_direction","standardStats"),output))>0){ test_direction<-get.test.direction(c(both,caps)) }else{test_direction<-NA}
    if(sum(is.element(c("all","software"),output))>0){ software<-get.software(both,add.software=add.software) }else{software<-NA}
    if(sum(is.element(c("all","Rpackage"),output))>0){ Rpackage<-get.R.package(both,update.package.list=update.package.list) }else{Rpackage<-NA}
    
@@ -208,7 +208,7 @@ study.character<-function(x,
       # get standard stats if output is desired
       if(sum(is.element(c("all","statsOnStats","standardStats"),output))>0){
          # set direction to "both" for alternative if has one sided hypotheses/tests
-         if(length(grep("^one ",test.direction))>0){
+         if(length(grep("^one ",test_direction))>0){
             direction<-"both"}else{direction<-"undirected"}
          standardStats<-standardStats(stats,stats.mode=stats.mode,recalculate.p=recalculate.p,alternative=direction,T2t=T2t,R2r=R2r,estimateZ=estimateZ,rm.na.col=rm.na.col,select=selectStandardStats)
       }else standardStats<-NA
@@ -231,7 +231,7 @@ study.character<-function(x,
    }
    statsOnStats<-list(nPvalues=nPvalues,nPcomputable=nPcomp,nPcheckable=nPcheck)
    # adjectives in front of significant/insignificant
-   if(sum(is.element(c("all","sig.adjectives","insig.adjectives"),output))>0){
+   if(sum(is.element(c("all","sig_adjectives"),output))>0){
           sig.adjectives<-unique(get.sig.adjectives(both)$sig_adjective)
           insig.adjectives<-unique(get.sig.adjectives(both)$insig_adjective)
           # else
@@ -241,9 +241,9 @@ study.character<-function(x,
           }
           
    # SAMPLE SIZE
-   if(sum(is.element(c("all","estimated.sample.size"),output))>0){
+   if(sum(is.element(c("all","estimated_sample_size"),output))>0){
       out<-est.ss(abstract=abstract,text=both,quantileDF=quantileDF,max.only=N.max.only)
-      sample.size<-list(SSabstractNsum=unname(out[1]),SSstats=unname(out[2]),SSstandardStats=unname(out[3]),estimatedSampleSize=unname(out[4]))
+      sample.size<-list(SSabstract=unname(out[1]),SSstats=unname(out[2]),SSstandardStats=unname(out[3]),estimatedSampleSize=unname(out[4]))
    }else sample.size<-NA
    
    ## output
@@ -253,14 +253,14 @@ study.character<-function(x,
       year=year,
       Nstudies=n.studies,
       methods=methods,
-      categorized_methods=categorized.methods,
+      categorized_methods=categorized_methods,
       alpha_error=alpha.error,
       power=power,
       multi_comparison_correction=multi.comp,
       assumptions=assumptions,
       OutlierRemovalInSD=outlier,
       InteractionModeratorMediatorEffect=InteractionModeratorMediatorEffect,
-      test_direction=test.direction,
+      test_direction=test_direction,
       sig_adjectives=sig.adjectives,
       insig_adjectives=insig.adjectives,
       software=software,
@@ -284,7 +284,7 @@ categorize.methods<-function(x){
    names<-c("descriptive statistics|descriptive analysis|descriptives",
             "permutation test|permutation.*? test|permutation.*? model",
             "neural network","machine learning","random forest","random trees|random.* trees*",
-            "single case",
+            "single case analysis",
             "sequential analysis|sequential.* test|sequential.* model",
             "distributional analysis|distribution analysis|distribution fitting",
             "inter rater reliability|inter.*rater.*reliability|kappa|intraclass correlation|intra class correlation",
@@ -319,6 +319,7 @@ categorize.methods<-function(x){
             "growth curve|growth model",
             "multilevel growth|multigroup.*?growth",
             "principal component analysis|principal component analyses",
+            "factor analysis|factor analyses",
             "confirmatory factor analysis|confirmatory factor",
             "exploratory factor analysis|exploratory factor",
             "cronbach alpha|reliability coeff|cronbach coeff",

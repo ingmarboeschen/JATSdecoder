@@ -32,7 +32,7 @@ if(length(i>0)){
   red[i]<-gsub("un directional|bidirectional|undirectional|two directional"," two sided",red[i])
   red[i]<-gsub("unidirectional","one sided",red[i])
   red[i]<-gsub("[^m][^u][^l][^t][^i] directional|unidirectional|^directional"," one sided",red[i])
-#  red[i]<-gsub("directional","sided",red[i])
+  #  red[i]<-gsub("directional","sided",red[i])
 }
 # 'tailed' -> 'sided'
 red<-gsub("  *"," ",gsub("tailed|tails","sided",red))
@@ -51,7 +51,7 @@ red<-gsub("one and two sided","one sided and two sided",red)
 red<-unlist(strsplit(red," in | to | as | for | and | or | in "))
 # get test direction
 res<-which.term(red,c("one sided","two sided"))
-if(sum(res==c(0,0))==2) out<-NA
+if(sum(res==c(0,0))==2) out<-character(0)
 if(sum(res==c(1,1))==2) out<-"one and two sided"
 if(res[1]==0&res[2]==1) out<-"two sided"
 if(res[1]==1&res[2]==0) out<-"one sided"

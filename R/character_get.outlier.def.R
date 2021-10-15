@@ -10,6 +10,9 @@
 get.outlier.def<-function(x){
 # convert to sentences if has length 1
 if(length(x)==1) x<-text2sentences(x)
+# remove num%* SDS
+x<-gsub("[0-9\\.]*%* SDS","",x)
+
 # lowerize
 x<-tolower(x)
 # remove numbers with percent sign
@@ -17,7 +20,7 @@ x<-gsub("[0-9\\.]* *%","",x)
 # SDs to SD
 x<-gsub("([^a-z])sds([^a-z])|([^a-z])sd[' ]*s([^a-z])","\\1\\3sd\\2\\4",x)
 # Extract potential lines with "Outlier removal"
-out<-grep("outlier|extreme|remove|delete|discard| drop| exclud|correct|preclude|except| omit",x,value=TRUE)
+out<-grep("outlier|extreme|remove|delete|discard| dropped| exclud|correct|preclude|except| omit",x,value=TRUE)
 # that also contain standard deviation
 out<-grep("[^a-z]sd[^a-z]|standard dev",out,value=TRUE)
 # and a number

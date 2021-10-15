@@ -51,7 +51,7 @@ if(temp[1]==""&!is.na(temp[1])) temp<-NA
 temp<-gsub(" \\.",".",gsub(" ,",",",temp))
 temp<-gsub(" [)]",")",gsub("[(] ","(",temp))
 #convert letters
-if(letter.convert==T) temp<-letter.convert(temp,cermine=cermine)
+if(letter.convert==TRUE) temp<-letter.convert(temp,cermine=cermine)
 # clean up
 # Convert figure only to NA
 if(length(grep("^fig. [0-9]|^fig [0-9]|^fig. i|^figs. [0-9]|^figure [0-9]|^figure i|^figures [0-9]|^p\\[|^p[0-9]^plate [0-9]|^plate I",tolower(temp)))>0) temp<-NA
