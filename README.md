@@ -69,9 +69,9 @@ JATSdecoder: A metadata and text extraction and manipulation tool set. Ingmar B�
 ### Resources
 **Articles:**
 
-Böschen, I. (2021). Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports. Scientific Reports <b>11</b>, 19525. [https://doi.org/10.1038/s41598-021-98782-3](https://doi.org/10.1038/s41598-021-98782-3)
+- Böschen, I. (2021) Software review: The JATSdecoder package—extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed central’s open access database. Scientometrics (2021). https://doi.org/10.1007/s11192-021-04162-z
 
-Böschen, I. (2021) Software review: The JATSdecoder package—extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed central’s open access database. Scientometrics (2021). https://doi.org/10.1007/s11192-021-04162-z
+- Böschen, I. (2021). Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports. Scientific Reports <b>11</b>, 19525. [https://doi.org/10.1038/s41598-021-98782-3](https://doi.org/10.1038/s41598-021-98782-3)
 
 **Evaluation data and code:** 
 
