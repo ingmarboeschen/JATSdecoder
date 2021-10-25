@@ -258,7 +258,7 @@ vol. 18, no. 4, pp. 317-335, doi: 10.1007/s10032-015-0249-8.
 
 
 <div id="JATSdecoder">
-- - Böschen, I. (2021) Software review: The JATSdecoder package—extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed central’s open access database. Scientometrics. https://doi.org/10.1007/s11192-021-04162-z
+- Böschen, I. (2021) Software review: The JATSdecoder package—extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed central’s open access database. Scientometrics. https://doi.org/10.1007/s11192-021-04162-z
 </div>
   
 <div id="get.stats">
