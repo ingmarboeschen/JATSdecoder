@@ -18,13 +18,16 @@ x<-x[unique(c(i1,i2))]
 
 # remove lines with 'no' in lines without 'significant'
 i1<-grep(" no |^no | not |instead of|n't ",x)
-i2<-grep("signific",x,invert=TRUE)
-i<-i1[is.element(i1,i2)]
-x<-x[-i]
+if(length(i1)>0){
+  i2<-grep("signific",x,invert=TRUE)
+  i<-i1[is.element(i1,i2)]
+  if(length(i)>0) x<-x[-i]
+}
 
 # unify
 red<-gsub(" uni | 1 "," one ",x)
 red<-gsub(" bi | un | 2 | both "," two ",red)
+red<-gsub("two tails","two sided",red)
 
 # unifi 'directional' -> 'sided' if has test or hypothesis
 i<-grep("directional[^ ]* [a-z]* *[a-z]* *hypothes|directional[^ ]* [a-z]* *[a-z]* *test",red)
@@ -43,6 +46,7 @@ red<-grep("sided",red,value=TRUE)
 red<-grep("[^a-z]path[s]* |pathway|interact| book| page|questionaire| paper| coin| medal| form[^a-z]",red,value=TRUE,invert=TRUE)
 
 # correct/unify uni- and bisided
+red<-gsub("([^0-9])2([^0-9])","\\1two\\2",red)
 red<-gsub("unisided|uni sided|onesided","one sided",red)
 red<-gsub("bi *sided|twosided|bothsided|unsided","two sided",red)
 # add "sided" to "one and two sided"
