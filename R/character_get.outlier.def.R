@@ -20,7 +20,7 @@ x<-gsub("[0-9\\.]* *%","",x)
 # SDs to SD
 x<-gsub("([^a-z])sds([^a-z])|([^a-z])sd[' ]*s([^a-z])","\\1\\3sd\\2\\4",x)
 # Extract potential lines with "Outlier removal"
-out<-grep("outlier|extreme|remove|delete|discard| dropped| exclud|correct|preclude|except| omit",x,value=TRUE)
+out<-grep("outlier|extreme|remove|delete|discard| dropped| exclud|preclude|except| omit",x,value=TRUE)
 # that also contain standard deviation
 out<-grep("[^a-z]sd[^a-z]|standard dev",out,value=TRUE)
 # and a number
@@ -37,9 +37,10 @@ if(length(out)>0){
   temp<-suppressWarnings(as.numeric(gsub(".* ([0-9\\.]*?) sd.*","\\1",temp)))
     # select non NAs
   temp<-temp[!is.na(temp)]
-  # extract unique values
+  # extract unique values and reduce to valid values >1
   if(length(temp)>0){
     temp<-unique(temp)
+    temp<-temp[temp>1]
   } else temp<-character(0)
 } else temp<-character(0)
 
