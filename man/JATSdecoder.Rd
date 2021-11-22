@@ -10,32 +10,41 @@ JATSdecoder(
     "implica", "discussion"),
   grepsection = "",
   sentences = FALSE,
+  abstract2sentences = TRUE,
   output = "all",
   letter.convert = TRUE,
   unify.country.name = TRUE,
   greek2text = FALSE,
-  warning = TRUE
+  warning = TRUE,
+  countryconnection = FALSE,
+  authorconnection = FALSE
 )
 }
 \arguments{
 \item{x}{a NISO-JATS coded XML file or text}
 
-\item{sectionsplit}{search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")}
+\item{sectionsplit}{search patterns for section split of text parts (forced to lower case), e.g. c("intro","method","result","discus")}
 
-\item{grepsection}{search pattern to reduce text to specific section namings only}
+\item{grepsection}{search pattern in regex to reduce text to specific section only}
 
 \item{sentences}{Logical. IF TRUE text is returned as sectioned list with sentences}
 
+\item{abstract2sentences}{Logical. IF TRUE abstract is returned as vector with sentences}
+
 \item{output}{selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "tables", "captions", "references")}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode}
 
 \item{unify.country.name}{Logical. If TRUE tries to unify country name/s with list of country names from worldmap()}
 
 \item{greek2text}{Logical. If TRUE converts and unifies several greek letters to textual representation, e.g.: alpha}
 
 \item{warning}{Logical. If TRUE outputs a warning if processing CERMINE converted PDF files}
+
+\item{countryconnection}{Logical. If TRUE outputs country connections as vector c("A - B","A - C", ...)}
+
+\item{authorconnection}{Logical. If TRUE outputs connections of a maximum of 50 involved authors as vector c("A - B","A - C", ...)}
 }
 \description{
-Function to extract and structure NISO-JATS coded XML file or text into a list
+Function to extract and restructure NISO-JATS coded XML file or text into a list with metadata and text as selectable elements
 }
