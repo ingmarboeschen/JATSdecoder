@@ -5,6 +5,7 @@
 #' @param sectionsplit search patterns for section split of text parts (forced to lower case), e.g. c("intro","method","result","discus")
 #' @param grepsection search pattern in regex to reduce text to specific section only
 #' @param sentences Logical. IF TRUE text is returned as sectioned list with sentences
+#' @param abstract2sentences Logical. IF TRUE abstract is returned as vector with sentences
 #' @param output selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "tables", "captions", "references")
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
 #' @param warning Logical. If TRUE outputs a warning if processing CERMINE converted PDF files
@@ -16,7 +17,7 @@
 
 # define function
 JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experiment","conclu","implica","discussion"),grepsection="",
-                         sentences=FALSE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,
+                         sentences=FALSE,abstract2sentences=TRUE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,
                       countryconnection=FALSE,authorconnection=FALSE){
 # presettings
 rm.na.history<-TRUE
@@ -63,7 +64,7 @@ ifelse(sum(is.element(c("all","history"),output))>0,     history<-as.list(get.hi
 ifelse(sum(is.element(c("all","country"),output))>0,     country<-get.country(get.aff(x),unifyCountry=unify.country.name),                     country<-NA)
 ifelse(sum(is.element(c("all","subject"),output))>0,     subject<-get.subject(x,letter.convert=letter.convert),subject<-NA)
 ifelse(sum(is.element(c("all","keywords"),output))>0,    keywords<-get.keywords(x,letter.convert=letter.convert),keywords<-NA)
-ifelse(sum(is.element(c("all","abstract"),output))>0,    abstract<-text2sentences(get.abstract(x,sentences=sentences,letter.convert=letter.convert,cermine=cerm)), abstract<-NA)
+ifelse(sum(is.element(c("all","abstract"),output))>0,    abstract<-get.abstract(x,sentences=abstract2sentences,letter.convert=letter.convert,cermine=cerm), abstract<-NA)
 
 if(sum(is.element(c("all","sections"),output))>0) sections<-sections else sections<-NA
 if(sum(is.element(c("all","text"),output))>0) text<-text else text<-NA

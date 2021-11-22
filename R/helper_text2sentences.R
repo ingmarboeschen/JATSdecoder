@@ -16,7 +16,7 @@ helper<-function(x){
   temp<-gsub("  *"," ",x)
   temp<-gsub(" \\. ","\\. ",gsub(" \\, ","\\, ",temp))
   # break lines after "[a-z\\)]\\. [A-Z|0-9|<]"
-  temp<-unlist(strsplit2(temp,";;|[A-Za-z\\)0-9\\%\\.\\'\\>]\\. [A-Z0-9\\<]|</fig> [A-Z0-9<]|\\]\\. [A-Z]|['`]\\. [A-Z]|[^0-9]\\. [(]|\\.\\) [A-Z]","after",T))
+  temp<-unlist(strsplit2(temp,";;|[A-Za-z\\)0-9\\%\\.\\'\\>][\\.\\?\\!] [A-Z0-9\\<]|</fig> [A-Z0-9<]|\\][\\.\\?\\!] [A-Z]|['`][\\.\\?\\!] [A-Z]|[^0-9][\\.\\?\\!] [(]|\\.\\) [A-Z]","after",T))
   
   # only clean up if line splitted to sentences
   if(length(temp)>1){
@@ -37,25 +37,28 @@ helper<-function(x){
   e<-grep("[^\\.]$",x)
   # lines starting with dot
   s<-grep("^\\.",x)
-# lines that have movable dot
+  # lines that have movable dot
   i<-is.element(e+1,s)
-# move dot
-  x[e[i]]<-paste0(x[e[i]],".")
-  x[e[i]+1]<-gsub("^\\.","",x[e[i]+1])
+  # move dot
+  if(length(x)>0){
+    x[e[i]]<-paste0(x[e[i]],".")
+    x[e[i]+1]<-gsub("^\\.","",x[e[i]+1])
+  }
   return(x)
 }    
 
 temp<-movedot(temp)    
     
-# correction: paste too short lines (<=10 chars) to row in front
-  while(sum(nchar(temp)<=10)>0){    
-   ind<-(1:length(temp))[nchar(temp)<=20][1]
+# correction: paste too short lines (<=8 chars) to row in front
+  while(sum(nchar(temp)<=8)>0){    
+   ind<-(1:length(temp))[nchar(temp)<=16][1]
     temp[ind]<-paste(temp[ind],temp[ind+1])
     temp<-temp[-(ind+1)]
    }
   } 
   return(temp)
 }
+
   # apply for each cell in x
   sentences<-unlist(lapply(x,helper))
   return(sentences)
