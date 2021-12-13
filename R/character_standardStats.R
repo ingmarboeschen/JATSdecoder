@@ -196,7 +196,8 @@ x<-unlist(lapply(x,percent2number))
   x<-gsub("\\; ([a-zA-z]*? [a-zA-z]*? )"," \\1",x)
   
   # unify use of [0-9]^-[1-9] 
-if(length(grep("([0-9]*?)\\^\\-[0-9]",x))>0){
+  if(length(grep("([0-9]*?)\\^\\-[0-9]",x))>0){
+    
 # index
 i<-grep("([0-9]*?)\\^\\-[0-9]",x)
 v<-as.numeric(gsub(".*[^0-9\\.]","",gsub("([0-9]*?)\\^\\-[0-9\\.].*","\\1",x[i])))
@@ -319,10 +320,20 @@ if(length(grep("^b[<=>]| b[<=>]",x))>0){
    res[index,"SEbeta"]<-SE
    res[index,"result"]<-y[index]
    if(estimateZ==TRUE) res[index,"Zest"]<-beta/SE
-   
 }
 
-## get d and SE if has d and SE, t or Z error than calculate Zest
+## get d value
+if(length(grep("^d[<=>]| d[<=>]",x))>0){
+  index<-grep("^d[<=>]| d[<=>]",x)
+  # extract
+  d<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* d[<=>]*|^d[<=>]*","",x[index]))))
+  # add to res
+  res[index,"d"]<-d
+  res[index,"result"]<-y[index]
+  
+}
+
+## get d and SE if has d and SE, t or Z, than calculate Zest
 if(length(grep("^d[<=>]| d[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-9]|[Zbzt]=",x))>0){
    index<-grep("^d[<=>]| d[<=>]",x)
    # extract
@@ -379,13 +390,18 @@ if(length(index>0)){
   res[index,"result"]<-y[index]
 }
 
+
 ## get F-value and its df1 and df2
 # remove number of numbered F-values
 x<-gsub("([ \\[\\(])F[0-9]*?\\(([1-9])|^F[0-9]*?\\(([1-9])","\\1F(\\2\\3",x)
 x<-gsub(",F", ", F",x)
+
 # remove letter of labeled F-values in lines with (df1,df2)
 if(length(grep("\\([0-9\\.]*?[,;](+)?[0-9\\.]*?\\)",x))>0){ 
   x[grep("\\([0-9\\.]*?[,;](+)?[0-9\\.]*?\\)",x)]<-gsub("([ \\[\\(])F[a-zA-Z ]*?\\(([1-9])|^F[a-zA-Z ]*?\\(([1-9])","\\1F(\\2\\3",x[grep("\\([0-9\\.]*?[,;](+)?[0-9\\.]*?\\)",x)])}
+
+# unify F=num, df=df1, df2 -> F(df1, df2)=num
+x<-gsub("F([<=>]*[0-9\\.]*), df=([0-9\\.]*), ([0-9\\.]*)","F(\\2, \\3)\\1",x)
 
 # extract eta2 
 ind<-grep(" eta[2<=>]|^eta[2<=>]",x)
@@ -408,7 +424,9 @@ res[ind,"result"]<-x[ind]
 }
 
 
-# extract F-values without (df1,df2)  in brackets
+
+
+## extract F-values without (df1,df2)  in brackets
 index<-grep("^F[<=>][0-9\\.]| F[<=>][0-9\\.]|^F[<=>]{2}[0-9\\.]| F[<=>]{2}[0-9\\.]|^F[<=>]{3}[0-9\\.]| F[<=>]{3}[0-9\\.]",x)
 # extract F
 if(length(index)>0){
