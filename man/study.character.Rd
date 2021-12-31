@@ -19,7 +19,7 @@ study.character(
   text.mode = 1,
   update.package.list = FALSE,
   add.software = NULL,
-  quantileDF = 0.75,
+  quantileDF = 0.9,
   N.max.only = FALSE,
   output = "all",
   rm.na.col = TRUE
@@ -58,10 +58,10 @@ study.character(
 
 \item{N.max.only}{return only maximum of estimated sample sizes}
 
-\item{output}{output selection of specific results c("all", "doi", "title", "year", "n.studies", "methods", "alpha.error", "power", "multi.comparison.correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test.direction", "sig.adjectives", "software", "Rpackage", "stats", "standardStats", "estimated.sample.size")}
+\item{output}{output selection of specific results c("all", "doi", "title", "year", "Nstudies", "methods", "alpha_error", "power", "multi_comparison_correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test_direction", "sig_adjectives", "software", "Rpackage", "stats", "standardStats", "estimated_sample_size")}
 
 \item{rm.na.col}{Logical. If TRUE removes all columns with only NA in extracted standard statistics}
 }
 \description{
-extracts study characteristics out of a JATS coded XML file or JATSdecoder result
+Extracts study characteristics out of a NISO-JATS coded XML file or JATSdecoder result
 }
