@@ -1,11 +1,14 @@
 Package: JATSdecoder
 Title: JATSdecoder
 Version: 1.1
-Authors@R: person("Ingmar", "Böschen", email = "ingmar.boeschen@sumdata.de", role = c("aut", "cre"))
-Description: This package contains a function collection to extract metadata, sectioned text and study characteristics from scientific articles. Its function JATSdecoder() converts NISO-JATS-tagged XML files to a structured list with elements containing title, author, journal, history, link, abstract, sectioned text and references. Studies in PDF format can be easily converted to NISO-JATS with the open source software CERMINE (https://github.com/CeON/CERMINE/). JATSdecoders function study.character() extracts multiple study characteristics like number of included studies, statistical methods used, alpha error, power, statistical results, correction method for multiple testing, software used. Based on different heuristics, it will perform a reliable estimation of studies sample size soon (in progress). The package contains a set of useful functions to unify and transform numerical representations within text.
+Authors@R: person("Ingmar", "Böschen", email = "ingmar.boeschen@uni-hamburg.de", role = c("aut", "cre"))
+Description: This package contains a function collection to extract metadata, sectioned text and study characteristics from scientific articles. Its function JATSdecoder() converts NISO-JATS-tagged XML files to a structured list with elements containing title, author, journal, history, link, abstract, sectioned text and references. Studies in PDF format can be easily converted to NISO-JATS with the open source software CERMINE (https://github.com/CeON/CERMINE/). JATSdecoders function study.character() extracts multiple study characteristics like number of included studies, statistical methods used, alpha error, power, statistical results, correction method for multiple testing, software used. Based on different heuristics, it will perform an estimation of the involved sample size (still in progress). The package contains some useful functions to process text (text2sentences, strsplit2) and to unify numerical representations within text (text2num).
 Depends: R (>= 3.1.1)
 Imports: 
-    utils, stats
+    utils,
+    stats,
+    NLP,
+    openNLP,
 License: CC0
 Encoding: UTF-8
 LazyData: true
