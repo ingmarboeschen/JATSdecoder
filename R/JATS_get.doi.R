@@ -18,7 +18,10 @@ if(length(grep("pub-id-type=\"pmc\">",x,value=TRUE))>0){
 # else NA
 }else temp<-NA
 
+# correct some errors
+temp<-gsub("/$|;$","",temp)
+
 # set empty link to NA
 if(!is.na(temp)&nchar(temp)<5) temp<-NA
-temp
+return(temp)
 }

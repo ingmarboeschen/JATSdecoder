@@ -43,6 +43,9 @@ text<-gsub("([a-z])hundred","\\1 hundred ",text)
 text<-gsub("thousand and ","thousand ",text)
 text<-gsub("([a-z])thousand and ","\\1 thousand ",text)
 text<-gsub("fourty","forty",text)
+text<-gsub("\uFB01ve","five",text)
+text<-gsub("\uFB01fty","fifty",text)
+
 if(length(text)>0&sum(is.na(text)==0)){ 
     one_digits <- list(zero=0, one=1, two=2, three=3, four=4, five=5,six=6, seven=7, eight=8, nine=9)
     teens <- list(eleven=11, twelve=12, thirteen=13, fourteen=14, fifteen=15,sixteen=16, seventeen=17, eighteen=18, nineteen=19)

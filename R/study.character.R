@@ -35,7 +35,7 @@ study.character<-function(x,
                           text.mode=1,
                           update.package.list=FALSE,
                           add.software=NULL,
-                          quantileDF=.75,
+                          quantileDF=.9,
                           N.max.only=FALSE,
                           output="all",
                           rm.na.col=TRUE){
@@ -186,7 +186,8 @@ study.character<-function(x,
       # End n.studies==1
    }else{n.studies<-NA} # End no !DOCTYPE
    # get characteristics
-   if(sum(is.element(c("all","methods"),output))>0){ methods<-get.method(both,cermine=cermine) }else{methods<-NA}
+   if(sum(is.element(c("all","methods"),output))>0){ 
+      suppressWarnings(methods<-get.method(both,cermine=cermine)) }else{methods<-NA}
    if(sum(is.element(c("all","categorized_methods"),output))>0){ categorized_methods<-categorize.methods(methods) }else{categorized_methods<-NA}
    if(sum(is.element(c("all","alpha_error"),output))>0){ alpha.error<-get.alpha.error(c(both,caps),p2alpha=p2alpha,output=alpha_output) }else{alpha.error<-NA}
    if(sum(is.element(c("all","multi_comparison_correction"),output))>0){ multi.comp<-get.multi.comparison(c(both,caps)) }else{multi.comp<-NA}
@@ -198,7 +199,7 @@ study.character<-function(x,
    if(sum(is.element(c("all","software"),output))>0){ software<-get.software(both,add.software=add.software) }else{software<-NA}
    if(sum(is.element(c("all","Rpackage"),output))>0){ Rpackage<-get.R.package(both,update.package.list=update.package.list) }else{Rpackage<-NA}
    
-   if(sum(is.element(c("all","stats","statsOnStats"),output))>0){
+   if(sum(is.element(c("all","stats","statsOnStats","estimated_sample_size"),output))>0){
       if(text.mode==1) stats<-c("\u2022 Results in abstract and full text:",allStats(c(abstract,fulltext)))
       if(text.mode==2) stats<-c("\u2022 Results in methods and results sections:",allStats(both))
       if(text.mode==3) stats<-c("\u2022 Results in results section/s:",allStats(result))
@@ -206,7 +207,7 @@ study.character<-function(x,
       if(captions==TRUE) stats<-c(stats,"\u2022 Results in captions:",allStats(caps))   
       
       # get standard stats if output is desired
-      if(sum(is.element(c("all","statsOnStats","standardStats"),output))>0){
+      if(sum(is.element(c("all","statsOnStats","standardStats","estimated_sample_size"),output))>0){
          # set direction to "both" for alternative if has one sided hypotheses/tests
          if(length(grep("^one ",test_direction))>0){
             direction<-"both"}else{direction<-"undirected"}
@@ -229,6 +230,7 @@ study.character<-function(x,
    }else{
    nPvalues<-NA;nPcheck<-NA;nPcomp<-NA
    }
+   
    statsOnStats<-list(nPvalues=nPvalues,nPcomputable=nPcomp,nPcheckable=nPcheck)
    # adjectives in front of significant/insignificant
    if(sum(is.element(c("all","sig_adjectives"),output))>0){
@@ -239,10 +241,14 @@ study.character<-function(x,
              sig.adjectives<-NA
              insig.adjectives<-NA
           }
-          
+   
    # SAMPLE SIZE
    if(sum(is.element(c("all","estimated_sample_size"),output))>0){
-      out<-est.ss(abstract=abstract,text=both,quantileDF=quantileDF,max.only=N.max.only)
+      out<-est.ss(abstract=abstract,
+                  #text=both,
+                  stats=stats,
+                  standardStats=standardStats,
+                  quantileDF=quantileDF,max.only=N.max.only)
       sample.size<-list(SSabstract=unname(out[1]),SSstats=unname(out[2]),SSstandardStats=unname(out[3]),estimatedSampleSize=unname(out[4]))
    }else sample.size<-NA
    

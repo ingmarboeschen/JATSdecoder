@@ -98,6 +98,12 @@ x<-gsub("\\\\","",x)
   # remove email address
   authors<-gsub("[^ ]*@[^ ]*","",authors)
   authors<-gsub(" $|, $","",authors)
+  
+  # correct some errors
+  authors<-gsub("(\\.org[^ ]*) ([^ ]*) ?","\\1\\2",authors)
+  authors<-gsub("/$|;$","",authors)
+  
+  
 }else authors<-NA
 
 return(authors)
