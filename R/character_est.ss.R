@@ -49,8 +49,8 @@ est.ss<-function(abstract=NULL,text=NULL,stats=NULL,standardStats=NULL,quantileD
       if(length(text)>0){
          text[is.na(text)]<-""
          text<-unlist(text)
-#         t<-NA
-         t<-est.ss.text(text,max.only=max.parts)
+         t<-NA
+#         t<-est.ss.text(text,max.only=max.parts)
          stats<-get.stats(unlist(text))
          standardStats<-stats$standardStats
          stats<-stats$stats
@@ -73,7 +73,7 @@ est.ss<-function(abstract=NULL,text=NULL,stats=NULL,standardStats=NULL,quantileD
    if(max.only==TRUE) return(c(estimated.sample.size=max))
    # ,SStext=t
    if(max.only==FALSE){
-      out<-unlist(c(SSabstract=a,SSstats=s,SSdf1df2=ss,SStext=t,estimated.sample.size=max))
+      out<-unlist(c(SSabstract=a,SSstats=s,SSdf1df2=ss,estimated.sample.size=max))
       if(max.parts==T) names(out)[1]<-"SSabstract"
       return(out)
    }
