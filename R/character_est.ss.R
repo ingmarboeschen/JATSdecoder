@@ -86,20 +86,28 @@ est.ss<-function(abstract=NULL,text=NULL,stats=NULL,standardStats=NULL,quantileD
 #####################################################
 est.ss.n<-function(x){
    x<-unlist(x)
+   # get lines with number
+   x<-grep("[0-9]",x,value=TRUE)
    # unify "="
    n<-gsub(" [=] |[=] | [=]","=",x)
+   # remove word between "n" and "="
+   n<-gsub("([^a-z][Nn]) [a-z]*(=[1-9])","\\1\\2",n)
+   # add n= in listing of n with and
+   n<-gsub("([^a-z]n=[1-9][0-9]*) and ([1-9][0-9]*)","\\1 and n=\\2",n)
+   # lowerize
+   n<-tolower(n)
    # reduce to lines with n=
-   n<-get.sentence.with.pattern(n,"[^a-z]n=[1-9]")
+   n<-grep("[^a-z]n=[1-9]|^n=[1-9]",n,value=T)
    # correct 1,000 to 1000
    for(i in 1:2) n<-gsub("([0-9]),([0-9][0-9][0-9])","\\1\\2",n)
    # remove NA
    n<-n[!is.na(n)]
    n<-(n[length(n)>0])
-   # get first sentence
-   n<-n[1]
+   # get first sentence with pasted space in front
+   n<-paste0(" ",n[1])
    # split before n=
-   n<-unlist(strsplit2(n,"[Nn]=[0-9]*","before"))
-   # remove first line
+   n<-unlist(strsplit2(n,"n=[0-9]*","before"))
+   # remove first line 
    n<-n[-1]
    # remove first 2 characters
    n<-gsub("^..","",n)
@@ -118,6 +126,7 @@ est.ss.abstract<-function(abstract,max.only=FALSE){
    abstract<-unlist(abstract)
    # remove only text in brackets
    abstract<-gsub(" \\([a-zA-Z]*\\)","",abstract)
+   abstract<-gsub(" \\[[a-zA-Z]*\\]","",abstract)
    # remove short words with -
    abstract<-gsub(" [a-z]{2}-([a-z])| [a-z]{3}-([a-z])"," \\1\\2",abstract)
    # big numbers without comma but space to number without space
@@ -128,35 +137,76 @@ est.ss.abstract<-function(abstract,max.only=FALSE){
    
    # get estimate from lines with N=
    n<-est.ss.n(abstract)
-   b<-unlist(abstract)
+   # remove n=num
+   b<-gsub("([^a-z])n *= *[1-9][0-9]*","(",abstract)
    
-   # numerize textual numbers
+   # remove any word in sentence followed with capital Number: c("The Big Five", "airforce One", "Airforce One")
+   b<-gsub("[A-Z][a-z]*[ -](One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)[^a-z]?","",b)
+   # remove " Capital Capital" Words
+   b<-gsub(" [A-Z][a-z]*[ -][A-Z][a-z]*([ -][A-Z][a-z]*)?","",b)
+   
+   # numerize textual numbers and lowerize
    b<-unlist(lapply(tolower(paste0(" ",b)),text2num))
+   # get lines with numbers
+   b<-grep("[1-9]",b,value=TRUE)
    
-   # remove experiment/study + num
-   b<-gsub("[Ee]xperiment [1-9]( and [1-9])?|[Ee]xperiments [1-9] and [1-9]","",b)
+   # prepare ouput of "participants were number"
+   participantsWere<-NA
+   
+   # go on if something's left
+   if(length(b)>0){
+   # remove numtext
+   b<-gsub("[0-9][0-9]*[a-z][a-z]*","",b)
+   # remove textnum
+   b<-gsub("[a-z][a-z]*[0-9][0-9]*","",b)
+   
+   # remove experiment/study/etc. + num
+   b<-gsub("[Ee]xperiments* [1-9]( and [1-9])?|[Ee]xperiments* [1-9] and [1-9]","",b)
    b<-gsub("[Ss]tudy [1-9]( and ([Ss]tudy )?[1-9])?|[Ss]tudies [1-9] and [1-9]","",b)
-   b<-gsub("[1-9] ([a-z]* )?[Ee]xperiments","",b)
-   b<-gsub("[1-9] ([a-z]* )?[Ss]tudies","",b)
-   b<-gsub("[Tt]ime [1-9]","",b)
+   b<-gsub("[1-9][1-9]* ([a-z]* )?[Ee]xperiments","",b)
+   b<-gsub("[1-9][1-9]* ([a-z]* )?[Ss]tudies","",b)
+   b<-gsub("[Tt]ime [1-9][1-9]*|[1-9][1-9]* [Tt]imes","",b)
+   b<-gsub("[1-9][1-9]*[ -]([Cc]lass|[Ii]tem)","",b)
+   b<-gsub("[1-9][1-9]*[ -]([Pp]redict|[Ff]actor|[Ss]tage|[Pp]oint)","",b)
+   b<-gsub("[1-9][1-9]*[ -]([Cc]lass|[Ii]tem)","",b)
+   b<-gsub("[Gg]roup [1-9][1-9]*|[1-9][1-9]* ([a-z]* )?[Gg]roups","",b)
+   b<-gsub("[1-9][1-9]* [a-z]* *[sS]amples","",b)
+   b<-gsub("subsample of [0-9][0-9]*","",b)
+   b<-gsub(" age [1-9][1-9]*( and [1-9][1-9]*)?| day [1-9][1-9]*( and [1-9][1-9]*)?| week [1-9][1-9]*( and [1-9][1-9]*)?","",b)
    
-   # remove number/s in front of year, month, etc
-   pat<-"[0-9]*( year| month| week| day| sequence| face| group| sets| times| pictures)"
+   # remove "num-num", "num- word* num" or "num to num"
+   pat<-"[0-9][0-9]*-[ ,]*([a-z]* )?[0-9][0-9]*|[0-9][0-9]* to [0-9][0-9]*|[0-9][0-9]*-[0-9\\.][0-9\\.]*"
    b<-gsub(pat,"",b)
-   b<-gsub("act of [0-9][0-9]*","",b)
+   # remove number/s in front of year, month, etc
+   pat<-"[0-9][0-9]*([ -]year|[ -]month|[ -]week|[ -]day|[ -]sequence|[ -]face|[ -]group|[ -]sets|[ -]time|[ -]pictures)"
+   b<-gsub(pat,"",b)
+
+   # remove "number-"
+   pat<-"[0-9][0-9]*- *[a-z]"
+   b<-gsub(pat,"",b)
    
    # remove numbers with .
-   b<-gsub("[0-9]*\\.[0-9]*","",b)
+   b<-gsub("[0-9][0-9]*\\.[0-9][0-9]*","",b)
+   # remove "num ms/kg/mg/hz/ml/hr " 
+   b<-gsub("  "," ",gsub("[0-9][0-9]* [mkh]*[sglzr]([^a-z])","\\1",b))
    # remove '
    b<-gsub("'","",b)
+   # remove "num in num"
+   b<-gsub("[0-9][0-9]* in [0-9][0-9]*","",b)
+   # remove act of
+   b<-gsub("act of [0-9][0-9]*","",b)
+   # convert end of sentence that is not letter or number to space
+   b<-gsub("[^a-z0-9]*$"," ",b)
    
+   # split at when|while
+   b<-unlist(strsplit(b," while | when | which | than | to | between "))
    # get lines with numbers
    b<-grep("[1-9]",b,value=TRUE)
    
    # go on if something's left
    if(length(b)>0){
-      # extract N from lines with sample and number in front
-      sampleOf<-gsub(".*cohort of ([0-9]*).*|.*sample [a-z]* *of ([0-9]*).*|.*([0-9]*) samples.*","\\1\\2\\3",grep("sample|cohort",b,value=T)[1])
+      # extract N from lines with sample/cohort/total of and "num samples"
+      sampleOf<-gsub(".*cohort of ([0-9]*).*|.*sample [a-z]* *of ([0-9]*).*|.*([0-9]*) samples.*|.*total of ([0-9]*).*","\\1\\2\\3\\4",grep("sample|cohort|total",b,value=T)[1])
       if(length(sampleOf)>0) sampleOf<-suppressWarnings(as.numeric(sampleOf)) else sampleOf<-NA
       
       # add "twins" to monozygotic/dizygotic
@@ -167,21 +217,26 @@ est.ss.abstract<-function(abstract,max.only=FALSE){
       b<-gsub("[( ]girls[;, )]|[( ]woman[;, )]|[( ]females[;, )]|[( ]female[;, )]|[( ]mothers[;, )]"," women ",b)
       # children synonyms
       b<-gsub(" kids| infants| toddler| teenager| youths| youth| adolescents| preschoolers"," children",b)
+      b<-gsub("([0-9]) child ","\\1 children ",b)
       # adults synonyms
       b<-gsub(" caregivers| parents"," adults",b)
+      b<-gsub("([0-9]) adult ","\\1 adults ",b)
+      
       # participants synonyms
       b<-gsub(" respondents| responders"," participants",b)
       # students synonyms
       b<-gsub(" undergraduates"," students",b)
       
       # control synonyms
+      b<-gsub("control tasks*","",b)
       b<-gsub(" non[ -]patients|healthy participants| healthy| waiting list| controls| matched"," control",b)
       b<-gsub("([0-9] control )[a-z]*","\\1",b)
       
       # people synonyms
       b<-gsub(" individuals| citizens| subjects| employees| workers| members| teachers| volunteers| natives| native| bilinguar"," people",b)
       b<-gsub(" users| managers| CEOs| members| founders| subordinates| entrepreneurs| directors| officers| nurses| smokers"," people",b)
-      b<-gsub(" incumbents| lawyers| representatives| cases| experts| persons"," people",b)
+      b<-gsub(" incumbents| lawyers| representatives| cases| experts| persons| siblings| inhabitants| citizens| residants"," people",b)
+      b<-gsub(" spouses*| i*m*migrants*| fans| trainers| mentors| supervisors"," people",b)
       
       # reports synonyms
       b<-gsub("-structured","structured",b)
@@ -189,21 +244,48 @@ est.ss.abstract<-function(abstract,max.only=FALSE){
       # animals synonym
       b<-gsub(" monkeys| apes| rats| birds| pigeons| rabbits"," animals",b)
       # couples synonyms
-      b<-gsub(" twins| twin| pairs| dyads| partners| siblings| sibling"," couples",b)
+      b<-gsub(" twins| twin| pairs| dyads| partners| sibling[^s]|[^a-z]sibships"," couples",b)
       # firms synonyms
       b<-gsub(" companies| ventures| establishments"," firms",b)
       # teams synonyms
       b<-gsub(" families| alliances"," teams",b)
       
-      # delete text between number and people
-      b<-gsub(" (and|,;)[^0-9]*(control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)","",b)
-      b<-gsub("([0-9] )[^,;0-9]* (control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)","\\1\\2",b)
-      b
+      # remove specification of couples
+      b<-gsub(" (control|men|women|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)( couples)","\\2",b)
+      
+      # get sum of number/s behind "participants were num ... and num" in object participantsWere
+      # if has "and" between two numbers of participants
+      i<-grep("participants were ([0-9][0-9]*).* (and [0-9][0-9])",b)
+      if(length(i>0)) participantsWere<-unlist(strsplit(gsub(".*participants: ","",gsub("participants were ([0-9][0-9]*).* (and [0-9][0-9]*).*","participants: \\1 \\2",b[i]))," and "))
+      # if has no capture yet extract number behind "participants were"
+      if(is.na(participantsWere)[1]){
+        i<-grep("participants were ([0-9][0-9]*).*",b)
+        if(length(i>0)) participantsWere<-gsub(".*participants were ([0-9][0-9]*).*","\\1",b[i])
+      }
+      
+      if(!is.na(participantsWere)[1])suppressWarnings(participantsWere<-sum(as.numeric(participantsWere),na.rm=T))
+      
+      #b<-gsub("([^0-9] )participants were ([0-9][0-9]*)","\\1\\2 participants were \\2",b)
+      b<-paste0(b," ")
+      # remove only words between two matches of people
+      b<-gsub("  ", " ",gsub("(control| men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)([^a-z])[^0-9]*(control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)([^a-z])","\\1\\2",b))
+      # delete a maximum of three words between number and pattern in lines that have only one of the patterns 
+      b<-gsub("([0-9] )([^,;0-9\\(\\): ]*) ([^,;0-9\\(\\): ]* )?([^,;0-9\\(\\): ]*)? ?(control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)([^a-z])","\\1\\5\\6",b)
       # select lines with patterns
-      pattern<-"[^a-z]men |[^a-z]women| patients| students| children| control| participants| adults| adult| people| animals| reports| couples| firms| teams"
+      pattern<-"[^a-z]men |[^a-z]women| patients| students| children| control| participants| adults| people| animals| reports| couples| firms| teams"
       b<-grep(pattern,b,value=TRUE)
+      
+      # has sum of two women or men refs in a single row 
+      has2<-length(grep("[0-9] women .* [0-9][0-9]* women|[0-9] men .* [0-9][0-9]* men",b))>0
+      
       # select first line with patterns?
       #b<-grep(pattern,b,value=TRUE)[1]
+      
+      ## NEW
+      # remove text in brackets if stands before match of number of pattern and is not male nor femele
+      b<-gsub("([0-9][0-9]* (control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults) [a-z ]*)\\([0-9][0-9]* (control|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults) .*\\)","\\1",b)
+      # remove text behind ":" if stands before match of number of pattern and is not male nor femele
+      b<-gsub("([0-9][0-9]* (control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults) *[a-z ]*)\\: [0-9][0-9]*.*(control|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)[^a-z]","\\1",b)
       
       # create empty result objects
       male<-NA; female<-NA; patients<-NA; students<-NA; children<-NA; control<-NA; participants<-NA; adults<-NA; people<-NA; reports<-NA; animals<-NA; couples<-NA; firms<-NA; teams<-NA
@@ -220,31 +302,40 @@ est.ss.abstract<-function(abstract,max.only=FALSE){
          b<-grep(pattern,b,value=TRUE)
          # convert "[0-9] [A-Z]"->"[0-9] [a-z]"
          # if has "[0-9] [A-Z]" get first and lowerize capital letter
-         while(sum(nchar(gsub(".*[0-9] ([A-Z]).*",tolower("\\1"),b))==1)>0){
-            i<-grep("[0-9] ([A-Z])",b)[1]
-            l<- tolower(gsub(".*[0-9] ([A-Z]).*",tolower("\\1"),b[i]))
-            # convert capital to lowerized letter
-            b[i]<- gsub("([0-9]) ([A-Z])",paste("\\1",l),b[i])
-         }
+         #while(sum(nchar(gsub(".*[0-9] ([A-Z]).*",tolower("\\1"),b))==1)>0){
+         #   i<-grep("[0-9] ([A-Z])",b)[1]
+         #   l<- tolower(gsub(".*[0-9] ([A-Z]).*",tolower("\\1"),b[i]))
+         #   # convert capital to lowerized letter
+         #   b[i]<- gsub("([0-9]) ([A-Z])",paste("\\1",l),b[i])
+         #}
          
          # remove "-" in case of no "ty-number"
-         b<-gsub("([^t][^y])-([a-z]{6})","\\1\\2",b)
+         b<-gsub("  "," ",gsub("([^t][^y])-([a-z]{6})","\\1\\2",b))
          # select lines with pattern
          b<-grep(pattern,b,value=TRUE)
          # only go on if something left
          if(length(b)>0|!is.na(sampleOf)){
             if(length(b)>0){
                # get first 5 lines
-               b<-utils::head(b,5)
+               b<-utils::head(paste0(" ",b),5)
                # extract N male and N female
+               if(has2==FALSE){
                male<-gsub(".* ([0-9]*?) men[^a-z].*|^([0-9]*?) men[^a-z].*|.* ([0-9]*?) men$||^([0-9]*?) men$","\\1\\2\\3\\4",grep("[0-9] men[^a-z]|[0-9] men$",b,value=TRUE)[1])
                female<-gsub(".* ([0-9]*?) women[^a-z].*|^([0-9]*?) women[^a-z].*|.* ([0-9]*?) women$|^([0-9]*?) women$","\\1\\2\\3\\4",grep("[0-9] women",b,value=TRUE)[1])
+               }else{
+                  male<-suppressWarnings(sum(as.numeric(unlist(strsplit(gsub(".* ([1-9][0-9]*) men.* and ([1-9][0-9]*) men.*","\\1 SPLIT \\2",grep("[0-9] men",b,value=T))," SPLIT ")))))
+                  female<-suppressWarnings(sum(as.numeric(unlist(strsplit(gsub(".* ([1-9][0-9]*) women.* and ([1-9][0-9]*) women.*","\\1 SPLIT \\2",grep("[0-9] women",b,value=T))," SPLIT ")))))
+                  if(is.na(male)) male<-gsub(".* ([0-9]*?) men[^a-z].*|^([0-9]*?) men[^a-z].*|.* ([0-9]*?) men$||^([0-9]*?) men$","\\1\\2\\3\\4",grep("[0-9] men[^a-z]|[0-9] men$",b,value=TRUE)[1])
+                  if(is.na(female)) female<-gsub(".* ([0-9]*?) women[^a-z].*|^([0-9]*?) women[^a-z].*|.* ([0-9]*?) women$|^([0-9]*?) women$","\\1\\2\\3\\4",grep("[0-9] women",b,value=TRUE)[1])
+                  
+               }
+               
                # get POS-tags
                b<-get.POStagged(b,"tagged")
                # remove coma at listing of subjectives
                b<-gsub("(/JJ) ,/,( [a-z\\-]*?/JJ)","\\1\\2",b)
-               # remove and at listing of subjectives
-               b<-gsub("(/JJ) and/CC( [a-z\\-]*?/JJ)","\\1\\2",b)
+               # remove "adjective and" at listing of subjectives
+               b<-gsub("([a-z\\-]*/JJ) and/CC( [a-z\\-]*?/JJ)","\\2",b)
                
                # correct numbers/VBG or /RP to number/CD
                b<-gsub("([0-9]/)VBG","\\1CD",b)
@@ -253,19 +344,26 @@ est.ss.abstract<-function(abstract,max.only=FALSE){
                b<-gsub("([0-9]/)JJ","\\1CD",b)
                
                # convert listing of adjectives with numbers to number of "people"
-               b<-gsub("([0-9]*/CD [a-z]*/JJ) and/CC ([0-9]*/CD)( [a-z]*/JJ)? (couples|patients|animals|participants|people|firms|animals|controls|teams|reports|students|adults)","\\1 \\4/NN and/CC \\2\\3 \\4",b)
-               # OLD #b<-gsub("([0-9]*/CD [a-z]*/JJ) and/CC ([0-9]*/CD [a-z]*/JJ) ","\\1 people/NN and/CC \\2 people/NN ",b)
+               # OLD #b<-gsub("([0-9][0-9]*/CD) [a-z]*/JJ and/CC ([0-9][0-9]*/CD)( [a-z]*/JJ)? (couples|patients|animals|participants|people|firms|animals|control|teams|reports|students|adults)","\\1 \\4/NN and/CC \\2\\3 \\4",b)
+               # OLDest #b<-gsub("([0-9]*/CD [a-z]*/JJ) and/CC ([0-9]*/CD [a-z]*/JJ) ","\\1 people/NN and/CC \\2 people/NN ",b)
+
+               # get index of lines with unidentified person group: number /JJ /NNS and number person group 
+               i<-grep("[1-9][0-9]*/CD [a-z]*/JJ (control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)/NNS* and/CC [1-9][0-9]*/CD (control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)",b,invert=T)
+               # impute known person group in these lines
+               b[i]<-gsub("([1-9][0-9]*/CD )([a-z]*/JJ) ([a-z]*)(/NNS* and/CC [1-9][0-9]*/CD )(control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)","\\1\\5\\4\\5",b[i])
+               # impute known person group to num /JJ and num /known group
+               b<-gsub("([1-9][0-9]*/CD )([a-z]*/JJ) (and/CC [1-9][0-9]*/CD )(control|men|women|couples|patients|children|animals|participants|people|firms|animals|teams|reports|students|adults)","\\1\\4/NNS \\3\\4",b)
                
                # split at split words
                #unlist(strsplit(b," and/CC| to/TO|[a-z]*?/DT| ,/,| ;/:|[a-z]*?/IN|[a-z]*?/WP|[a-z]*?/PRP|[a-z]*?/VBD|[a-z]*?/VBN|[a-z]*?/VBP|[a-z]*?/VBG|[a-z]*?/MD"))
                b<-grep(pattern,grep("[1-9]",unlist(strsplit(b," and/CC| to/TO|[a-z]*?/DT| ,/,| ;/:|[a-z]*?/IN|[a-z]*?/WP|[a-z]*?/PRP|[a-z]*?/VBD|[a-z]*?/VBN|[a-z]*?/VBP|[a-z]*?/VBG|[a-z]*?/MD")),value=TRUE),value=TRUE)
-               # remove text behind /NN
-               b<-gsub("(/NN).*","\\1",b)
+               # remove text behind num/NN
+               b<-gsub("([0-9][0-9]*/CD [a-z]*/NN).*","\\1",b)
                # remove lines with %
                b<-grep("\\%",b,value=TRUE,invert=TRUE)
                
                # remove text til "num/CD"
-               b<-sub(".* ([0-9].*/CD)","\\1",b)
+               b<-sub(".* ([0-9][0-9]*/CD)","\\1",b)
                
                # get first line of patterns and select first number/CD
                if(length(grep(" children/",b))<=1)
@@ -341,30 +439,39 @@ est.ss.abstract<-function(abstract,max.only=FALSE){
             
             # create result vector
             res<-c(male=male,female=female,patients=patients,students=students,children=children,control=control,
-                   participants=participants,adults=adults,people=people,reports=reports,animals=animals,couples=couples,firms=firms,teams=teams,sampleOf=sampleOf,n)
-            # set lines with year, month, etc to NA
-            pat<-" year| month| week| day| sequence| face| group| sets"
-            if(length(grep(pat,res))>0) res[grep(pat,res)]<-"NA"
-            
+                   participants=participants,adults=adults,people=people,reports=reports,animals=animals,couples=couples,firms=firms,teams=teams,
+                   sampleOf=sampleOf,participantsWere=participantsWere,n)
+
             # if length of pattern match was 0
          }else res<-c(male=NA,female=NA,patients=NA,students=NA,children=NA,control=NA,
-                      participants=NA,adults=NA,people=NA,reports=NA,animals=NA,couples=NA,firms=NA,teams=NA,sampleOf=NA,n)
+                      participants=NA,adults=NA,people=NA,reports=NA,animals=NA,couples=NA,firms=NA,teams=NA,sampleOf=NA,participantsWere=participantsWere,n)
          # if length of input was 0
       }else res<-c(male=NA,female=NA,patients=NA,students=NA,children=NA,control=NA,
-                   participants=NA,adults=NA,people=NA,reports=NA,animals=NA,couples=NA,firms=NA,teams=NA,sampleOf=NA,n)
+                   participants=NA,adults=NA,people=NA,reports=NA,animals=NA,couples=NA,firms=NA,teams=NA,sampleOf=NA,participantsWere=participantsWere,n)
       # if no number was detected
    }else res<-c(male=NA,female=NA,patients=NA,students=NA,children=NA,control=NA,
-                participants=NA,adults=NA,people=NA,reports=NA,animals=NA,couples=NA,firms=NA,teams=NA,sampleOf=NA,n)
+                participants=NA,adults=NA,people=NA,reports=NA,animals=NA,couples=NA,firms=NA,teams=NA,sampleOf=NA,participantsWere=participantsWere,n)
+   # if no number was detected
+}else res<-c(male=NA,female=NA,patients=NA,students=NA,children=NA,control=NA,
+             participants=NA,adults=NA,people=NA,reports=NA,animals=NA,couples=NA,firms=NA,teams=NA,sampleOf=NA,participantsWere=participantsWere,n)
    
    
    # convert bad captures to NA
    res[which(res=="0")]<-NA
    # get max of captures with sum(male,female), sum(patients,control), sum(child, adult)
    num<-as.numeric(gsub("NA",NA,gsub(" .*","",res)))
+   # if has no control group
    if(is.na(res["control"])|res["control"]=="NA")
-      num<-max(c(sum(num[1:2],na.rm=T,warn=F),sum(num[c(3,6)],na.rm=T,warn=F),sum(num[c(5,8)],na.rm=T,warn=F),max(num[3:17],na.rm=T,warn=F)),na.rm=T,warn=F)
+      num<-max(c(sum(num[1:2],na.rm=T,warn=F),sum(num[c(3,6)],na.rm=T,warn=F),sum(num[c(5,8)],na.rm=T,warn=F),max(num[3:18],na.rm=T,warn=F)),na.rm=T,warn=F)
+   # if has control group
    if(!is.na(res["control"])&res["control"]!="NA")
-      num<-max(c(sum(num[1:2],na.rm=T,warn=F),sum(num[3:14],na.rm=T,warn=F),num[length(num)]),na.rm=T,warn=F)
+      # if has control and female but no male
+#      if(is.na(res["male"])&!is.na(res["female"])) num<-max(c(sum(num[c(2,6)],na.rm=T,warn=F),sum(num[3:14],na.rm=T,warn=F),num[15:17]),na.rm=T,warn=F)
+      # if has control and male but no female
+#      if(!is.na(res["male"])&is.na(res["female"])) num<-max(c(sum(num[c(1,6)],na.rm=T,warn=F),sum(num[3:14],na.rm=T,warn=F),num[15:17]),na.rm=T,warn=F)
+      # if has male and female
+#      if(!is.na(res["male"])&!is.na(res["female"]))
+      num<-max(c(sum(num[1:2],na.rm=T,warn=F),sum(num[3:14],na.rm=T,warn=F),num[15:17]),na.rm=T,warn=F)
    
    if(num<=2) num<-NA
    gc()
@@ -423,7 +530,7 @@ est.ss.text<-function(text,max.only=F){
    # animals synonym
    b<-gsub(" monkeys| apes| rats| birds| pigeons| rabbits"," animals",b)
    # couples synonyms
-   b<-gsub(" twins| twin| pairs| dyads| partners| siblings| sibling"," couples",b)
+   b<-gsub(" twins| twin| pairs| dyads| partners| siblings| sibling|[^a-z]sibships"," couples",b)
    # firms synonyms
    b<-gsub(" companies| ventures| establishments"," firms",b)
    # teams synonyms
@@ -591,6 +698,13 @@ est.ss.standardStats<-function(standardStats,quantileDF=.9,quantile.only=FALSE){
          n<-names(matrix)
          matrix<-matrix(matrix,ncol=length(matrix))
          colnames(matrix)<-n
+      }
+      
+      # set df1 to NA if has no df2
+      if(length(grep("df1",colnames(matrix)))==1){ 
+         if(length(grep("df2",colnames(matrix)))==0){ 
+            matrix[,"df1"]<-NA
+      }
       }
       
       # remove corrected df's: set df1 and df2 to NA if one of both contains a "." (correction)
