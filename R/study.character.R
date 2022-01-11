@@ -220,15 +220,18 @@ study.character<-function(x,
    if(sum(is.element(c("all","statsOnStats"),output))>0){
    if(is.element("p",colnames(standardStats))){
       nPvalues<-sum(!is.na(standardStats[,"p"]))
-   }else nPvalues<-NA
+      nPvalues[is.na(nPvalues)]<-0
+   }else nPvalues<-0
    if(is.element("recalculatedP",colnames(standardStats))){
       nPcomp<-sum(!is.na(standardStats[,"recalculatedP"]))
-   }else nPcomp<-NA
+      nPcomp[is.na(nPcomp)]<-0
+   }else nPcomp<-0
    if(sum(is.element(c("p","recalculatedP"),colnames(standardStats)))==2){
       nPcheck<-sum(!is.na(standardStats[,"p"])&!is.na(standardStats[,"recalculatedP"]))
-   }else nPcheck<-NA
+      nPcheck[is.na(nPcheck)]<-0
+   }else nPcheck<-0
    }else{
-   nPvalues<-NA;nPcheck<-NA;nPcomp<-NA
+   nPvalues<-0;nPcheck<-0;nPcomp<-0
    }
    
    statsOnStats<-list(nPvalues=nPvalues,nPcomputable=nPcomp,nPcheckable=nPcheck)
