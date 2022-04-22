@@ -124,7 +124,7 @@ checkHTML("file.xml")
 ```
 
 ## Usage for a collection of XML files
-The PubMed Central database offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/). 
+The [PubMed Central](https://www.ncbi.nlm.nih.gov/pmc/) database offers more than 3 million documents related to the biology and health sciences. The full repository is bulk downloadable as NISO-JATS coded NXML documents here: [PMC bulk download](https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/). 
 
 1. Get XML file names from working directory
 ``` r
