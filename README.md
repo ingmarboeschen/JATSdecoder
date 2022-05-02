@@ -5,11 +5,15 @@ A metadata and text extraction and text manipulation tool set for the statistica
 Its function `JATSdecoder()` extracts metadata, sectioned text and reference list from [NISO-JATS](https://jats.nlm.nih.gov/publishing/tag-library/1.1d2/index.html) coded XML files. 
 The function `study.character()` uses the `JATSdecoder()` result to perform fine-tuned text extraction tasks to identify key study characteristics like statistical methods used, alpha-error, statistical results reported in text and others. 
 
-Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
+Note: 
+
+PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
 
 Note too: 
+
 A minimal web app to extract statistical results from textual resources with get.stats() is hosted at:
 [https://get-stats.app](https://get-stats.app).
+
 An interactive web application to analyze study characteristics of articles stored in the PubMed Central database and perform an individual article selection by study characteristcs is hosted at: [https://scianalyzer.com/](https://scianalyzer.com/).
 
 **JATSdecoder** supplies some convenient functions to work with textual input in general. 
