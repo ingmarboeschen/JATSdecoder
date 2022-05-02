@@ -33,10 +33,10 @@ helper<-function(x){
     
   # correct dot in first position and move to row above
   movedot<-function(x){
-  # lines ending without dot
-  e<-grep("[^\\.]$",x)
+  # lines ending without dot or ? or !
+  e<-grep("[^\\.\\?\\!]$",x)
   # lines starting with dot
-  s<-grep("^\\.",x)
+  s<-grep("^[\\.\\?\\!]",x)
   # lines that have movable dot
   i<-is.element(e+1,s)
   # move dot
