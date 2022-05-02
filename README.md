@@ -7,8 +7,10 @@ The function `study.character()` uses the `JATSdecoder()` result to perform fine
 
 Note: PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
 
-Note too: A minimal web app to extract statistical results from textual resources with get.stats() is hosted at:
+Note too: 
+A minimal web app to extract statistical results from textual resources with get.stats() is hosted at:
 [https://get-stats.app](https://get-stats.app).
+An interactive web application to analyze study characteristics of articles stored in the PubMed Central database and perform an individual article selection by study characteristcs is hosted at: [https://scianalyzer.com/](https://scianalyzer.com/).
 
 **JATSdecoder** supplies some convenient functions to work with textual input in general. 
 Its function `text2sentences()` is especially designed to break floating text with scientific content (references, results) into sentences. 
