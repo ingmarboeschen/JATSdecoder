@@ -9,7 +9,8 @@ Imports:
     stats,
     NLP,
     openNLP,
-License: CC0
+License: GPL-3
+Language: en-US
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
