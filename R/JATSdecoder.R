@@ -41,7 +41,7 @@ if(length(grep("\\.nxml$|cermxml$|\\.xml$|XML$",x[1]))==1){
 x<-x[nchar(x)>0]
 
 # if x is not JATS coded stop
-if(length(grep("!DOCTYPE",x[1:5]))==0) stop("x seems not to be a JATS coded file or text")
+if(length(grep("!DOCTYPE",x[1:15]))==0) stop("x seems not to be a JATS coded file or text")
 
 if(sum(is.element(c("all","sections","text","captions"),output))>0){
 temp<-get.text(x,sectionsplit=sectionsplit,grepsection=grepsection,letter.convert=letter.convert,rm.table=rm.table.text,rm.xref=rm.xref.text, rm.graphic=rm.graphic.text,rm.formula=rm.formula.text,cermine=cerm,greek2text=greek2text,sentences=sentences)
