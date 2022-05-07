@@ -6,7 +6,7 @@
 
 get.tables<-function(x){
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 tables<-character(0)
 if(sum(grep("</table>",x))>0){
 # split lines with table

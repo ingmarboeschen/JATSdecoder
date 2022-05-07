@@ -34,7 +34,7 @@ captions<-character(0)
 # set cermine if "auto"
 if(cermine=="auto") cermine<-ifelse(length(grep("cermxml$",x[1]))>0,TRUE,FALSE)
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 # remove strangely converted lines in CERMXML (mostly from tables)
 if(cermine==TRUE){
 # remove lines with at least "num (num), num (num)" or "num (num) num (num)"

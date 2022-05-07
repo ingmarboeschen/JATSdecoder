@@ -7,7 +7,7 @@
 ## get.link
 get.doi<-function(x){
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 # with doi
 if(length(grep("<article-id pub-id-type=\"doi\">",x,value=TRUE))>0){
   temp<-paste("https://doi.org/",sub(".*>","",sub("</article-id>.*","",sub(".*<article-id pub-id-type=\"doi\">","",grep("<article-id pub-id-type=\"doi\">",x,value=TRUE)[1]))),sep="")

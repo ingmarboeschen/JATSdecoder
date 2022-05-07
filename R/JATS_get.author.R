@@ -10,7 +10,7 @@
 get.author<-function(x,paste="",short.names=FALSE,letter.convert=FALSE){
 
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 
 if(length(grep("^contrib",x))!=length(x)) x<-get.contrib(x)
 # collapse x for cases with many spaces (cermine export)

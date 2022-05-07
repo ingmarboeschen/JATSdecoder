@@ -9,7 +9,7 @@
 
 get.journal<-function(x){
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 
 if(length(grep("</journal-title",x))>0&length(grep("<journal-title",x))>0) {
   journal<-gsub(".*>","",gsub("<.*?>","",letter.convert(paste(gsub(".*<journal-title","",gsub("</journal-title>.*","",

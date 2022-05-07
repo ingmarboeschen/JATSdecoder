@@ -6,7 +6,7 @@
 
 get.vol<-function(x){
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 
 x<-paste(x,collapse=" ")
 x<-gsub("<abstract.*|<body.*","",x)

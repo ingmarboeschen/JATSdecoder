@@ -13,7 +13,7 @@
 
 get.keywords<-function(x,paste="",letter.convert=TRUE,include.max=length(keyword)){
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 
 if(length(grep("</kwd",x))>0) {
  keyword<-paste(x,collapse=" ")

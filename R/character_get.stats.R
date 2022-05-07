@@ -11,6 +11,7 @@
 #' @param output Select the desired output. One of c("both","allStats","standardStats")
 #' @param select Select specific standard statistics only (e.g.: c("t","F","Chi2"))
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA from standardStats
+#' @param encoding Character encoding
 #' @param cermine Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results
 #' @export
 #' @examples
@@ -26,7 +27,7 @@ get.stats<-function(x,output="both",
                     alternative="undirected",
                     estimateZ=FALSE,T2t=FALSE,R2r=FALSE,
                     select=NULL,
-                    rm.na.col=TRUE,
+                    rm.na.col=TRUE,encoding="UTF-8",
                     cermine=FALSE){
 # get text and abstract if x is file
   if(!is.list(x)) if(file.exists(x[1])){
@@ -59,7 +60,7 @@ docx2text<-function(file){
   # read DOCX
   if(length(grep("\\.docx$",tolower(file[1])))==1){
     a<-utils::unzip(file,"word/document.xml")
-    x<-readLines(a,warn=FALSE)
+    x<-readLines(a,warn=FALSE,encoding=encoding)
     y<-invisible(x)
     # remove HTML
     y<-gsub("</[-\\=a-zA-Z0-9 ,;_\\:\\\\/\\'\"]*>","",y)
@@ -89,7 +90,7 @@ html2text<-function(file
   w<-NULL
   if(length(grep("xml$|html$|htm$",tolower(file[1])))==1){
     # read HTML
-    x<-readLines(file,warn=FALSE)
+    x<-readLines(file,warn=FALSE,encoding=encoding)
     y<-invisible(x)
     # is JATS coded document?
     if(length(grep("NLM//DTD",x[1:6]))>0){

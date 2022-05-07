@@ -8,7 +8,7 @@
 #' @export
 get.references<-function(x,letter.convert=FALSE, remove.html=FALSE,extract="full"){ 
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 
 if(length(grep("<ref-list",x))>0){
   temp<-paste(x,collapse=" ")

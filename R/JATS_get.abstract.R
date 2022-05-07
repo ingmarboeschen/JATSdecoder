@@ -16,7 +16,7 @@
 
 get.abstract<-function(x,sentences=FALSE,remove.title=TRUE,letter.convert=TRUE,cermine=FALSE){
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 # case 1
 if(length(grep("<abstract",x,value=TRUE))>0) {
 temp<-paste(x,collapse=" ")

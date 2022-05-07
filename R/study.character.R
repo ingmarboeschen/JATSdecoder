@@ -49,7 +49,7 @@ study.character<-function(x,
    if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0&!is.list(x)) stop("file is not in XML nor NISO-JATS format nor a JATSdecoder result")
    # if x is xml file readLines else copy to temp
    if(length(grep("\\.nxml$|cermxml$|\\.xml$|XML$",x[1]))==1){
-      temp<-readLines(x,warn=F)
+      temp<-readLines(x,warn=F,encoding="UTF-8")
    }else temp<-x
    
    # if output only contains standardStats add stats

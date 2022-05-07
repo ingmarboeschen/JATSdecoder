@@ -7,7 +7,7 @@
 
 get.history<-function(x,remove.na=FALSE){
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 # prepare
 temp<-paste(x,collapse=" ")
 temp<-unlist(strsplit(temp,"<history>|<pub-history>|<pub-date"))[-1]

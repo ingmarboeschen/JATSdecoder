@@ -11,7 +11,7 @@
 
 get.country<-function(x,unifyCountry=TRUE){
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
  t<-x
 
 if(length(grep("<country",t))>0){

@@ -14,7 +14,7 @@
 
 get.subject<-function(x,letter.convert=TRUE,paste=""){
 # readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE)
+if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 
 if(length(grep("<subject",x,value=TRUE))>0){
  # collapse to one row

@@ -34,7 +34,7 @@ ifelse(length(grep("cermxml$",x[1]))==1,cerm<-TRUE,cerm<-FALSE)
 # if x is file readLines
 if(length(grep("\\.nxml$|cermxml$|\\.xml$|XML$",x[1]))==1){
     file<-x
-    x<-readLines(x,warn=F)
+    x<-readLines(x,warn=FALSE,encoding="UTF-8")
     }else file<-NA
 
 # remove emty lines
