@@ -202,7 +202,7 @@ if(rm.formula==T){
 # remove <caption> from text if some is left
 textred<-lapply(textred,function(x) gsub("</caption>","",gsub("<caption.*?.*</caption>","",x)))
 # remove <title> and <p> and <sec> <italic> <b> <bold>  <undeline> tag 
-textred<-lapply(textred,function(x) gsub("<title>|</title>|<p>|</p>|<sec>|</sec>|<italic>|</italic>"," ",x))
+textred<-lapply(textred,function(x) gsub("<title>|</title>|<p>|</p>|<sec>|</sec>|<italic>|</italic>|<italic toggle=\"yes\">|<italic toggle=\"no\">"," ",x))
 textred<-lapply(textred,function(x) gsub("<b>|</b>|<bold>|</bold>|</sup>|<sub>|</sub>|<underline>|</underline>"," ",x))
 textred<-lapply(textred,function(x) gsub("<supplementary-material>|</supplementary-material>|<alternatives>|</alternatives>"," ",x))
 # replace <sup> with ^

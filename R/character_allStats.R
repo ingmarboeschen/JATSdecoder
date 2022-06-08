@@ -29,9 +29,6 @@ x<-gsub("([0-9]) *\\^ *(-*[1-9])","\\1^\\2",x)
 # convert space before/after bracket
 x<-gsub("[\\(\\[] ","(",x)
 x<-gsub(" [\\)\\]]",")",x)
-# unify "[]" -> "()" ??
-#x<-gsub("\\[","(", x)
-#x<-gsub("\\]",")", x)
 
 x<-gsub(" to ","-", x)
 
@@ -64,7 +61,11 @@ stats<-gsub("[\\[][\\[]","[",gsub("[\\][\\]","]",stats))
 # remove html in inline formula
 stats<-lapply(strsplit(stats,"<inline-formula>|</inline-formula>"),function(x) paste(gsub("<mml.*?>|</mml.*?>","",x),collapse=" "))
 # remove further html
+stats<-gsub(' *toggle="yes"',"",stats)
+stats<-gsub(' *toggle="no"',"",stats)
 stats<-gsub("<[a-z/]*?>","",stats)
+#stats<-gsub("<italic toggle=\"yes\">|<italic toggle=\"no\">","",stats)
+
 # correct "- 1.2"-> "-1.2"
 stats<-gsub(" - ([0-9\\.])"," -\\1",stats)
 # correct bracket and coma use: "( 1 , 305 )" -> "(1, 305)"
