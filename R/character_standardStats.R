@@ -162,8 +162,9 @@ x<-unlist(lapply(x,percent2number))
    x<-gsub("([pPtFraid2])[' ]s([<=>])","\\1\\2",x)
    x<-gsub("([pPtFraid2])' s([<=>])","\\1\\2",x)
    x<-gsub("\\)s([<=>])",")\\1",x)
-  # add coma after number followed by letter of satistic
-   x<-gsub("([0-9]) ([a-zA-z])","\\1, \\2",x)
+   
+  # add coma after number followed by letter of staistic
+   x<-gsub("([^a-z][0-9]) ([a-zA-z])","\\1, \\2",x)
  
 # correct f(df1,df2) -> F(df1,df2)
    x<-gsub("([^a-zA-Z])f(\\([0-9]*?,[ 0-9]*?\\))","\\1F\\2",x)
@@ -291,6 +292,8 @@ x<-unlist(lapply(x,text2num))
 # remove spaces in front or after operator
 x<-gsub(" ([<=>])","\\1",x)
 x<-gsub("([<=>]) ","\\1",x)
+# remove spaces in operator-space-num 
+x<-gsub("([<=>]-) ([\\.0-9])","\\1\\2",x)
 
 # prepare results colnames
 cnames<-c("result","Z_op","Z","F_op","F","eta2","omega2","t_op","t","d","SE","r_op","r","R2_op","R2","U_op","U","H_op","H","G2_op","G2","OR","RR","Chi2","Q_op","Q","df1","df2","beta","SEbeta","Zest","BF10_op","BF10","BF_op","BF","p_op","p","recalculatedP","p_H0_less","p_H0_greater")
@@ -407,7 +410,7 @@ x<-gsub("F([<=>]*[0-9\\.]*), df=([0-9\\.]*), ([0-9\\.]*)","F(\\2, \\3)\\1",x)
 ind<-grep(" eta[2<=>]|^eta[2<=>]",x)
 if(length(ind)>0){
 eta<-rep(NA,length(ind))
- eta<-gsub("[^0-9\\.].*","",gsub(".*[<=>]","",gsub("[,;] .*| [a-zA-Z].*","",unlist(lapply(strsplit(x[ind]," eta|^eta"),"[",2)))))
+ eta<-gsub("[^0-9\\.].*","",gsub(".*[<=>]","",gsub("[,;] .*| [a-zA-Z].*","",unlist(lapply(strsplit(gsub("eta2 [a-zA-Z]*","eta2",x[ind])," eta2*|^eta2*"),"[",2)))))
 # insert results to res
 res[ind,"eta2"]<-eta
 res[ind,"result"]<-x[ind]
