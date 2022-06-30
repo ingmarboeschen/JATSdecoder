@@ -298,7 +298,7 @@ if(sentences==TRUE) captions<-lapply(captions,text2sentences)
 # convert "<New paragraph>. " -> <New paragraph> and remove it at end of section
 if(paragraph==T) textred<-lapply(textred,function(x) gsub("<New paragraph>. *","<New paragraph> ",x))
 if(paragraph==T) textred<-lapply(textred,function(x) gsub("^<New paragraph> ","<New paragraph>",x))
-#if(paragraph==T) textred<-lapply(textred,function(x) gsub("<New paragraph>$","",x))
+if(paragraph==T) textred<-lapply(textred,function(x) gsub("<New paragraph> *$","",x))
 
 
 # remove if text only contains html tag  
