@@ -1,8 +1,8 @@
 #' get.history
 #'
-#' Extract available publishing history tags from NISO-JATS coded XML file or text and compute pubDate and pubyear
-#' @param x a NISO-JATS coded XML file or text
-#' @param remove.na Logical. If TRUE hides non available date stamps
+#' Extracts available publishing history tags from NISO-JATS coded XML file or text and compute pubDate and pubyear.
+#' @param x a NISO-JATS coded XML file or text.
+#' @param remove.na Logical. If TRUE hides non available date stamps.
 #' @export
 
 get.history<-function(x,remove.na=FALSE){

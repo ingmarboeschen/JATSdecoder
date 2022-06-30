@@ -1,7 +1,7 @@
 #' get.journal
 #'
-#' Extract journal tag from NISO-JATS coded XML file or text
-#' @param x a NISO-JATS coded XML file or text
+#' Extracts journal tag from NISO-JATS coded XML file or text.
+#' @param x a NISO-JATS coded XML file or text.
 #' @export
 #' @examples
 #' x<-"Some text <journal-title>PLoS One</journal-title> some text"

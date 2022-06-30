@@ -1,7 +1,7 @@
 #' get.outlier.def
 #'
-#' Extract outlier/extreme value definition/removal in standard deviations, if present in text
-#' @param x text to process
+#' Extracts outlier/extreme value definition/removal in standard deviations, if present in text.
+#' @param x text string to process.
 #' @export
 #' @examples
 #' x<-"We removed 4 extreme values that were 3 SD above mean."

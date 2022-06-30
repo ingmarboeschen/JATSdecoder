@@ -1,10 +1,10 @@
 #' get.author
 #'
-#' Extract author tag/s from NISO-JATS coded XML file or text as vector of authors
-#' @param x a NISO-JATS coded XML file or text
-#' @param paste if "" author list is exported as vector with length of number of authors, else collapsed to one cell
-#' @param short.names Logical. If TRUE fully available first names will be reduced to one letter abbreviation
-#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
+#' Extracts author tag information from NISO-JATS coded XML file or text.
+#' @param x a NISO-JATS coded XML file or text.
+#' @param paste if paste!="" author list is collapsed to one cell with seperator specified (e.g. paste=";").
+#' @param short.names Logical. If TRUE fully available first names will be reduced to single letter abbreviation.
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
 #' @export
 
 get.author<-function(x,paste="",short.names=FALSE,letter.convert=FALSE){

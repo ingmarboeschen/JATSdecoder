@@ -1,15 +1,15 @@
 #' standardStats
 #'
-#' Extract and restructure standard statistical results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values to a matrix. Performs a recomputation of p-values if possible.
-#' @param x result of allStats()
-#' @param stats.mode Select subset of standard stats. One of: "all", "checkable", "computable", "uncomputable"
-#' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible
-#' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected","directed","both")
+#' Extracts and restructures statistical standard results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values to a matrix. Performs a recomputation of p-values if possible.
+#' @param x result of allStats().
+#' @param stats.mode Select subset of standard stats. One of: c("all", "checkable", "computable", "uncomputable").
+#' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible.
+#' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
-#' @param T2t Logical. If TRUE capital letter T is treated as t-statistic
-#' @param R2r Logical. If TRUE capital letter R is treated as correlation
-#' @param select Select specific standard statistics only (e.g.: c("t","F","Chi2"))
-#' @param rm.na.col Logical. If TRUE removes all columns with only NA
+#' @param T2t Logical. If TRUE capital letter T is treated as t-statistic.
+#' @param R2r Logical. If TRUE capital letter R is treated as correlation.
+#' @param select Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
+#' @param rm.na.col Logical. If TRUE removes all columns with only NA.
 #' @importFrom stats pf pchisq pt pnorm
 #' @export
 #' @examples
@@ -49,6 +49,11 @@ x<-gsub("[A-Za-z]chi[a-z]","",x)
      }
      
      
+# remove letter or number behind effect d
+x<-gsub(" d *[a-zA-Z0-9]([^a-zA-Z0-9])|^d *[a-zA-Z0-9]([^a-zA-Z0-9])"," d\\1\\2",x)
+# remove chi/letter=num
+x<-gsub("chi2*/[a-z0-9]*[<=>]*[0-9\\.]*","",x)
+
  # remove percent value in brackets
    x<-gsub(" \\([0-9\\.]*\\%\\)","",x)     
    # remove ")" in "), text...

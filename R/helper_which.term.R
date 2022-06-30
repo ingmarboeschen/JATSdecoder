@@ -1,10 +1,10 @@
 #' which.term
 #'
-#' Returns search element/s from vector that is/are present in text or returns search term hit vector for all terms
-#' @param x text to process
-#' @param terms search terms
-#' @param tolower Logical. If TRUE converts search terms and text to lower case
-#' @param hits_only Logical. If TRUE returns search pattern/s, that were found in text and not a search term hit vector
+#' Returns search element/s from vector that is/are present in text or returns search term hit vector for all terms.
+#' @param x text string to process.
+#' @param terms search term vector.
+#' @param tolower Logical. If TRUE converts search terms and text to lower case.
+#' @param hits_only Logical. If TRUE returns search pattern/s, that were found in text and not a search term hit vector.
 #' @export
 #' @examples
 #' text<-c("This demo demonstrates how which.term works.",

@@ -1,10 +1,10 @@
 #' get.editor
 #'
-#' Extract editor tag from NISO-JATS coded XML file or text as vector of editor/s
-#' @param x a NISO-JATS coded XML file or text
-#' @param role Logical. If TRUE adds role to editor name, if available
-#' @param short.names Logical. If TRUE reduces fully available first names to one letter abbreviation
-#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
+#' Extracts editor tag from NISO-JATS coded XML file or text as vector of editors.
+#' @param x a NISO-JATS coded XML file or text.
+#' @param role Logical. If TRUE adds role to editor name, if available.
+#' @param short.names Logical. If TRUE reduces fully available first names to one letter abbreviation.
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
 #' @export
 
 get.editor<-function(x,role=FALSE,short.names=FALSE,letter.convert=FALSE){

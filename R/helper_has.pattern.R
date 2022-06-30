@@ -1,9 +1,9 @@
 #' has.pattern
 #'
-#' Return search term hit vector for all search patterns
-#' @param x text to process
-#' @param patterns search terms as vector
-#' @param tolower Logical. If TRUE converts search terms and text to lower case
+#' Returns search term hit vector for all search patterns.
+#' @param x text string to process.
+#' @param patterns search terms as vector.
+#' @param tolower Logical. If TRUE converts search terms and text to lower case.
 #' @export
 #' @examples
 #' text<-c("This demo demonstrates how has.pattern() works.",

@@ -1,7 +1,7 @@
 #' get.title
 #'
-#' Extract articles title from NISO-JATS coded XML file or text
-#' @param x a NISO-JATS coded XML file or text
+#' Extracts article title from NISO-JATS coded XML file or text.
+#' @param x a NISO-JATS coded XML file or text.
 #' @export
 get.title<-function(x){
 # readLines if x is file

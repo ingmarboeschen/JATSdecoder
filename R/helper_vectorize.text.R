@@ -1,7 +1,7 @@
 #' vectorize.text
 #'
-#' convert vector of text to a list of words within each cell. Note: punctuation will be removed
-#' @param x text to vectorize
+#' Converts vector of text to a list of vectors with words within each cell. Note: punctuation will be removed.
+#' @param x text string to vectorize.
 #' @export
 #' @examples
 #' text<-"One hundred twenty-eight students participated in our Study, 

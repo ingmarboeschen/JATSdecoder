@@ -1,9 +1,9 @@
 #' get.method
 #'
-#' Extract statistical methods mentioned in text
-#' @param x text to extract statistical methods from
-#' @param add possible new end words of method as vector
-#' @param cermine Logical. If TRUE CERMINE specific letter conversion will be performed
+#' Extracts statistical methods mentioned in text.
+#' @param x text to extract statistical methods from.
+#' @param add possible new end words of method as vector.
+#' @param cermine Logical. If TRUE CERMINE specific letter conversion will be performed.
 #' @importFrom stats na.omit
 #' @export
 #' @examples

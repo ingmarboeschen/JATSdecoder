@@ -1,7 +1,7 @@
 #' get.vol
 #'
-#' Extract volume, first and last page from NISO-JATS coded XML file or text
-#' @param x a NISO-JATS XML coded file or text
+#' Extracts volume, first and last page from NISO-JATS coded XML file or text.
+#' @param x a NISO-JATS XML coded file or text.
 #' @export
 
 get.vol<-function(x){

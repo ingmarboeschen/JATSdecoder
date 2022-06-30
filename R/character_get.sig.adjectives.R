@@ -1,7 +1,7 @@
 #' get.sig.adjectives
 #'
-#' Extract adjectives used for in/significance out of list with 37 potential adjectives
-#' @param x text to process
+#' Extracts adjectives used for in/significance out of list with 37 potential adjectives.
+#' @param x text string to process.
 #' @param unique_only Logical. If TRUE returns unique hits only.
 #' @export
 #' @examples

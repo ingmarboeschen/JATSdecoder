@@ -1,14 +1,14 @@
 #' text2num
 #'
 #' Converts special annotated number and written numbers in a text string to a fully digit representation.
-#' Can handle numbers with exponent, fraction, percent, e+num, products and written representation (e.g. 'fourtys-one') of all absolut numbers till 99,999 (Note: gives false returns for higher numbers). Process is performed in the same order as its arguments.
-#' @param x text to process
-#' @param exponent Logical. If TRUE values with exponent are converted to a digit representation
-#' @param percentage Logical. If TRUE percentages are converted to a digit representation
-#' @param fraction Logical. If TRUE fractions are converted to a digit representation
-#' @param e Logical. If TRUE values denoted with num e+num (e.g. '2e+2') or num*10^num are converted to a digit representation
-#' @param product Logical. If TRUE values products are converted to a digit representation
-#' @param words Logical. If TRUE written numbers are converted to a digit representation
+#' Can handle numbers with exponent, fraction, percent, e+num, products and written representation (e.g. 'fourtys-one') of all absolut numbers up to 99,999 (Note: gives wrong output for higher spelled numbers). Process is performed in the same order as its arguments.
+#' @param x text string to process.
+#' @param exponent Logical. If TRUE values with exponent are converted to a digit representation.
+#' @param percentage Logical. If TRUE percentages are converted to a digit representation.
+#' @param fraction Logical. If TRUE fractions are converted to a digit representation.
+#' @param e Logical. If TRUE values denoted with num e+num (e.g. '2e+2') or num*10^num are converted to a digit representation.
+#' @param product Logical. If TRUE values products are converted to a digit representation.
+#' @param words Logical. If TRUE written numbers are converted to a digit representation.
 #' @export
 #' @examples
 #' x<-c("numbers with exponent: -2^3, .2^-2, -.3^.2, 49^-.5, 2^10.",
@@ -30,6 +30,8 @@ if(words==TRUE)      x<-unlist(lapply(x,text2digit))
 if(words==TRUE&percentage==TRUE)    x<-unlist(lapply(x,percent2number))
 if(fraction==TRUE)   x<-unlist(lapply(x,function(y) tryCatch(frac2num(y),error=function(e) return(y))))
 
+# remove spaces in operator-space-num 
+x<-gsub("([<=>]-) ([\\.0-9])","\\1\\2",x)
 # output
 return(x)
 }
@@ -298,6 +300,7 @@ if(length(grep("\\*[-\\.0-9]|\\* [-\\.0-9]",x))>0){
     x<-gsub(" , ",", ",x)
     x<-gsub(" \\.$",".",x)
 }
+    
     return(x)
 },error=function(e) return(x))
 }

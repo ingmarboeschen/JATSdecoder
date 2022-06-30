@@ -1,17 +1,17 @@
 #' get.stats
 #'
-#' Extract statistical results from plain text, XML, CERMXML, HTML, HTM or DOCX files. The result is a list with a vector containing all identified sticked results and a matrix with containing reported standard statistics and recalculated p-values if computation is possible.
-#' @param x text or JATScoded XML file to extract statistical results from
-#' @param stats.mode Select subset of standardStats. One of: "all", "checkable", "computable", "uncomputable"
-#' @param recalculate.p Logical. If TRUE recalculates p-values of standardStats if possible
-#' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected","directed","both")
+#' Extracts statistical results from text string, XML, CERMXML, HTML or DOCX files. The result is a list with a vector containing all identified sticked results and a matrix containing the reported standard statistics and recalculated p-values if computation is possible.
+#' @param x DOCX file path, NISO-JATS coded XML file path or plain textual content
+#' @param stats.mode Select subset of standardStats. One of: c("all", "checkable", "computable", "uncomputable").
+#' @param recalculate.p Logical. If TRUE recalculates p-values of standardStats if possible.
+#' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
-#' @param T2t Logical. If TRUE capital letter T is treated as t-statistic
-#' @param R2r Logical. If TRUE capital letter R is treated as correlation
-#' @param output Select the desired output. One of c("both","allStats","standardStats")
-#' @param select Select specific standard statistics only (e.g.: c("t","F","Chi2"))
-#' @param rm.na.col Logical. If TRUE removes all columns with only NA from standardStats
-#' @param cermine Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results
+#' @param T2t Logical. If TRUE capital letter T is treated as t-statistic.
+#' @param R2r Logical. If TRUE capital letter R is treated as correlation.
+#' @param output Select the desired output. One of c("both", "allStats", "standardStats").
+#' @param select Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
+#' @param rm.na.col Logical. If TRUE removes all columns with only NA from standardStats.
+#' @param cermine Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results.
 #' @export
 #' @examples
 #' x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05).",

@@ -1,11 +1,11 @@
 #' get.abstract
 #'
-#' Extract abstract tag from NISO-JATS coded XML file or text as vector of abstracts
-#' @param x a NISO-JATS coded XML file or text
-#' @param sentences Logical. If TRUE abstract is returned as vector of sentences
-#' @param remove.title Logical. If TRUE removes section titles in abstract
-#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
-#' @param cermine Logical. If TRUE and letter.convert=TRUE performs CERMINE specific text correction
+#' Extracts abstract tag from NISO-JATS coded XML file or text as vector of abstracts.
+#' @param x a NISO-JATS coded XML file or text.
+#' @param sentences Logical. If TRUE abstract is returned as vector of sentences.
+#' @param remove.title Logical. If TRUE removes section titles in abstract.
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
+#' @param cermine Logical. If TRUE and if 'letter.convert=TRUE' CERMINE specific letter correction is carried out (e.g. inserting of missing operators to statistical results).
 #' @export
 #' @examples
 #' x<-"Some text <abstract>Some abstract</abstract> some text"

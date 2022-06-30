@@ -1,8 +1,8 @@
 #' get.software
 #'
-#' Extract mentioned software from text by dictionary search for 63 software names (object: .software_names)
-#' @param x text
-#' @param add.software a text vector with additional software name patterns to search for
+#' Extracts mentioned software from text by dictionary search for 63 software names (object: .software_names).
+#' @param x text string to process.
+#' @param add.software a text vector with additional software name patterns to search for.
 #' @export
 
 #' @examples

@@ -1,9 +1,9 @@
 #' get.sentence.with.pattern
 #'
-#' Return lines with search term patterns
-#' @param x text to process
-#' @param patterns search terms
-#' @param tolower Logical. If TRUE converts search terms and text to lower case
+#' Returns lines with search term patterns.
+#' @param x sentence vector to process.
+#' @param patterns search terms.
+#' @param tolower Logical. If TRUE converts search terms and text to lower case.
 #' @export
 #' @examples
 #' text<-c("This demo demonstrates how get.sentence.with.pattern works.","The is a simple 0, 1.")

@@ -1,8 +1,8 @@
 #' allStats
 #'
-#' Extract any statistical results from text with some uniformizations.
+#' Extracts any statistical results from text string with some uniformizations.
 #' 
-#' @param x text to extract statistical results from
+#' @param x a text string to extract statistical results from.
 #' @export
 #' @examples
 #' x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05)",

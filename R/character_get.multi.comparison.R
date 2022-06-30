@@ -1,7 +1,7 @@
 #' get.multi.comparison
 #'
-#' Extracts alpha-/p-value correction method for multiple comparisons from list with 15 correction methods
-#' @param x text to process
+#' Extracts alpha-/p-value correction method for multiple comparisons from list with 15 correction methods.
+#' @param x text string to process.
 #' @export
 #' @examples
 #' x<-"We used Bonferroni corrected p-values."

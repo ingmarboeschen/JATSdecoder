@@ -1,9 +1,9 @@
 #' get.subject
 #'
-#' Extract subject tag/s from NISO-JATS coded XML file or text as vector of subjects
-#' @param x a NISO-JATS coded XML file or text
-#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
-#' @param paste if "" author list is exported as vector with length of number of authors, else collapsed to one cell
+#' Extracts subject tag/s from NISO-JATS coded XML file or text as vector of subjects.
+#' @param x a NISO-JATS coded XML file or text.
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
+#' @param paste if paste!="" subject list is collapsed to one cell with seperator specified (e.g. paste=";").
 #' @export
 #' @examples
 #' x<-"Some text <subject>Some subject</subject> some text"

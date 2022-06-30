@@ -1,24 +1,24 @@
 #' study.character
 #'
-#' Extracts study characteristics out of a NISO-JATS coded XML file or JATSdecoder result
-#' @param x JATS coded XML file or JATSdecoder result
-#' @param text.mode text parts to extract statistical results from (text.mode=1: abstract and full text, text.mode=2: method and result section, text.mode=3: result section only)
-#' @param captions Logical. If TRUE captions text will be scanned for statistical results
-#' @param stats.mode Character. Select subset of standard stats. One of: "all", "checkable", "computable"
-#' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible
-#' @param alternative Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto","undirected","directed","both"). If set to "auto" 'alternative' will be be set to 'both' if get.test.direction() detects one-directional hypotheses/tests in text. If no directional hypotheses/tests are dtected only "undirected" recomputed p-values will be returned
+#' Extracts study characteristics out of a NISO-JATS coded XML file or JATSdecoder result.
+#' @param x JATS coded XML file or JATSdecoder result.
+#' @param text.mode Numeric. Defines text parts to extract statistical results from (text.mode=1: abstract and full text, text.mode=2: method and result section, text.mode=3: result section only).
+#' @param captions Logical. If TRUE captions text will be scanned for statistical results.
+#' @param stats.mode Character. Select subset of standard stats. One of: c("all", "checkable", "computable").
+#' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible.
+#' @param alternative Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto", "undirected", "directed", "both"). If set to "auto" 'alternative' will be be set to 'both' if get.test.direction() detects one-directional hypotheses/tests in text. If no directional hypotheses/tests are dtected only "undirected" recomputed p-values will be returned.
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
-#' @param T2t Logical. If TRUE capital letter T is treated as t-statistic when extracting statistics with get.stats()
-#' @param R2r Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats()
-#' @param selectStandardStats Select specific standard statistics only (e.g.: c("t","F","Chi2"))
-#' @param p2alpha Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections) 
-#' @param alpha_output One of "list" (list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min), vector with unique alpha errors but no distinction of types
-#' @param update.package.list if TRUE updates available R packages with available.packages() function
-#' @param add.software additional software names to detect as vector
-#' @param quantileDF quantile of (df1+1)+(df2+1) to extract for estimating sample size
-#' @param N.max.only return only maximum of estimated sample sizes
-#' @param output output selection of specific results c("all", "doi", "title", "year", "Nstudies", "methods", "alpha_error", "power", "multi_comparison_correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test_direction", "sig_adjectives", "software", "Rpackage", "stats", "standardStats", "estimated_sample_size")
-#' @param rm.na.col Logical. If TRUE removes all columns with only NA in extracted standard statistics
+#' @param T2t Logical. If TRUE capital letter T is treated as t-statistic when extracting statistics with get.stats().
+#' @param R2r Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats().
+#' @param selectStandardStats Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
+#' @param p2alpha Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections).
+#' @param alpha_output One of c("list", "vector"). If alpha_output="list" a list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min is returned, if alpha_output="vector" unique alpha errors without a distinction of types is returned.
+#' @param update.package.list if TRUE updates available R packages with available.packages() function.
+#' @param add.software additional software names to detect as vector.
+#' @param quantileDF quantile of (df1+1)+(df2+1) to extract for estimating sample size.
+#' @param N.max.only return only maximum of estimated sample sizes.
+#' @param output output selection of specific results c("all", "doi", "title", "year", "Nstudies", "methods", "alpha_error", "power", "multi_comparison_correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test_direction", "sig_adjectives", "software", "Rpackage", "stats", "standardStats", "estimated_sample_size").
+#' @param rm.na.col Logical. If TRUE removes all columns with only NA in extracted standard statistics.
 #' @export
 
 study.character<-function(x,

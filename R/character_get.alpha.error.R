@@ -1,9 +1,9 @@
 #' get.alpha.error
 #'
-#' Extract reported and corrected alpha error from text and 1-alpha confidence intervalls
-#' @param x text to process
-#' @param p2alpha Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections) 
-#' @param output One of "list" (list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min), vector with unique alpha errors but no distinction of types
+#' Extracts reported and corrected alpha error from text and 1-alpha confidence intervalls.
+#' @param x text string to process.
+#' @param p2alpha Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections). 
+#' @param output One of c("list","vector"). If output="lists" outputs a list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min. If list="vector" contains unique alpha errors but no distinction of types.
 #' @export
 #' @examples
 #' x<-c("The threshold for significance was adjusted to .05/2",

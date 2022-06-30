@@ -1,7 +1,7 @@
 #' get.type
 #'
-#' Extract article-type tag from NISO-JATS coded XML file or text
-#' @param x a NISO-JATS coded XML file or text
+#' Extracts article type from NISO-JATS coded XML file or text.
+#' @param x a NISO-JATS coded XML file or text.
 #' @export
 
 ## get.type

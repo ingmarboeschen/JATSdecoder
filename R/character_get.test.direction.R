@@ -1,7 +1,7 @@
 #' get.test.direction
 #'
-#' Extract mentioned test direction/s (one sided, two sided, one and two sided) from text
-#' @param x text to process
+#' Extracts mentioned test direction/s (one sided, two sided, one and two sided) from text.
+#' @param x text string to process.
 #' @export
 
 get.test.direction<-function(x){

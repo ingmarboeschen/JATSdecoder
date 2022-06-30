@@ -1,7 +1,7 @@
 #' get.power
 #'
-#' Extract a priori power, empirial power values and 1-betaerror
-#' @param x text to process
+#' Extracts a priori power and empirial power values from text.
+#' @param x text string to process.
 #' @export
 #' @examples
 #' x<-"We used G*Power 3 to calculate the needed sample with 

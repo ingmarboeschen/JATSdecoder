@@ -1,12 +1,12 @@
 #' ngram
 #'
-#' Extract ngram bag of words around a pattern match in a text vector. 
+#' Extracts ngram bag of words around words that match a search pattern. 
 #' Note: If an input contains the search pattern twice, only the ngram bag of words of the last hit is detected. Consider individual text splitting with text2sentences() or strsplit2() before applying ngram().
-#' @param x vector of text to process
-#' @param pattern a search term pattern to extract the ngram bag of words
-#' @param ngram a vector of length=2 that defines the number of words to extract from left and right side of pattern match
-#' @param tolower Logical. If TRUE converts text and pattern to lower case
-#' @param split Logical. If TRUE splits text input at "[.,;:] " before processing. Note: You may consider other text splits before
+#' @param x vector of text strings to process.
+#' @param pattern a search term pattern to extract the ngram bag of words.
+#' @param ngram a vector of length=2 that defines the number of words to extract from left and right side of pattern match.
+#' @param tolower Logical. If TRUE converts text and pattern to lower case.
+#' @param split Logical. If TRUE splits text input at "[.,;:] " before processing. Note: You may consider other text splits before.
 #' @param exact Logical. If TRUE only exact word matches will be proceses
 #' @export
 #' @examples

@@ -1,9 +1,9 @@
 #' get.contrib
 #'
-#' Extract contrib tag/s from NISO-JATS coded XML file or text as vector of contributers
-#' @param x a NISO-JATS coded XML file or text
-#' @param remove.html Logical. If TRUE removes all HTML tags
-#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
+#' Extracts contrib tag/s from NISO-JATS coded XML file or text as vector of contributers.
+#' @param x a NISO-JATS coded XML file or text.
+#' @param remove.html Logical. If TRUE removes all HTML tags.
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
 #' @export
 
 get.contrib<-function(x,remove.html=FALSE,letter.convert=FALSE){

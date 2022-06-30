@@ -1,10 +1,10 @@
 #' strsplit2
 #'
-#' Extension of strsplit(). Makes it possible to split lines "before" or "after" a pattern match
-#' @param x text to process
-#' @param split pattern to split text at
-#' @param type one out of "remove", "before", "after"
-#' @param perl Logical. If TRUE uses perl expressions
+#' Extension of strsplit(). Makes it possible to split lines before or after a pattern match without removing the pattern.
+#' @param x text string to process.
+#' @param split pattern to split text at.
+#' @param type one out of c("remove", "before", "after").
+#' @param perl Logical. If TRUE uses perl expressions.
 #' @export
 #' @examples
 #' x<-"This is some text, where text is the split pattern of the text."

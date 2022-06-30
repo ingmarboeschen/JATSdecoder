@@ -1,19 +1,20 @@
 #' get.text
 #'
-#' Extract main textual content from NISO-JATS coded XML file or text as sectioned text
-#' @param x a NISO-JATS coded XML file or text
-#' @param sectionsplit search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")
-#' @param grepsection search pattern to reduce text to specific section namings only
-#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode
-#' @param greek2text Logical. If TRUE some greek letters and special characters will be unified to textual representation. (important to extract stats)
-#' @param sentences Logical. IF TRUE text is returned as sectioned list with sentences
-#' @param cermine Logical. If TRUE CERMINE specific error handling and letter conversion will be applied. If set to "auto" file name ending with 'cermxml$' will set cermine=TRUE
-#' @param rm.table Logical. If TRUE removes <table> tag from text
-#' @param rm.formula Logical. If TRUE removes <formula> tags
-#' @param rm.xref Logical. If TRUE removes <xref> tag (citing) from text
-#' @param rm.media Logical. If TRUE removes <media> tag from text
-#' @param rm.graphic Logical. If TRUE removes <graphic> and <fig> tag from text
-#' @param rm.ext_link Logical. If TRUE removes <ext link> tag from text
+#' Extracts main textual content from NISO-JATS coded XML file or text as sectioned text.
+#' @param x a NISO-JATS coded XML file or text.
+#' @param sectionsplit search patterns for section split (forced to lower case), e.g. c("intro", "method", "result", "discus").
+#' @param grepsection search pattern to reduce text to specific section namings only.
+#' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
+#' @param greek2text Logical. If TRUE some greek letters and special characters will be unified to textual representation (important to extract stats).
+#' @param sentences Logical. IF TRUE text is returned as sectioned list with sentences.
+#' @param paragraph Logical. IF TRUE "<New paragraph>" is added at the end of each paragraph to enable manual splitting at paragraphs.
+#' @param cermine Logical. If TRUE CERMINE specific error handling and letter conversion will be applied. If set to "auto" file name ending with 'cermxml$' will set cermine=TRUE.
+#' @param rm.table Logical. If TRUE removes <table> tag from text.
+#' @param rm.formula Logical. If TRUE removes <formula> tags.
+#' @param rm.xref Logical. If TRUE removes <xref> tag (citing) from text.
+#' @param rm.media Logical. If TRUE removes <media> tag from text.
+#' @param rm.graphic Logical. If TRUE removes <graphic> and <fig> tag from text.
+#' @param rm.ext_link Logical. If TRUE removes <ext link> tag from text.
 #' @export
 
 get.text<-function(x,sectionsplit="",
@@ -21,6 +22,7 @@ get.text<-function(x,sectionsplit="",
                   letter.convert=TRUE,
                   greek2text=FALSE,
                   sentences=FALSE,
+                  paragraph=FALSE,
                   cermine="auto",
                   rm.table=TRUE,
                   rm.formula=TRUE,
@@ -201,6 +203,11 @@ if(rm.formula==T){
 
 # remove <caption> from text if some is left
 textred<-lapply(textred,function(x) gsub("</caption>","",gsub("<caption.*?.*</caption>","",x)))
+# add "<New paragraph>.
+if(paragraph==TRUE){
+  textred<-lapply(textred,function(x) gsub("</p>"," <New paragraph>. ",x))
+  textred<-lapply(textred,function(x) gsub(" $| <New paragraph>. $","",x))
+}
 # remove <title> and <p> and <sec> <italic> <b> <bold>  <undeline> tag 
 textred<-lapply(textred,function(x) gsub("<title>|</title>|<p>|</p>|<sec>|</sec>|<italic>|</italic>|<italic toggle=\"yes\">|<italic toggle=\"no\">"," ",x))
 textred<-lapply(textred,function(x) gsub("<b>|</b>|<bold>|</bold>|</sup>|<sub>|</sub>|<underline>|</underline>"," ",x))
@@ -257,7 +264,7 @@ textred<-gsub(" \\. ",". ",gsub(" , ",", ",textred))
 textred<-gsub(" \\. ",". ",gsub(",,",",",textred))
 # set ",." to "."
 textred<-gsub(", \\.|,\\.",".",gsub(" , ",", ",textred))
-# remove white space in breakets
+# remove white space in brackets
 textred<-gsub(" [)]",")",gsub("[(] ","(",textred))
 textred<-gsub(" [\\]]","]",gsub("[\\[] ","[",textred))
 # remove white space at beginning and end
@@ -283,8 +290,16 @@ if(sum(section==""&textred=="")>0){
   }
  }
 
+textred<-lapply(textred,function(x) gsub(" *<New paragraph>. *;;",";;",x))
+
 if(sentences==TRUE) textred<-lapply(textred,text2sentences) 
 if(sentences==TRUE) captions<-lapply(captions,text2sentences) 
+
+# convert "<New paragraph>. " -> <New paragraph> and remove it at end of section
+if(paragraph==T) textred<-lapply(textred,function(x) gsub("<New paragraph>. *","<New paragraph> ",x))
+if(paragraph==T) textred<-lapply(textred,function(x) gsub("^<New paragraph> ","<New paragraph>",x))
+#if(paragraph==T) textred<-lapply(textred,function(x) gsub("<New paragraph>$","",x))
+
 
 # remove if text only contains html tag  
 textred<-lapply(textred,function(x){

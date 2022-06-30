@@ -1,7 +1,7 @@
 #' has.interaction
 #'
-#' Identify interaction/moderator/mediator effect in text
-#' @param x text to process
+#' Identifies mentiones of interaction/moderator/mediator effect in text.
+#' @param x text string to process.
 #' @export
  
 has.interaction<-function(x){

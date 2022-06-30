@@ -1,7 +1,7 @@
 #' est.ss
 #'
 #' Function to estimate studies sample size by maximizing different conservative estimates.
-#' Performs 4 different heuristical searches for sample size in abstract, text, stats and standardStats.
+#' Performs four different extraction heuristics for sample sizes mentioned in abstract, text and statistical results.
 #' 
 #' Sample size extraction from abstract:\cr
 #' - Extracts N= from abstract text and performs POS search with list of synonyms of sample units
@@ -12,18 +12,18 @@
 #' - Unifies and extracts textlines with participant description than computes sum of first three hits as ntext
 #' 
 #' Sample size extraction from statistical results:\cr
-#' - Extracts "N=" in statistical results extracted with get.stats() that contain p-value: e.g.: chi(2, N=12)=15.2, p<.05
+#' - Extracts "N=" in statistical results extracted with allStats() that contain p-value: e.g.: chi(2, N=12)=15.2, p<.05
 #' 
-#' Sample size extraction with result of standardStats(get.stats()):\cr
-#' - Extracts df1 and df2 if possible and neither containing a ".", than calculates quantile of (df1+1)+(df2+2) (at least 2 group comparison assumed)
+#' Sample size extraction by degrees of freedom with result of standardStats(allStats()):\cr
+#' - Extracts df1 and df2 if possible and neither containing a ".", than calculates specified quantile of (df1+1)+(df2+2) (at least 2 group comparison assumed)
 #'
-#' @param abstract abstracts text
-#' @param text main text to process (usually method and result sections). If text has content, arguments "stats" and "standardStats" are deactivated and filled with results by get.stats(text)
-#' @param stats statistics extracted with get.stats(x)$stats (only activ if no text is submitted)
-#' @param standardStats standard statistics extracted with get.stats(x)$standardStats  (only activ if no text is submitted)
-#' @param quantileDF quantile of (df1-1)+(df2+2) to extract
-#' @param max.only Logical. If TRUE only the final estimate will be returned, if FALSE all sub estimates are returned as well
-#' @param max.parts Logical. If FALSE outputs all captured sample sizes in sub inputs
+#' @param abstract an abstract text string.
+#' @param text the main text string to process (usually method and result sections). If text has content, arguments "stats" and "standardStats" are deactivated and filled with results by get.stats(text).
+#' @param stats statistics extracted with get.stats(x)$stats (only active if no text is submitted).
+#' @param standardStats standard statistics extracted with get.stats(x)$standardStats  (only active if no text is submitted).
+#' @param quantileDF quantile of (df1-1)+(df2+2) to extract.
+#' @param max.only Logical. If TRUE only the final estimate will be returned, if FALSE all sub estimates are returned as well.
+#' @param max.parts Logical. If FALSE outputs all captured sample sizes in sub inputs.
 #' @importFrom utils head
 #' @importFrom stats quantile
 #' @importFrom NLP as.String
@@ -35,7 +35,7 @@
 #'  a<-"One hundred twelve students participated in our study."
 #'  x<-"Our sample consists of three hundred twenty five undergraduate students.
 #'      For one sub group the F-test indicates significant differences in means F(2,102)=3.21, p<.05."
-#'  est.ss(standardStats=get.stats(x)$standardStats,stats=get.stats(x)$stats)
+#'  est.ss(abstract=a,text=x)
 
 ###############################################################
 ## Function to combine results and find max of extracted N's

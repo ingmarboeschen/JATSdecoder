@@ -1,10 +1,10 @@
 #' letter.convert
 #'
-#' Convert and unify most hexadecimal and some HTML coded letters in text to Unicode characters and correct CERMINE specific errors in captured statistical results.
-#' @param x text to process
-#' @param cermine Logical. If TRUE CERMINE specific error handling and letter conversion will be applied
-#' @param greek2text Logical. If TRUE some greek letters and special characters will be unified to textual representation. (important to extract stats)
-#' @param warning Logical. If TRUE prints warning massage if CERMINE specific letter conversion was performed
+#' Converts and unifies most hexadecimal and some HTML coded letters to Unicode characters. Performs CERMINE specific error correction (inserting operators, where these got lost while conversion). 
+#' @param x text string to process.
+#' @param cermine Logical. If TRUE CERMINE specific error handling and letter conversion will be applied.
+#' @param greek2text Logical. If TRUE some greek letters and special characters will be unified to textual representation (important to extract stats).
+#' @param warning Logical. If TRUE prints warning massage if CERMINE specific letter conversion was performed.
 #' @export
 #' @examples
 #' x<-c("five &#x0003c; ten","five &lt; ten")
