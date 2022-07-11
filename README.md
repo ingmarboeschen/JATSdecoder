@@ -132,7 +132,7 @@ The [PubMed Central](https://www.ncbi.nlm.nih.gov/pmc/) database offers more tha
 
 1. Get XML file names from working directory
 ``` r
-setwd("/home/PMC") # May be you would like to choose a specific journal folder for testing instead
+setwd("/home/PMC") # Maybe you would like to choose a specific journal folder for testing instead
 files<-list.files(pattern="XML$|xml$",recursive=TRUE)
 ``` 
 2. Apply extraction of article content to all files (replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multicore processing)
