@@ -276,4 +276,4 @@ vol. 18, no. 4, pp. 317-335, doi: 10.1007/s10032-015-0249-8.
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-This software is part of a dissertation project about the evolution of methodological characteristics in psychological research and financed by a grant awarded by the Department of [Research Methods and Statistics](https://www.psy.uni-hamburg.de/arbeitsbereiche/psychologische-methoden-und-statistik.html), [Institute of Psychology](https://www.psy.uni-hamburg.de/), [University Hamburg](https://www.uni-hamburg.de/), Germany.  
+This software is part of a dissertation project about the evolution of methodological characteristics in psychological research and financed by a grant awarded by the Department of [Research Methods and Statistics](https://www.psy.uni-hamburg.de/arbeitsbereiche/forschungsmethoden-und-statistik.html), [Institute of Psychology](https://www.psy.uni-hamburg.de/), [University Hamburg](https://www.uni-hamburg.de/), Germany.  
