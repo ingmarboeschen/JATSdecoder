@@ -1,16 +1,16 @@
 Package: JATSdecoder
-Title: JATSdecoder
+Title: Extract meta data, text and study characteristics from NISO-JATS coded XML files
+Year: 2022-10-02
+Date: 2022-10-02
 Version: 1.1
 Authors@R: person("Ingmar", "Böschen", email = "ingmar.boeschen@uni-hamburg.de", role = c("aut", "cre"))
-Description: This package contains a function collection to extract metadata, sectioned text and study characteristics from scientific articles. Its function JATSdecoder() converts NISO-JATS-tagged XML files to a structured list with elements containing title, author, journal, history, link, abstract, sectioned text and references. Studies in PDF format can be easily converted to NISO-JATS with the open source software CERMINE (https://github.com/CeON/CERMINE/). JATSdecoders function study.character() extracts multiple study characteristics like number of included studies, statistical methods used, alpha error, power, statistical results, correction method for multiple testing, software used. Based on different heuristics, it will perform an estimation of the involved sample size (still in progress). The package contains some useful functions to process text (text2sentences, strsplit2) and to unify numerical representations within text (text2num).
+Description: Provides a function collection to extract metadata, sectioned text and study characteristics from scientific articles. JATSdecoder() converts NISO-JATS-tagged XML files to a structured list with elements containing title, author, journal, history, link, abstract, sectioned text and references. Articles in PDF format can be easily converted to NISO-JATS with the open source software CERMINE (<https://github.com/CeON/CERMINE>). study.character() extracts multiple study characteristics like number of included studies, statistical methods used, alpha error, power, statistical results, correction method for multiple testing, software used. An estimation of the involved sample size is performed based on reports within the abstract and the reported degrees of freedom within statistical results. In addition, the package contains some useful functions to process text (text2sentences(), text2num(), ngram(), strsplit2(), grep2()).
 Depends: R (>= 3.1.1)
-Imports: 
-    utils,
-    stats,
-    NLP,
-    openNLP,
+Imports: utils, stats, NLP, openNLP
 License: GPL-3
+URL: https://github.com/ingmarboeschen/JATSdecoder
 Language: en-US
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
+
