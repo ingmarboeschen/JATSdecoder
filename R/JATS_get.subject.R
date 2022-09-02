@@ -8,7 +8,8 @@
 #' @examples
 #' x<-"Some text <subject>Some subject</subject> some text"
 #' get.subject(x)
-#' x<-"Some text <subject>Some subject</subject> TEXT <subject>Some other subject</subject> Some text "
+#' x<-"Some text <subject>Some subject</subject> TEXT ...
+#' <subject>Some other subject</subject> Some text "
 #' get.subject(x)
 #' get.subject(x,paste=", ")
 

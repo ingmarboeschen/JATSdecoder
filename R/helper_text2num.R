@@ -6,7 +6,8 @@
 #' @param exponent Logical. If TRUE values with exponent are converted to a digit representation.
 #' @param percentage Logical. If TRUE percentages are converted to a digit representation.
 #' @param fraction Logical. If TRUE fractions are converted to a digit representation.
-#' @param e Logical. If TRUE values denoted with num e+num (e.g. '2e+2') or num*10^num are converted to a digit representation.
+#' @param e Logical. If TRUE values denoted with 'number e+number' (e.g. '2e+2') or 
+#' number*10^number are converted to a digit representation.
 #' @param product Logical. If TRUE values products are converted to a digit representation.
 #' @param words Logical. If TRUE written numbers are converted to a digit representation.
 #' @export

@@ -1,6 +1,6 @@
 #' JATSdecoder
 #'
-#' Function to extract and restructure NISO-JATS coded XML file or text into a list with metadata and text as selectable elements.
+#' Function to extract and restructure NISO-JATS coded XML file or text into a list with metadata and text as selectable elements. Use \href{https://github.com/CeON/CERMINE}{CERMINE} to convert PDF to CERMXML files.
 #' @param x a NISO-JATS coded XML file or text.
 #' @param sectionsplit search patterns for section split of text parts (forced to lower case), e.g. c("intro", "method", "result", "discus").
 #' @param grepsection search pattern in regex to reduce text to specific section only.
@@ -14,6 +14,10 @@
 #' @param greek2text Logical. If TRUE converts and unifies several greek letters to textual representation, e.g.: "alpha".
 #' @param countryconnection Logical. If TRUE outputs country connections as vector c("A - B","A - C", ...).
 #' @param authorconnection Logical. If TRUE outputs connections of a maximum of 50 involved authors as vector c("A - B","A - C", ...).
+#' @note A short tutorial on how to work with JATSdecoder and the generated outputs can be found at: \href{https://github.com/ingmarboeschen/JATSdecoder}{https://github.com/ingmarboeschen/JATSdecoder}  
+#' @source An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+#' @source The XML version of PubMed Central database articles can be downloaded in bulk from:\cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}
+#' @references Böschen (2021). "Software review: The JATSdecoder package - extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed Central’s open access database.” \emph{Scientometrics.} doi: \href{https://link.springer.com/article/10.1007/s11192-021-04162-z}{10.1007/s1119202104162z}.
 #' @export
 
 # define function

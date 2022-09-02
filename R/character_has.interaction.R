@@ -36,3 +36,14 @@ return(inter)
 }
 
 
+has.pattern<-function(x,patterns=c(""),tolower=TRUE){
+  res<-NULL
+  for(i in 1:length(patterns)){
+    if(tolower==T) res[i]<-ifelse(length(grep(tolower(patterns[i]),tolower(x)))>0,1,0)
+    if(tolower!=T) res[i]<-ifelse(length(grep(patterns[i],x))>0,1,0)
+  }
+  names(res)<-patterns
+  res
+}
+
+

@@ -6,9 +6,8 @@
 #' @export
 #' @examples
 #' x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05)",
-#' "The ANOVA yielded significant results on 
-#'  faktor A (F(2,18)=6, p<.05, eta(g)2<-.22)",
-#' "the correlation of x and y was r=.37.")
+#' "The ANOVA yielded significant results on factor A (F(2,18)=6, p<.05, eta(g)2<-.22).",
+#' "The correlation of x and y was r=.37.")
 #' allStats(x)
 allStats<-function(x){
 # remove non result lines

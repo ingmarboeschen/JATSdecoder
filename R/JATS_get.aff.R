@@ -8,7 +8,7 @@
 #' @examples
 #' x<-"Some text <aff>Some affiliation</aff> some text"
 #' get.aff(x)
-#' x<-"Some text <aff>Some affiliation</aff> TEXT <aff>Some other affiliation</aff> Some text "
+#' x<-"TEXT <aff>Some affiliation</aff> TEXT <aff>Some other affiliation</aff> TEXT"
 #' get.aff(x)
 
 get.aff<-function(x,remove.html=FALSE,letter.convert=TRUE){

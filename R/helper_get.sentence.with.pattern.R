@@ -6,9 +6,9 @@
 #' @param tolower Logical. If TRUE converts search terms and text to lower case.
 #' @export
 #' @examples
-#' text<-c("This demo demonstrates how get.sentence.with.pattern works.","The is a simple 0, 1.")
+#' text<-c("This demo", "demonstrates how", "get.sentence.with.pattern works.")
 #' get.sentence.with.pattern(text,c("Demo","example","work"))
-#' get.sentence.with.pattern(text,c("Demo","example","work"),tolower=TRUE)
+#' get.sentence.with.pattern(text,c("Demo","example","work"),tolower=FALSE)
 
 get.sentence.with.pattern<-function(x,patterns=c(""),tolower=TRUE){
 pat<-paste(patterns,collapse="|")

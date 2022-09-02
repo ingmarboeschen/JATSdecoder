@@ -1,7 +1,7 @@
 #' study.character
 #'
-#' Extracts study characteristics out of a NISO-JATS coded XML file or JATSdecoder result.
-#' @param x JATS coded XML file or JATSdecoder result.
+#' Extracts study characteristics out of a NISO-JATS coded XML file. Use \href{https://github.com/CeON/CERMINE}{CERMINE} to convert PDF to CERMXML files.
+#' @param x JATS coded XML file.
 #' @param text.mode Numeric. Defines text parts to extract statistical results from (text.mode=1: abstract and full text, text.mode=2: method and result section, text.mode=3: result section only).
 #' @param captions Logical. If TRUE captions text will be scanned for statistical results.
 #' @param stats.mode Character. Select subset of standard stats. One of: c("all", "checkable", "computable").
@@ -12,13 +12,20 @@
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats().
 #' @param selectStandardStats Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
 #' @param p2alpha Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections).
-#' @param alpha_output One of c("list", "vector"). If alpha_output="list" a list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min is returned, if alpha_output="vector" unique alpha errors without a distinction of types is returned.
-#' @param update.package.list if TRUE updates available R packages with available.packages() function.
+#' @param alpha_output One of c("list", "vector"). If alpha_output = "list" a list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min is returned. If alpha_output = "vector" unique alpha errors without a distinction of types is returned.
+#' @param update.package.list Logical. If TRUE updates available R packages with utils::available.packages() function.
 #' @param add.software additional software names to detect as vector.
 #' @param quantileDF quantile of (df1+1)+(df2+1) to extract for estimating sample size.
 #' @param N.max.only return only maximum of estimated sample sizes.
-#' @param output output selection of specific results c("all", "doi", "title", "year", "Nstudies", "methods", "alpha_error", "power", "multi_comparison_correction", "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", "test_direction", "sig_adjectives", "software", "Rpackage", "stats", "standardStats", "estimated_sample_size").
+#' @param output output selection of specific results c("doi", "title", "year", "Nstudies", \cr
+#' "methods", "alpha_error", "power", "multi_comparison_correction", \cr
+#' "assumptions", "OutlierRemovalInSD", "InteractionModeratorMediatorEffect", \cr
+#' "test_direction", "sig_adjectives", "software", "Rpackage", "stats", \cr
+#' "standardStats", "estimated_sample_size").
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA in extracted standard statistics.
+#' @source An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+#' @source The XML version of PubMed Central database articles can be downloaded in bulk from: \cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}
+#' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 #' @export
 
 study.character<-function(x,

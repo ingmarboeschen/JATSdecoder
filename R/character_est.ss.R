@@ -34,7 +34,7 @@
 #' @examples
 #'  a<-"One hundred twelve students participated in our study."
 #'  x<-"Our sample consists of three hundred twenty five undergraduate students.
-#'      For one sub group the F-test indicates significant differences in means F(2,102)=3.21, p<.05."
+#'      The F-test indicates significant differences in means F(2,102)=3.21, p<.05."
 #'  est.ss(abstract=a,text=x)
 
 ###############################################################
