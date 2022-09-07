@@ -24,6 +24,7 @@
 #' @param quantileDF quantile of (df1-1)+(df2+2) to extract.
 #' @param max.only Logical. If TRUE only the final estimate will be returned, if FALSE all sub estimates are returned as well.
 #' @param max.parts Logical. If FALSE outputs all captured sample sizes in sub inputs.
+#' @return Numeric. Vector with estimated sample sizes by part of text.
 #' @importFrom utils head
 #' @importFrom stats quantile
 #' @importFrom NLP as.String

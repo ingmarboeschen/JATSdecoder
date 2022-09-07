@@ -4,6 +4,8 @@
 #' @param x sentence vector to process.
 #' @param patterns search terms.
 #' @param tolower Logical. If TRUE converts search terms and text to lower case.
+#' @return Character. Vector with sentences, that contain search pattern.
+#' @keywords internal
 #' @export
 #' @examples
 #' text<-c("This demo", "demonstrates how", "get.sentence.with.pattern works.")

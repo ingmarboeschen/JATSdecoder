@@ -2,6 +2,7 @@
 #'
 #' Extracts alpha-/p-value correction method for multiple comparisons from list with 15 correction methods.
 #' @param x text string to process.
+#' @return Character. Identified author/method of multiple comparison correction procedure.
 #' @export
 #' @examples
 #' x<-"We used Bonferroni corrected p-values."

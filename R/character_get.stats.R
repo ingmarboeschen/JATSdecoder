@@ -12,9 +12,9 @@
 #' @param select Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA from standardStats.
 #' @param cermine Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results.
-#' @source A minimal web application that extracts statistical results from single documents with JATSdecoder::get.stats() is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
+#' @return List with two elements: vector of extracted results by [allStats()] and matrix of standard results by [standardStats()].
+#' @source A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
 #' @source Statistical results from subsets of articles in the PubMed Central library can be analyzed and used to identify studies with specific measures and effect and sample sizes. Further, p-value checking is possible on selections of less than 20,000 articles.  is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
-
 #' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 #' @export
 #' @examples

@@ -5,6 +5,7 @@
 #' @param cermine Logical. If TRUE CERMINE specific error handling and letter conversion will be applied.
 #' @param greek2text Logical. If TRUE some greek letters and special characters will be unified to textual representation (important to extract stats).
 #' @param warning Logical. If TRUE prints warning massage if CERMINE specific letter conversion was performed.
+#' @return Character. Text with unified and corrected letter representation.
 #' @export
 #' @examples
 #' x<-c("five &#x0003c; ten","five &lt; ten")

@@ -5,6 +5,7 @@
 #' @param paste if paste!="" keyword list is collapsed to one cell with seperator specified (e.g. paste=";").
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
 #' @param include.max a maximum number of keywords to extract.
+#' @return Character vector with extracted keyword/s.
 #' @export
 #' @examples
 #' x<-"Some text <kwd>Keyword 1</kwd>, <kwd>Keyword 2</kwd> some text"

@@ -2,6 +2,7 @@
 #'
 #' Extracts articles doi from NISO-JATS coded XML file or text.
 #' @param x a NISO-JATS coded XML file or text.
+#' @return Character string with the extracted doi.
 #' @export
 
 ## get.link

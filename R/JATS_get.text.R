@@ -15,6 +15,7 @@
 #' @param rm.media Logical. If TRUE removes <media> tag from text.
 #' @param rm.graphic Logical. If TRUE removes <graphic> and <fig> tag from text.
 #' @param rm.ext_link Logical. If TRUE removes <ext link> tag from text.
+#' @return List with two elements. 1: Character vector with section title/s, 2: Character vector with floating text of sections or list with vector of sentences per section/s if sentences=TRUE. 
 #' @export
 
 get.text<-function(x,sectionsplit="",

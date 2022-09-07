@@ -3,6 +3,7 @@
 #' Extracts number of studies/experiments from text.
 #' @param x text string to process.
 #' @param tolower Logical. If TRUE lowerises text and search patterns for processing.
+#' @return Numeric number of identified number of studies.
 #' @export
 
 get.n.studies<-function(x,tolower=TRUE){

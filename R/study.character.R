@@ -23,6 +23,7 @@
 #' "test_direction", "sig_adjectives", "software", "Rpackage", "stats", \cr
 #' "standardStats", "estimated_sample_size").
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA in extracted standard statistics.
+#' @return List with extracted study characteristics.
 #' @source An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
 #' @source The XML version of PubMed Central database articles can be downloaded in bulk from: \cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}
 #' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.

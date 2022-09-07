@@ -4,6 +4,7 @@
 #' @param x a NISO-JATS coded XML file or text.
 #' @param remove.html Logical. If TRUE removes all html tags.
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
+#' @return Character vector with the extracted affiliation name/s.
 #' @export
 #' @examples
 #' x<-"Some text <aff>Some affiliation</aff> some text"

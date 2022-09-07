@@ -2,6 +2,7 @@
 #'
 #' Extracts a priori power and empirial power values from text.
 #' @param x text string to process.
+#' @return Numeric. Identified power values.
 #' @export
 #' @examples
 #' x<-"We used G*Power 3 to calculate the needed sample with 

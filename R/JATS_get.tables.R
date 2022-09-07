@@ -2,6 +2,7 @@
 #'
 #' Extracts HTML tables as vector of tables.
 #' @param x HTML file or html text.
+#' @return Character vector with extracted table in html coding.
 #' @export
 
 get.tables<-function(x){

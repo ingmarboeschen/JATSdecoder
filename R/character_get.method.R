@@ -4,6 +4,7 @@
 #' @param x text to extract statistical methods from.
 #' @param add possible new end words of method as vector.
 #' @param cermine Logical. If TRUE CERMINE specific letter conversion will be performed.
+#' @return Character. Vector with identified statistical method/s
 #' @importFrom stats na.omit
 #' @export
 #' @examples

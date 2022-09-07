@@ -14,6 +14,7 @@
 #' @param greek2text Logical. If TRUE converts and unifies several greek letters to textual representation, e.g.: "alpha".
 #' @param countryconnection Logical. If TRUE outputs country connections as vector c("A - B","A - C", ...).
 #' @param authorconnection Logical. If TRUE outputs connections of a maximum of 50 involved authors as vector c("A - B","A - C", ...).
+#' @return List with extracted meta data, sectioned text and references.
 #' @note A short tutorial on how to work with JATSdecoder and the generated outputs can be found at: \href{https://github.com/ingmarboeschen/JATSdecoder}{https://github.com/ingmarboeschen/JATSdecoder}  
 #' @source An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
 #' @source The XML version of PubMed Central database articles can be downloaded in bulk from:\cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}

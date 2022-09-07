@@ -10,14 +10,15 @@
 #' number*10^number are converted to a digit representation.
 #' @param product Logical. If TRUE values products are converted to a digit representation.
 #' @param words Logical. If TRUE written numbers are converted to a digit representation.
+#' @return Character. Text with unified digital representation of numbers.
 #' @export
 #' @examples
-#' x<-c("numbers with exponent: -2^3, .2^-2, -.3^.2, 49^-.5, 2^10.",
+#' x<-c("numbers with exponent: 2^2, -2.5^2, (-3)^2, 6.25^.5, .2^-2 text.",
 #'      "numbers with percentage: 2%, 15 %, 25 percent.",
-#'      "numbers with fractions: 1/100, -2/5, -7/-.1",
+#'      "numbers with fractions: 1/100, -2/5, -7/.1",
 #'      "numbers with e: 10e+2, -20e3, .2E-2, 2e4",
 #'      "numbers as products: 100*2, -20*.1, 2*10^3",
-#'      "written numbers: twenty-two, one hundred fourty five",
+#'      "written numbers: twenty-two, one hundred fourty five, fifteen percent",
 #'      "mix: one hundred ten is not 1/10 is not 10^2 nor 10%/5")
 #' text2num(x)
 
@@ -33,6 +34,8 @@ if(fraction==TRUE)   x<-unlist(lapply(x,function(y) tryCatch(frac2num(y),error=f
 
 # remove spaces in operator-space-num 
 x<-gsub("([<=>]-) ([\\.0-9])","\\1\\2",x)
+# remove spaces in front of "." at end 
+x<-gsub(" \\.",".",x)
 # output
 return(x)
 }
@@ -182,18 +185,31 @@ if(length(grep("\\%|[0-9] percent",x))>0){
 
 # function to convert ^num
 hight2num<-function(x){
-if(length(grep("[0-9]\\^[-\\.0-9]",x))>0){
+if(length(grep("[0-9]\\)*\\^[-\\.0-9]",x))>0){
 x<-unlist(strsplit2(x,"\\.$","before"))
-x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?\\^[-\\.0-9]","before"))
+# 1 new line 
+#x<-unlist(strsplit2(x,"[\\(]*[^-\\.0-9][-\\.0-9][-\\.0-9]*?[\\)]*\\^[-\\.0-9]","before"))
+x<-unlist(strsplit2(x,"[\\(]*[^-\\.0-9][-\\.0-9][-\\.0-9]*?[\\)]*\\^","before"))
+# 1 old line
+# x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?\\^[-\\.0-9]","before"))
+
     # add space to end
     x<-paste0(x," ")
     # if has num^num calculate and and replace 
-    ind<-grep("[^a-zA-Z][0-9]\\^[-\\.0-9]|^[0-9]\\^[-\\.0-9]",x)
-    exponent <- function(a, pow) (abs(a)^pow)*sign(a)
-    res<-suppressWarnings(format( exponent(as.numeric(gsub(".*[^-0-9\\.]","\\1",
-                                                 gsub("(.*[-0-9\\.]*)\\^[-\\.0-9].*","\\1",x[ind]))),
-                                       as.numeric(gsub("[^-0-9\\.].*","\\1",gsub(".*[-0-9\\.]*?\\^([-\\.0-9]*)","\\1",x[ind])))),
-                                 scientific=F))
+    ind<-grep("[^a-zA-Z][0-9][\\)]*\\^[-\\.0-9]|^[0-9]\\^[-\\.0-9]",x)
+    exponent <- function(a, pow){
+        res<-rep(NA,length(a))
+        # if has: (-num)^num
+        if(length(grep("\\(-[0-9\\.]",a))>0) res[grep("\\(-[0-9\\.]",a)]<-as.numeric((gsub("[\\(\\)]","",a[grep("\\(-[0-9\\.]",a)])))^as.numeric(pow[grep("\\(-[0-9\\.]",a)])
+        if(length(grep("\\(-[0-9\\.]",a,inv=T))>0) res[grep("\\(-[0-9\\.]",a,inv=T)]<-as.numeric((gsub("[\\(\\)]","",a[grep("\\(-[0-9\\.]",a,inv=T)])))^as.numeric(pow[grep("\\(-[0-9\\.]",a,inv=T)])*sign(as.numeric((gsub("[\\(\\)]","",a[grep("\\(-[0-9\\.]",a,inv=T)]))))
+        return(res)
+    }
+    
+    res<-suppressWarnings(format( 
+        exponent(a=gsub(".*[^-0-9\\.\\)\\(]","\\1",
+                      gsub("(.*[-0-9\\.\\)]*)\\^[-\\.0-9].*","\\1",paste0(" ",x[ind]))),
+                 pow=as.numeric(gsub("[^-0-9\\.].*","\\1",gsub(".*[-0-9\\.]*?\\^([-\\.0-9]*)","\\1",x[ind])))
+        ),scientific=F))
 
         # clean up white spaces
     res<-gsub("^ *|(?<= ) | *$", "", res, perl = TRUE)
@@ -201,7 +217,7 @@ x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?\\^[-\\.0-9]","before"))
     res<-gsub("\\.[0]*$","",res)
     res<-gsub("(\\.[0-9]*?)0*$","\\1",res)
     # insert result
-    suppressWarnings(if(length(ind)>0) for(i in 1:length(ind)) x[ind[i]]<-gsub("[-0-9\\.]*\\^[-\\.0-9]*",res[i],x[ind[i]]))
+    suppressWarnings(if(length(ind)>0) for(i in 1:length(ind)) x[ind[i]]<-gsub("[-0-9\\.\\(\\)]*\\^[-\\.0-9]*",res[i],x[ind[i]]))
     # collapse
     x<-gsub("  "," ",gsub(" $","",paste(x,collapse=" ")))
     # clean up

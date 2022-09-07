@@ -2,6 +2,7 @@
 #'
 #' Extracts article type from NISO-JATS coded XML file or text.
 #' @param x a NISO-JATS coded XML file or text.
+#' @return Character string with extracted article type.
 #' @export
 
 ## get.type

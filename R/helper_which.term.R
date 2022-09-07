@@ -5,6 +5,8 @@
 #' @param terms search term vector.
 #' @param tolower Logical. If TRUE converts search terms and text to lower case.
 #' @param hits_only Logical. If TRUE returns search pattern/s, that were found in text and not a search term hit vector.
+#' @return Binary hit vector with search term named elements if hits_only=FALSE.
+#' @return Character vector with identified search term elements if hits_only=TRUE.
 #' @export
 #' @examples
 #' text<-c("This demo demonstrates how which.term works.",

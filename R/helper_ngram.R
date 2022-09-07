@@ -8,6 +8,7 @@
 #' @param tolower Logical. If TRUE converts text and pattern to lower case.
 #' @param split Logical. If TRUE splits text input at "[.,;:] " before processing. Note: You may consider other text splits before.
 #' @param exact Logical. If TRUE only exact word matches will be proceses
+#' @return Character. Vector with +-n words of search pattern.
 #' @export
 #' @examples
 #' text<-"One hundred twenty-eight students participated in our Study, 

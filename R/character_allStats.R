@@ -1,8 +1,11 @@
 #' allStats
 #'
-#' Extracts any statistical results from text string with some uniformizations.
+#' Extracts any statistical results from text string with some uniformizations as vector. This function is implemented in [get.stas()].
 #' 
-#' @param x a text string to extract statistical results from.
+#' @param x text string
+#' @return Vector with sticked results.
+#' @source A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
+#' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 #' @export
 #' @examples
 #' x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05)",

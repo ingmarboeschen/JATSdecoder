@@ -2,6 +2,7 @@
 #'
 #' Converts floating text to a vector with sentences via fine-tuned regular expressions.
 #' @param x text string to process.
+#' @return Character vector with sentences compiled from floating text.
 #' @export
 #' @examples
 #' x<-"Some text with result (t(18)=1.2, p<.05). This shows how text2sentences works."

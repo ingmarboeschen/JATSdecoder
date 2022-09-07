@@ -5,6 +5,7 @@
 #' @param role Logical. If TRUE adds role to editor name, if available.
 #' @param short.names Logical. If TRUE reduces fully available first names to one letter abbreviation.
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
+#' @return Character string with the extracted editor name/s.
 #' @export
 
 get.editor<-function(x,role=FALSE,short.names=FALSE,letter.convert=FALSE){

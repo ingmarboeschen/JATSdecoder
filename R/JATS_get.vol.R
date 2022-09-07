@@ -2,6 +2,7 @@
 #'
 #' Extracts volume, first and last page from NISO-JATS coded XML file or text.
 #' @param x a NISO-JATS XML coded file or text.
+#' @return Character string with extracted journal volume.
 #' @export
 
 get.vol<-function(x){

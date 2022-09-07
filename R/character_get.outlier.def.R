@@ -2,6 +2,7 @@
 #'
 #' Extracts outlier/extreme value definition/removal in standard deviations, if present in text.
 #' @param x text string to process.
+#' @return Numeric. Vector with identified outlier definition in standard deviations.
 #' @export
 #' @examples
 #' x<-"We removed 4 extreme values that were 3 SD above mean."

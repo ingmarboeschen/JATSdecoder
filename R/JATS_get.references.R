@@ -5,6 +5,7 @@
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
 #' @param remove.html Logical. If TRUE removes all HTML tags.
 #' @param extract part of refernces to extract (one of "full" or "title").
+#' @return Character vector with extracted references from reference list.
 #' @export
 get.references<-function(x,letter.convert=FALSE, remove.html=FALSE,extract="full"){ 
 # readLines if x is file

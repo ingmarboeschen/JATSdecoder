@@ -2,6 +2,7 @@
 #'
 #' Identifies mentiones of interaction/moderator/mediator effect in text.
 #' @param x text string to process.
+#' @return Character vector with type/s of identified interaction/moderator/mediator effect.
 #' @export
  
 has.interaction<-function(x){

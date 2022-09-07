@@ -1,7 +1,7 @@
 #' standardStats
 #'
-#' Extracts and restructures statistical standard results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values to a matrix. Performs a recomputation of p-values if possible.
-#' @param x result of allStats().
+#' Extracts and restructures statistical standard results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values into a matrix. Performs a recomputation of two- and one-sided p-values if possible. This function is implemented in [get.stas()].
+#' @param x result vector by [allStats()].
 #' @param stats.mode Select subset of standard stats. One of: c("all", "checkable", "computable", "uncomputable").
 #' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible.
 #' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").
@@ -10,7 +10,11 @@
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation.
 #' @param select Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA.
+#' @return Matrix with recognized statistical standard results and recalculated p-values.
 #' @importFrom stats pf pchisq pt pnorm
+#' @source A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
+#' @source Statistical results from subsets of articles in the PubMed Central library can be analyzed and used to identify studies with specific measures and effect and sample sizes. Further, p-value checking is possible on selections of less than 20,000 articles.  is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+#' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 #' @export
 #' @examples
 #' x<-c("t(38.8)<=>1.96, p=.002","F(2,39)<=>4, p<=>.05",

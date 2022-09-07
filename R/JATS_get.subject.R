@@ -4,6 +4,7 @@
 #' @param x a NISO-JATS coded XML file or text.
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
 #' @param paste if paste!="" subject list is collapsed to one cell with seperator specified (e.g. paste=";").
+#' @return Character vector with extracted subject/s.
 #' @export
 #' @examples
 #' x<-"Some text <subject>Some subject</subject> some text"

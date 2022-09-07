@@ -4,6 +4,8 @@
 #' @param x a NISO-JATS coded XML file or text.
 #' @param remove.html Logical. If TRUE removes all HTML tags.
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
+#' @return Character vector with the extracted contributer tag content.
+#' @keywords internal
 #' @export
 
 get.contrib<-function(x,remove.html=FALSE,letter.convert=FALSE){

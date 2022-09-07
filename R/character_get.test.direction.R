@@ -2,6 +2,7 @@
 #'
 #' Extracts mentioned test direction/s (one sided, two sided, one and two sided) from text.
 #' @param x text string to process.
+#' @return Character. 
 #' @export
 
 get.test.direction<-function(x){

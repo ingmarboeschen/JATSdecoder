@@ -5,6 +5,7 @@
 #' @param split pattern to split text at.
 #' @param type one out of c("remove", "before", "after").
 #' @param perl Logical. If TRUE uses perl expressions.
+#' @return A list of the same length as x, the i-th element of which contains the vector of splits of x[i].
 #' @export
 #' @examples
 #' x<-"This is some text, where text is the split pattern of the text."
