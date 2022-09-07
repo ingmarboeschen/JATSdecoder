@@ -7,10 +7,13 @@
 get.n.studies(x, tolower = TRUE)
 }
 \arguments{
-\item{x}{section titles or abstract text to process}
+\item{x}{text string to process.}
 
-\item{tolower}{Logical. If TRUE lowerises text and search patterns for processing}
+\item{tolower}{Logical. If TRUE lowerises text and search patterns for processing.}
+}
+\value{
+Numeric number of identified number of studies.
 }
 \description{
-Extract n studies/experiments from section titles or abstract text
+Extracts number of studies/experiments from text.
 }

@@ -7,12 +7,15 @@
 get.sig.adjectives(x, unique_only = FALSE)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
 
 \item{unique_only}{Logical. If TRUE returns unique hits only.}
 }
+\value{
+Character. Vector with identified adjectives.
+}
 \description{
-Extract adjectives used for in/significance out of list with 37 potential adjectives
+Extracts adjectives used for in/significance out of list with 37 potential adjectives.
 }
 \examples{
 get.sig.adjectives(

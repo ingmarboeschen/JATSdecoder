@@ -3,6 +3,11 @@
 \name{standardStats}
 \alias{standardStats}
 \title{standardStats}
+\source{
+A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
+
+Statistical results from subsets of articles in the PubMed Central library can be analyzed and used to identify studies with specific measures and effect and sample sizes. Further, p-value checking is possible on selections of less than 20,000 articles.  is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+}
 \usage{
 standardStats(
   x,
@@ -17,30 +22,36 @@ standardStats(
 )
 }
 \arguments{
-\item{x}{result of get.stats()}
+\item{x}{result vector by [allStats()].}
 
-\item{stats.mode}{Select subset of standard stats. One of: "all", "checkable", "computable", "uncomputable"}
+\item{stats.mode}{Select subset of standard stats. One of: c("all", "checkable", "computable", "uncomputable").}
 
-\item{recalculate.p}{Logical. If TRUE recalculates p values (for 2 sided test) if possible}
+\item{recalculate.p}{Logical. If TRUE recalculates p values (for 2 sided test) if possible.}
 
-\item{alternative}{Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected","directed","both")}
+\item{alternative}{Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").}
 
 \item{estimateZ}{Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.}
 
-\item{T2t}{Logical. If TRUE capital letter T is treated as t-statistic}
+\item{T2t}{Logical. If TRUE capital letter T is treated as t-statistic.}
 
-\item{R2r}{Logical. If TRUE capital letter R is treated as correlation}
+\item{R2r}{Logical. If TRUE capital letter R is treated as correlation.}
 
-\item{select}{Select specific standard statistics only (e.g.: c("t","F","Chi2"))}
+\item{select}{Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).}
 
-\item{rm.na.col}{Logical. If TRUE removes all columns with only NA}
+\item{rm.na.col}{Logical. If TRUE removes all columns with only NA.}
+}
+\value{
+Matrix with recognized statistical standard results and recalculated p-values.
 }
 \description{
-Extract and standard statistical results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values
+Extracts and restructures statistical standard results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values into a matrix. Performs a recomputation of two- and one-sided p-values if possible. This function is implemented in [get.stas()].
 }
 \examples{
 x<-c("t(38.8)<=>1.96, p=.002","F(2,39)<=>4, p<=>.05",
 "U(2)=200, p>.25","Z<=>2.1, F(20.8,22.6)=200, p<.005, 
 BF(01)<=>4","chi=3.2, r(34)<=>-.7, p<.01, R2=76\%.")
 standardStats(x)
+}
+\references{
+Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 }

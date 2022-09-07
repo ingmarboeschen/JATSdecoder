@@ -12,16 +12,19 @@ get.keywords(
 )
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{paste}{if paste!="" author vector is collapsed to one cell}
+\item{paste}{if paste!="" keyword list is collapsed to one cell with seperator specified (e.g. paste=";").}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
 
-\item{include.max}{a maximum number of keywords to extract}
+\item{include.max}{a maximum number of keywords to extract.}
+}
+\value{
+Character vector with extracted keyword/s.
 }
 \description{
-Extract keyword tag/s from NISO-JATS coded XML file or text as vector of keywords
+Extracts keyword tag/s from NISO-JATS coded XML file or text as vector of keywords.
 }
 \examples{
 x<-"Some text <kwd>Keyword 1</kwd>, <kwd>Keyword 2</kwd> some text"

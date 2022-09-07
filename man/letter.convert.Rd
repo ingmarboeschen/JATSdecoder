@@ -7,16 +7,19 @@
 letter.convert(x, cermine = FALSE, greek2text = FALSE, warning = TRUE)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
 
-\item{cermine}{Logical. If TRUE CERMINE specific error handling and letter conversion will be applied}
+\item{cermine}{Logical. If TRUE CERMINE specific error handling and letter conversion will be applied.}
 
-\item{greek2text}{Logical. If TRUE some greek letters and special characters will be unified to textual representation. (important to extract stats)}
+\item{greek2text}{Logical. If TRUE some greek letters and special characters will be unified to textual representation (important to extract stats).}
 
-\item{warning}{Logical. If TRUE prints warning massage if CERMINE specific letter conversion was performed}
+\item{warning}{Logical. If TRUE prints warning massage if CERMINE specific letter conversion was performed.}
+}
+\value{
+Character. Text with unified and corrected letter representation.
 }
 \description{
-Convert and unify most hex and some html coded letters in text to unicode characters and correct CERMINE specific errors in captured statistical results.
+Converts and unifies most hexadecimal and some HTML coded letters to Unicode characters. Performs CERMINE specific error correction (inserting operators, where these got lost while conversion).
 }
 \examples{
 x<-c("five &#x0003c; ten","five &lt; ten")

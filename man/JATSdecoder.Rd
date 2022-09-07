@@ -3,6 +3,11 @@
 \name{JATSdecoder}
 \alias{JATSdecoder}
 \title{JATSdecoder}
+\source{
+An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+
+The XML version of PubMed Central database articles can be downloaded in bulk from:\cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}
+}
 \usage{
 JATSdecoder(
   x,
@@ -10,6 +15,7 @@ JATSdecoder(
     "implica", "discussion"),
   grepsection = "",
   sentences = FALSE,
+  paragraph = FALSE,
   abstract2sentences = TRUE,
   output = "all",
   letter.convert = TRUE,
@@ -21,30 +27,41 @@ JATSdecoder(
 )
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{sectionsplit}{search patterns for section split of text parts (forced to lower case), e.g. c("intro","method","result","discus")}
+\item{sectionsplit}{search patterns for section split of text parts (forced to lower case), e.g. c("intro", "method", "result", "discus").}
 
-\item{grepsection}{search pattern in regex to reduce text to specific section only}
+\item{grepsection}{search pattern in regex to reduce text to specific section only.}
 
-\item{sentences}{Logical. IF TRUE text is returned as sectioned list with sentences}
+\item{sentences}{Logical. IF TRUE text is returned as sectioned list with sentences.}
 
-\item{abstract2sentences}{Logical. IF TRUE abstract is returned as vector with sentences}
+\item{paragraph}{Logical. IF TRUE "<New paragraph>" is added at the end of each paragraph to enable manual splitting at paragraphs.}
 
-\item{output}{selection of specific results to output c("all","title","author","affiliation","journal","volume","editor","doi","type","history","country","subject","keywords", "abstract", "sections", "text", "tables", "captions", "references")}
+\item{abstract2sentences}{Logical. IF TRUE abstract is returned as vector with sentences.}
 
-\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode}
+\item{output}{selection of specific results to output c("all", "title", "author", "affiliation", "journal", "volume", "editor", "doi", "type", "history", "country", "subject", "keywords", "abstract", "sections", "text", "tables", "captions", "references").}
 
-\item{unify.country.name}{Logical. If TRUE tries to unify country name/s with list of country names from worldmap()}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
 
-\item{greek2text}{Logical. If TRUE converts and unifies several greek letters to textual representation, e.g.: alpha}
+\item{unify.country.name}{Logical. If TRUE tries to unify country name/s with list of country names from worldmap().}
 
-\item{warning}{Logical. If TRUE outputs a warning if processing CERMINE converted PDF files}
+\item{greek2text}{Logical. If TRUE converts and unifies several greek letters to textual representation, e.g.: "alpha".}
 
-\item{countryconnection}{Logical. If TRUE outputs country connections as vector c("A - B","A - C", ...)}
+\item{warning}{Logical. If TRUE outputs a warning if processing CERMINE converted PDF files.}
 
-\item{authorconnection}{Logical. If TRUE outputs connections of a maximum of 50 involved authors as vector c("A - B","A - C", ...)}
+\item{countryconnection}{Logical. If TRUE outputs country connections as vector c("A - B","A - C", ...).}
+
+\item{authorconnection}{Logical. If TRUE outputs connections of a maximum of 50 involved authors as vector c("A - B","A - C", ...).}
+}
+\value{
+List with extracted meta data, sectioned text and references.
 }
 \description{
-Function to extract and restructure NISO-JATS coded XML file or text into a list with metadata and text as selectable elements
+Function to extract and restructure NISO-JATS coded XML file or text into a list with metadata and text as selectable elements. Use \href{https://github.com/CeON/CERMINE}{CERMINE} to convert PDF to CERMXML files.
+}
+\note{
+A short tutorial on how to work with JATSdecoder and the generated outputs can be found at: \href{https://github.com/ingmarboeschen/JATSdecoder}{https://github.com/ingmarboeschen/JATSdecoder}
+}
+\references{
+Böschen (2021). "Software review: The JATSdecoder package - extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed Central’s open access database.” \emph{Scientometrics.} doi: \href{https://link.springer.com/article/10.1007/s11192-021-04162-z}{10.1007/s1119202104162z}.
 }

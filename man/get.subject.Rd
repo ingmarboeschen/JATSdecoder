@@ -7,19 +7,23 @@
 get.subject(x, letter.convert = TRUE, paste = "")
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
 
-\item{paste}{if "" author list is exported as vector with length of number of authors, else collapsed to one cell}
+\item{paste}{if paste!="" subject list is collapsed to one cell with seperator specified (e.g. paste=";").}
+}
+\value{
+Character vector with extracted subject/s.
 }
 \description{
-Extract subject tag/s from NISO-JATS coded XML file or text as vector of subjects
+Extracts subject tag/s from NISO-JATS coded XML file or text as vector of subjects.
 }
 \examples{
 x<-"Some text <subject>Some subject</subject> some text"
 get.subject(x)
-x<-"Some text <subject>Some subject</subject> TEXT <subject>Some other subject</subject> Some text "
+x<-"Some text <subject>Some subject</subject> TEXT ...
+<subject>Some other subject</subject> Some text "
 get.subject(x)
 get.subject(x,paste=", ")
 }

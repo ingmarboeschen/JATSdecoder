@@ -7,14 +7,17 @@
 get.editor(x, role = FALSE, short.names = FALSE, letter.convert = FALSE)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{role}{Logical. If TRUE adds role to editor name, if available}
+\item{role}{Logical. If TRUE adds role to editor name, if available.}
 
-\item{short.names}{Logical. If TRUE reduces fully available first names to one letter abbreviation}
+\item{short.names}{Logical. If TRUE reduces fully available first names to one letter abbreviation.}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
+}
+\value{
+Character string with the extracted editor name/s.
 }
 \description{
-Extract editor tag from NISO-JATS coded XML file or text as vector of editor/s
+Extracts editor tag from NISO-JATS coded XML file or text as vector of editors.
 }

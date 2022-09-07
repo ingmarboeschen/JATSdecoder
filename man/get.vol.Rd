@@ -7,8 +7,11 @@
 get.vol(x)
 }
 \arguments{
-\item{x}{a NISO-JATS XML coded file or text}
+\item{x}{a NISO-JATS XML coded file or text.}
+}
+\value{
+Character string with extracted journal volume.
 }
 \description{
-Extract volume, first and last page from NISO-JATS coded XML file or text
+Extracts volume, first and last page from NISO-JATS coded XML file or text.
 }

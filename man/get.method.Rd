@@ -7,14 +7,17 @@
 get.method(x, add = NULL, cermine = FALSE)
 }
 \arguments{
-\item{x}{text to extract statistical methods from}
+\item{x}{text to extract statistical methods from.}
 
-\item{add}{possible new end words of method as vector}
+\item{add}{possible new end words of method as vector.}
 
-\item{cermine}{Logical. If TRUE CERMINE specific letter conversion will be performed}
+\item{cermine}{Logical. If TRUE CERMINE specific letter conversion will be performed.}
+}
+\value{
+Character. Vector with identified statistical method/s
 }
 \description{
-Extract statistical methods mentioned in text
+Extracts statistical methods mentioned in text.
 }
 \examples{
 x<-"We used multiple regression analysis and 

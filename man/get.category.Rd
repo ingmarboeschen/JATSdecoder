@@ -7,10 +7,13 @@
 get.category(x)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
+}
+\value{
+Character vector with the extracted category name/s.
 }
 \description{
-Extract category tag/s from NISO-JATS coded XML file or text as vector of categories
+Extracts category tag/s from NISO-JATS coded XML file or text as vector of categories.
 }
 \examples{
 x<-"Some text <article-categories>Some category</article-categories> some text"

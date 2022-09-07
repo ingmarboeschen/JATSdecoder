@@ -7,18 +7,21 @@
 get.aff(x, remove.html = FALSE, letter.convert = TRUE)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{remove.html}{Logical. If TRUE removes all html tags}
+\item{remove.html}{Logical. If TRUE removes all html tags.}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
+}
+\value{
+Character vector with the extracted affiliation name/s.
 }
 \description{
-Extract affiliation tag/s from NISO-JATS coded XML file or text as vector of affiliations
+Extracts the affiliation tag information from NISO-JATS coded XML file or text as a vector of affiliations.
 }
 \examples{
 x<-"Some text <aff>Some affiliation</aff> some text"
 get.aff(x)
-x<-"Some text <aff>Some affiliation</aff> TEXT <aff>Some other affiliation</aff> Some text "
+x<-"TEXT <aff>Some affiliation</aff> TEXT <aff>Some other affiliation</aff> TEXT"
 get.aff(x)
 }

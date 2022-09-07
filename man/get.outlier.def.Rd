@@ -7,10 +7,13 @@
 get.outlier.def(x)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
+}
+\value{
+Numeric. Vector with identified outlier definition in standard deviations.
 }
 \description{
-Extract outlier/extreme value definition/removal in standard deviations, if present in text
+Extracts outlier/extreme value definition/removal in standard deviations, if present in text.
 }
 \examples{
 x<-"We removed 4 extreme values that were 3 SD above mean."

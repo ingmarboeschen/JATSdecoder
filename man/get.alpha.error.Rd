@@ -7,14 +7,18 @@
 get.alpha.error(x, p2alpha = FALSE, output = "list")
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
 
-\item{p2alpha}{Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections)}
+\item{p2alpha}{Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections).}
 
-\item{output}{One of "list" (list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min), vector with unique alpha errors but no distinction of types}
+\item{output}{One of c("list","vector"). If output="list" returns a list containing: alpha_error, \cr
+corrected_alpha, alpha_from_CI, alpha_max, alpha_min. If output="vector" returns unique alpha errors but no distinction of types.}
+}
+\value{
+Numeric. Vector with identified alpha-error/s.
 }
 \description{
-Extract reported and corrected alpha error from text and 1-alpha confidence intervalls
+Extracts reported and corrected alpha error from text and 1-alpha confidence intervalls.
 }
 \examples{
 x<-c("The threshold for significance was adjusted to .05/2",

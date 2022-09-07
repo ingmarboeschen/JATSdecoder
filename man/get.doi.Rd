@@ -7,8 +7,11 @@
 get.doi(x)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
+}
+\value{
+Character string with the extracted doi.
 }
 \description{
-Extract articles doi from NISO-JATS coded XML file or text
+Extracts articles doi from NISO-JATS coded XML file or text.
 }

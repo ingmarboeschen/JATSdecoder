@@ -7,10 +7,13 @@
 get.history(x, remove.na = FALSE)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{remove.na}{Logical. If TRUE hides non available date stamps}
+\item{remove.na}{Logical. If TRUE hides non available date stamps.}
+}
+\value{
+Character vector with the extracted dates of publishing history.
 }
 \description{
-Extract available publishing history tags from NISO-JATS coded XML file or text and compute pubDate and pubyear
+Extracts available publishing history tags from NISO-JATS coded XML file or text and compute pubDate and pubyear.
 }

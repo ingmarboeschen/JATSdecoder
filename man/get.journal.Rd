@@ -7,10 +7,13 @@
 get.journal(x)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
+}
+\value{
+Character string with the extracted journal name.
 }
 \description{
-Extract journal-title tag from NISO-JATS coded XML file or text
+Extracts journal tag from NISO-JATS coded XML file or text.
 }
 \examples{
 x<-"Some text <journal-title>PLoS One</journal-title> some text"

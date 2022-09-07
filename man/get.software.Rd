@@ -7,15 +7,16 @@
 get.software(x, add.software = NULL)
 }
 \arguments{
-\item{x}{text}
+\item{x}{text string to process.}
 
-\item{add.software}{a text vector with additional software name patterns to search for}
+\item{add.software}{a text vector with additional software name patterns to search for.}
+}
+\value{
+Character. Vector with identified statistical software/s.
 }
 \description{
-Extract mentioned software from text by dictionary search for 63 software names (object: .software_names)
+Extracts mentioned software from text by dictionary search for 63 software names (object: .software_names).
 }
 \examples{
-get.software(
-x<-"We used the R Software and Excel 4.0 to analyse our data."
-)
+get.software("We used the R Software and Excel 4.0 to analyse our data.")
 }

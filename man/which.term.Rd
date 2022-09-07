@@ -7,16 +7,21 @@
 which.term(x, terms, tolower = TRUE, hits_only = FALSE)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
 
-\item{terms}{search terms}
+\item{terms}{search term vector.}
 
-\item{tolower}{Logical. If TRUE converts search terms and text to lower case}
+\item{tolower}{Logical. If TRUE converts search terms and text to lower case.}
 
-\item{hits_only}{Logical. If TRUE returns search pattern/s, that were found in text and not a search term hit vector}
+\item{hits_only}{Logical. If TRUE returns search pattern/s, that were found in text and not a search term hit vector.}
+}
+\value{
+Binary hit vector with search term named elements if hits_only=FALSE.
+
+Character vector with identified search term elements if hits_only=TRUE.
 }
 \description{
-Returns search element/s from vector that is/are present in text or returns search term hit vector for all terms
+Returns search element/s from vector that is/are present in text or returns search term hit vector for all terms.
 }
 \examples{
 text<-c("This demo demonstrates how which.term works.",

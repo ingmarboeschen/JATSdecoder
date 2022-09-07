@@ -7,12 +7,15 @@
 get.R.package(x, update.package.list = FALSE)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
 
-\item{update.package.list}{Logical. If TRUE update of list with available packages is downloaded from CRAN with available.packages()}
+\item{update.package.list}{Logical. If TRUE update of list with available packages is downloaded from CRAN with available.packages().}
+}
+\value{
+Character. Vector with identified R package/s.
 }
 \description{
-Extract mentioned R package from text
+Extracts mentioned R packages from text.
 }
 \examples{
 get.R.package("We used the R Software packages lme4 (and psych).")

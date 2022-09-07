@@ -7,10 +7,13 @@
 text2sentences(x)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
+}
+\value{
+Character vector with sentences compiled from floating text.
 }
 \description{
-Convert floating text to a vector with sentences via fine tuned regular expressions or NLP sentence tokenization
+Converts floating text to a vector with sentences via fine-tuned regular expressions.
 }
 \examples{
 x<-"Some text with result (t(18)=1.2, p<.05). This shows how text2sentences works."

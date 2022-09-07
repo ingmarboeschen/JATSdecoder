@@ -3,19 +3,27 @@
 \name{allStats}
 \alias{allStats}
 \title{allStats}
+\source{
+A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
+}
 \usage{
 allStats(x)
 }
 \arguments{
-\item{x}{text to extract statistical results from}
+\item{x}{text string}
+}
+\value{
+Vector with sticked results.
 }
 \description{
-Extract statistical results from text with some uniformisation
+Extracts any statistical results from text string with some uniformizations as vector. This function is implemented in [get.stas()].
 }
 \examples{
 x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05)",
-"The ANOVA yielded significant results on 
- faktor A (F(2,18)=6, p<.05, eta(g)2<-.22)",
-"the correlation of x and y was r=.37.")
+"The ANOVA yielded significant results on factor A (F(2,18)=6, p<.05, eta(g)2<-.22).",
+"The correlation of x and y was r=.37.")
 allStats(x)
+}
+\references{
+Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 }

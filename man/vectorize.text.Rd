@@ -7,10 +7,13 @@
 vectorize.text(x)
 }
 \arguments{
-\item{x}{text to vectorize}
+\item{x}{text string to vectorize.}
+}
+\value{
+Character vector with one word per cell.
 }
 \description{
-convert vector of text to a list of words within each cell. Note: punctuation will be removed
+Converts vector of text to a list of vectors with words within each cell. Note: punctuation will be removed.
 }
 \examples{
 text<-"One hundred twenty-eight students participated in our Study, 

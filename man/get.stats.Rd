@@ -3,6 +3,11 @@
 \name{get.stats}
 \alias{get.stats}
 \title{get.stats}
+\source{
+A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
+
+Statistical results from subsets of articles in the PubMed Central library can be analyzed and used to identify studies with specific measures and effect and sample sizes. Further, p-value checking is possible on selections of less than 20,000 articles.  is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+}
 \usage{
 get.stats(
   x,
@@ -19,30 +24,33 @@ get.stats(
 )
 }
 \arguments{
-\item{x}{text or JATScoded XML file to extract statistical results from}
+\item{x}{DOCX file path, NISO-JATS coded XML file path or plain textual content}
 
-\item{output}{Select the desired output. One of c("both","allStats","standardStats")}
+\item{output}{Select the desired output. One of c("both", "allStats", "standardStats").}
 
-\item{stats.mode}{Select subset of standardStats. One of: "all", "checkable", "computable", "uncomputable"}
+\item{stats.mode}{Select subset of standardStats. One of: c("all", "checkable", "computable", "uncomputable").}
 
-\item{recalculate.p}{Logical. If TRUE recalculates p-values of standardStats if possible}
+\item{recalculate.p}{Logical. If TRUE recalculates p-values of standardStats if possible.}
 
-\item{alternative}{Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected","directed","both")}
+\item{alternative}{Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").}
 
 \item{estimateZ}{Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.}
 
-\item{T2t}{Logical. If TRUE capital letter T is treated as t-statistic}
+\item{T2t}{Logical. If TRUE capital letter T is treated as t-statistic.}
 
-\item{R2r}{Logical. If TRUE capital letter R is treated as correlation}
+\item{R2r}{Logical. If TRUE capital letter R is treated as correlation.}
 
-\item{select}{Select specific standard statistics only (e.g.: c("t","F","Chi2"))}
+\item{select}{Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).}
 
-\item{rm.na.col}{Logical. If TRUE removes all columns with only NA from standardStats}
+\item{rm.na.col}{Logical. If TRUE removes all columns with only NA from standardStats.}
 
-\item{cermine}{Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results}
+\item{cermine}{Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results.}
+}
+\value{
+List with two elements: vector of extracted results by [allStats()] and matrix of standard results by [standardStats()].
 }
 \description{
-Extract statistical results from plain text, xml, cermxml, html, htm or docx files. The result is a list with a vector containing all identified sticked results and a matrix with containing reported standard statistics and recalculated p-values if computation is possible.
+Extracts statistical results from text string, XML, CERMXML, HTML or DOCX files. The result is a list with a vector containing all identified sticked results and a matrix containing the reported standard statistics and recalculated p-values if computation is possible.
 }
 \examples{
 x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05).",
@@ -50,4 +58,7 @@ x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.0
  faktor A (F(2,18)=6, p<.05, eta(g)2<-.22)",
 "the correlation of x and y was r=.37.")
 get.stats(x)
+}
+\references{
+Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 }

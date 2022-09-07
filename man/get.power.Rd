@@ -7,10 +7,13 @@
 get.power(x)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
+}
+\value{
+Numeric. Identified power values.
 }
 \description{
-Extract a priori power, empirial power values and 1-betaerror
+Extracts a priori power and empirial power values from text.
 }
 \examples{
 x<-"We used G*Power 3 to calculate the needed sample with 

@@ -11,6 +11,7 @@ get.text(
   letter.convert = TRUE,
   greek2text = FALSE,
   sentences = FALSE,
+  paragraph = FALSE,
   cermine = "auto",
   rm.table = TRUE,
   rm.formula = TRUE,
@@ -21,32 +22,37 @@ get.text(
 )
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{sectionsplit}{search patterns for section split (forced to lower case), e.g. c("intro","method","result","discus")}
+\item{sectionsplit}{search patterns for section split (forced to lower case), e.g. c("intro", "method", "result", "discus").}
 
-\item{grepsection}{search pattern to reduce text to specific section namings only}
+\item{grepsection}{search pattern to reduce text to specific section namings only.}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
 
-\item{greek2text}{Logical. If TRUE some greek letters and special characters will be unified to textual representation. (important to extract stats)}
+\item{greek2text}{Logical. If TRUE some greek letters and special characters will be unified to textual representation (important to extract stats).}
 
-\item{sentences}{Logical. IF TRUE text is returned as sectioned list with sentences}
+\item{sentences}{Logical. IF TRUE text is returned as sectioned list with sentences.}
 
-\item{cermine}{Logical. If TRUE CERMINE specific error handling and letter conversion will be applied. If set to "auto" file name ending with 'cermxml$' will set cermine=TRUE}
+\item{paragraph}{Logical. IF TRUE "<New paragraph>" is added at the end of each paragraph to enable manual splitting at paragraphs.}
 
-\item{rm.table}{Logical. If TRUE removes <table> tag from text}
+\item{cermine}{Logical. If TRUE CERMINE specific error handling and letter conversion will be applied. If set to "auto" file name ending with 'cermxml$' will set cermine=TRUE.}
 
-\item{rm.formula}{Logical. If TRUE removes <formula> tags}
+\item{rm.table}{Logical. If TRUE removes <table> tag from text.}
 
-\item{rm.xref}{Logical. If TRUE removes <xref> tag (citing) from text}
+\item{rm.formula}{Logical. If TRUE removes <formula> tags.}
 
-\item{rm.media}{Logical. If TRUE removes <media> tag from text}
+\item{rm.xref}{Logical. If TRUE removes <xref> tag (citing) from text.}
 
-\item{rm.graphic}{Logical. If TRUE removes <graphic> and <fig> tag from text}
+\item{rm.media}{Logical. If TRUE removes <media> tag from text.}
 
-\item{rm.ext_link}{Logical. If TRUE removes <ext link> tag from text}
+\item{rm.graphic}{Logical. If TRUE removes <graphic> and <fig> tag from text.}
+
+\item{rm.ext_link}{Logical. If TRUE removes <ext link> tag from text.}
+}
+\value{
+List with two elements. 1: Character vector with section title/s, 2: Character vector with floating text of sections or list with vector of sentences per section/s if sentences=TRUE.
 }
 \description{
-Extract main textual content from NISO-JATS coded XML file or text as sectioned text
+Extracts main textual content from NISO-JATS coded XML file or text as sectioned text.
 }

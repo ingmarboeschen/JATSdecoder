@@ -7,10 +7,13 @@
 get.multi.comparison(x)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
+}
+\value{
+Character. Identified author/method of multiple comparison correction procedure.
 }
 \description{
-Extracts alpha-/p-value correction method for multiple comparisons from list with 15 correction methods
+Extracts alpha-/p-value correction method for multiple comparisons from list with 15 correction methods.
 }
 \examples{
 x<-"We used Bonferroni corrected p-values."

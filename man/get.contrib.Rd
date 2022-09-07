@@ -7,12 +7,16 @@
 get.contrib(x, remove.html = FALSE, letter.convert = FALSE)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{remove.html}{Logical. If TRUE removes all html tags}
+\item{remove.html}{Logical. If TRUE removes all HTML tags.}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
+}
+\value{
+Character vector with the extracted contributer tag content.
 }
 \description{
-Extract contrib tag/s from NISO-JATS coded XML file or text as vector of contributers
+Extracts contrib tag/s from NISO-JATS coded XML file or text as vector of contributers.
 }
+\keyword{internal}

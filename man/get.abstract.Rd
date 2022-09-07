@@ -13,18 +13,21 @@ get.abstract(
 )
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{sentences}{Logical. If TRUE abstract is returned as vector of sentences}
+\item{sentences}{Logical. If TRUE abstract is returned as vector of sentences.}
 
-\item{remove.title}{Logical. If TRUE removes section titles in abstract}
+\item{remove.title}{Logical. If TRUE removes section titles in abstract.}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
 
-\item{cermine}{Logical. If TRUE and letter.convert=TRUE performs CERMINE specific text correction}
+\item{cermine}{Logical. If TRUE and if 'letter.convert=TRUE' CERMINE specific letter correction is carried out (e.g. inserting of missing operators to statistical results).}
+}
+\value{
+Character. The abstract/s text as floating text or vector of sentences.
 }
 \description{
-Extract abstract tag from NISO-JATS coded XML file or text as vector of abstracts
+Extracts abstract tag from NISO-JATS coded XML file or text as vector of abstracts.
 }
 \examples{
 x<-"Some text <abstract>Some abstract</abstract> some text"

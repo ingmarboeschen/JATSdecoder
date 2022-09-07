@@ -7,12 +7,15 @@
 get.country(x, unifyCountry = TRUE)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{unifyCountry}{Logical. If TRUE replaces country name with standardised country name}
+\item{unifyCountry}{Logical. If TRUE replaces country name with standardised country name.}
+}
+\value{
+Character vector with the extracted country name/s.
 }
 \description{
-Extract country tag from NISO-JATS coded XML file or text as vector of unique countries
+Extracts country tag from NISO-JATS coded XML file or text as vector of unique countries.
 }
 \examples{
 x<-"Some text <country>UK</country> some text <country>England</country>

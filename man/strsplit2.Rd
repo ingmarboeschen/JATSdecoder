@@ -7,16 +7,19 @@
 strsplit2(x, split, type = "remove", perl = FALSE)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
 
-\item{split}{pattern to split text at}
+\item{split}{pattern to split text at.}
 
-\item{type}{one out of "remove", "before", "after"}
+\item{type}{one out of c("remove", "before", "after").}
 
-\item{perl}{Logical. If TRUE uses perl expressions}
+\item{perl}{Logical. If TRUE uses perl expressions.}
+}
+\value{
+A list of the same length as x, the i-th element of which contains the vector of splits of x[i].
 }
 \description{
-Extension of strsplit(). Makes it possible to split lines "before" or "after" a pattern match
+Extension of strsplit(). Makes it possible to split lines before or after a pattern match without removing the pattern.
 }
 \examples{
 x<-"This is some text, where text is the split pattern of the text."

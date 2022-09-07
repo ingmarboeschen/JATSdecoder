@@ -7,12 +7,15 @@
 get.assumptions(x, hits_only = TRUE)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
 
-\item{hits_only}{Logical. If TRUE returns the detected assumtions only, else a hit matrix with all potential assumptions}
+\item{hits_only}{Logical. If TRUE returns the detected assumtions only, else a hit matrix with all potential assumptions is returned.}
+}
+\value{
+Character. Vector with identified statistical assumption/s.
 }
 \description{
-Extract mentioned assumptions in text out of list with 22 statistical assumptions
+Extracts the mentioned statistical assumptions from a text string by a dictionary search of 22 common statistical assumptions.
 }
 \examples{
 x<-"Sphericity assumption and gaus-marcov was violated."

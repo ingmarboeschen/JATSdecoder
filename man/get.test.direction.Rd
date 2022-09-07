@@ -7,8 +7,11 @@
 get.test.direction(x)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
+}
+\value{
+Character.
 }
 \description{
-Extract mentioned test direction/s (one sided, two sided, one and two sided) from text
+Extracts mentioned test direction/s (one sided, two sided, one and two sided) from text.
 }

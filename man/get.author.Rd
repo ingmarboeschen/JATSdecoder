@@ -7,14 +7,17 @@
 get.author(x, paste = "", short.names = FALSE, letter.convert = FALSE)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{paste}{if "" author list is exported as vector with length of number of authors, else collapsed to one cell}
+\item{paste}{if paste!="" author list is collapsed to one cell with seperator specified (e.g. paste=";").}
 
-\item{short.names}{Logical. If TRUE fully available first names will be reduced to one letter abbreviation}
+\item{short.names}{Logical. If TRUE fully available first names will be reduced to single letter abbreviation.}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
+}
+\value{
+Character vector with the extracted author name/s.
 }
 \description{
-Extract author tag/s from NISO-JATS coded XML file or text as vector of authors
+Extracts author tag information from NISO-JATS coded XML file or text.
 }

@@ -12,14 +12,17 @@ get.references(
 )
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
 
-\item{letter.convert}{Logical. If TRUE converts hex and html coded characters to unicode}
+\item{letter.convert}{Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.}
 
-\item{remove.html}{Logical. If TRUE removes all html tags}
+\item{remove.html}{Logical. If TRUE removes all HTML tags.}
 
-\item{extract}{part of refernces to extract (one of "full" or "title")}
+\item{extract}{part of refernces to extract (one of "full" or "title").}
+}
+\value{
+Character vector with extracted references from reference list.
 }
 \description{
-Extract reference list from NISO-JATS coded XML file or text as vector of references
+Extracts reference list from NISO-JATS coded XML file or text as vector of references.
 }

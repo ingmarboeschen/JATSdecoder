@@ -7,17 +7,21 @@
 get.sentence.with.pattern(x, patterns = c(""), tolower = TRUE)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{sentence vector to process.}
 
-\item{patterns}{search terms}
+\item{patterns}{search terms.}
 
-\item{tolower}{Logical. If TRUE converts search terms and text to lower case}
+\item{tolower}{Logical. If TRUE converts search terms and text to lower case.}
+}
+\value{
+Character. Vector with sentences, that contain search pattern.
 }
 \description{
-Return lines with search term patterns
+Returns lines with search term patterns.
 }
 \examples{
-text<-c("This demo demonstrates how get.sentence.with.pattern works.","The is a simple 0, 1.")
+text<-c("This demo", "demonstrates how", "get.sentence.with.pattern works.")
 get.sentence.with.pattern(text,c("Demo","example","work"))
-get.sentence.with.pattern(text,c("Demo","example","work"),tolower=TRUE)
+get.sentence.with.pattern(text,c("Demo","example","work"),tolower=FALSE)
 }
+\keyword{internal}

@@ -7,8 +7,11 @@
 has.interaction(x)
 }
 \arguments{
-\item{x}{text to process}
+\item{x}{text string to process.}
+}
+\value{
+Character vector with type/s of identified interaction/moderator/mediator effect.
 }
 \description{
-Identify interaction/moderator/mediator effect in text
+Identifies mentiones of interaction/moderator/mediator effect in text.
 }

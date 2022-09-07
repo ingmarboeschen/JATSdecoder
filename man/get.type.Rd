@@ -7,8 +7,11 @@
 get.type(x)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
+}
+\value{
+Character string with extracted article type.
 }
 \description{
-Extract article-type tag from NISO-JATS coded XML file or text
+Extracts article type from NISO-JATS coded XML file or text.
 }

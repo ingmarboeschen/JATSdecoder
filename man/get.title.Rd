@@ -7,8 +7,11 @@
 get.title(x)
 }
 \arguments{
-\item{x}{a NISO-JATS coded XML file or text}
+\item{x}{a NISO-JATS coded XML file or text.}
+}
+\value{
+Character string with extracted article title.
 }
 \description{
-Extract articles title from NISO-JATS coded XML file or text
+Extracts article title from NISO-JATS coded XML file or text.
 }
