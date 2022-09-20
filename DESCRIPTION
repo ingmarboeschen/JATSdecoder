@@ -1,9 +1,9 @@
 Package: JATSdecoder
 Title: A Metadata and Text Extraction and Manipulation Tool Set
-Date: 2022-10-02
+Date: 2022-09-09
 Version: 1.1
 Authors@R: person("Ingmar", "Böschen", email = "ingmar.boeschen@uni-hamburg.de", role = c("aut", "cre"))
-Description: Provides a function collection to extract metadata, sectioned text and study characteristics from scientific articles. JATSdecoder() converts NISO-JATS-tagged XML files to a structured list with elements title, author, journal, history, link, abstract, sectioned text and references. Articles in PDF format can be easily converted to NISO-JATS with the open source software CERMINE (<https://github.com/CeON/CERMINE>). study.character() extracts multiple study characteristics like number of included studies, statistical methods used, alpha error, power, statistical results, correction method for multiple testing, software used. An estimation of the involved sample size is performed based on reports within the abstract and the reported degrees of freedom within statistical results. In addition, the package contains some useful functions to process text (text2sentences(), text2num(), ngram(), strsplit2(), grep2()).
+Description: Provides a function collection to extract metadata, sectioned text and study characteristics from scientific articles. Articles in PDF format can be converted to NISO-JATS with the Content ExtRactor and MINEr (CERMINE, <https://github.com/CeON/CERMINE>). For convenience, two functions bundle the extraction heuristics: JATSdecoder() converts NISO-JATS-tagged XML files to a structured list with elements title, author, journal, history, doi abstract, sectioned text and reference list. study.character() extracts multiple study characteristics like number of included studies, statistical methods used, alpha error, power, statistical results, correction method for multiple testing, software used. An estimation of the involved sample size is performed based on reports within the abstract and the reported degrees of freedom within statistical results. In addition, the package contains some useful functions to process text (text2sentences(), text2num(), ngram(), strsplit2(), grep2()).
 Depends: R (>= 3.1.1)
 Imports: utils, stats, NLP, openNLP
 License: GPL-3
