@@ -5,6 +5,7 @@
 #' @param paste if paste!="" author list is collapsed to one cell with seperator specified (e.g. paste=";").
 #' @param short.names Logical. If TRUE fully available first names will be reduced to single letter abbreviation.
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
 #' @return Character vector with the extracted author name/s.
 #' @export
 

@@ -2,6 +2,7 @@
 #'
 #' Extracts HTML tables as vector of tables.
 #' @param x HTML file or html text.
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
 #' @return Character vector with extracted table in html coding.
 #' @export
 

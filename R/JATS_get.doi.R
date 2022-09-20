@@ -2,6 +2,7 @@
 #'
 #' Extracts articles doi from NISO-JATS coded XML file or text.
 #' @param x a NISO-JATS coded XML file or text.
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
 #' @return Character string with the extracted doi.
 #' @export
 

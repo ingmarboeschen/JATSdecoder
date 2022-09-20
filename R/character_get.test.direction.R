@@ -3,6 +3,7 @@
 #' Extracts mentioned test direction/s (one sided, two sided, one and two sided) from text.
 #' @param x text string to process.
 #' @return Character. 
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 #' @export
 
 get.test.direction<-function(x){

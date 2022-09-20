@@ -5,6 +5,7 @@
 #' @param role Logical. If TRUE adds role to editor name, if available.
 #' @param short.names Logical. If TRUE reduces fully available first names to one letter abbreviation.
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
 #' @return Character string with the extracted editor name/s.
 #' @export
 

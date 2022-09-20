@@ -1,9 +1,9 @@
 #' get.stats
 #'
 #' Extracts statistical results from text string, XML, CERMXML, HTML or DOCX files. The result is a list with a vector containing all identified sticked results and a matrix containing the reported standard statistics and recalculated p-values if computation is possible.
-#' @param x DOCX file path, NISO-JATS coded XML file path or plain textual content
-#' @param stats.mode Select subset of standardStats. One of: c("all", "checkable", "computable", "uncomputable").
-#' @param recalculate.p Logical. If TRUE recalculates p-values of standardStats if possible.
+#' @param x NISO-JATS coded XML or DOCX file path or plain textual content.
+#' @param stats.mode Select a subset of test results by p-value checkability for output. One of: c("all", "checkable", "computable", "uncomputable").
+#' @param recalculate.p Logical. If TRUE recalculates p-values of test results if possible.
 #' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
 #' @param T2t Logical. If TRUE capital letter T is treated as t-statistic.
@@ -12,10 +12,11 @@
 #' @param select Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA from standardStats.
 #' @param cermine Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results.
-#' @return List with two elements: vector of extracted results by [allStats()] and matrix of standard results by [standardStats()].
-#' @source A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
-#' @source Statistical results from subsets of articles in the PubMed Central library can be analyzed and used to identify studies with specific measures and effect and sample sizes. Further, p-value checking is possible on selections of less than 20,000 articles.  is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+#' @return If output="all": list with two elements. E1: vector of extracted results by \code{\link[JATSdecoder]{allStats}} and E2: matrix of standard results by \code{\link[JATSdecoder]{standardStats}}.\cr If output="allStats": vector of extracted results by \code{\link[JATSdecoder]{allStats}}.\cr If output="standardStats": matrix of standard results by \code{\link[JATSdecoder]{standardStats}}.
+#' @source A minimal web application that extracts statistical results from single documents with \code{\link[JATSdecoder]{get.stats}} is hosted at: \href{https://www.get-stats.app}{https://www.get-stats.app/}
+#' @source Statistical results extracted with \code{\link[JATSdecoder]{get.stats}} can be analyzed and used to identify articles stored in the PubMed Central library at: \href{https://www.scianalyzer.com}{https://www.scianalyzer.com/}. 
 #' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting different study characteristics at once.
 #' @export
 #' @examples
 #' x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05).",

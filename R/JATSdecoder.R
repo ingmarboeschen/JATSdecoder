@@ -16,12 +16,26 @@
 #' @param authorconnection Logical. If TRUE outputs connections of a maximum of 50 involved authors as vector c("A - B","A - C", ...).
 #' @return List with extracted meta data, sectioned text and references.
 #' @note A short tutorial on how to work with JATSdecoder and the generated outputs can be found at: \href{https://github.com/ingmarboeschen/JATSdecoder}{https://github.com/ingmarboeschen/JATSdecoder}  
-#' @source An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+#' @source An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{https://www.scianalyzer.com}{https://www.scianalyzer.com/}
 #' @source The XML version of PubMed Central database articles can be downloaded in bulk from:\cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting different study characteristics at once.
+#' @seealso \code{\link[JATSdecoder]{get.stats}} for extracting statistical results from textual input and different file formats.
 #' @references Böschen (2021). "Software review: The JATSdecoder package - extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed Central’s open access database.” \emph{Scientometrics.} doi: \href{https://link.springer.com/article/10.1007/s11192-021-04162-z}{10.1007/s1119202104162z}.
 #' @export
+#' @examples
+#' \dontrun{
+#' # download example XML file via URL
+#' URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
+#' download.file(URL,"file.xml")
+#' # convert full article to list with metadata, sectioned text and reference list
+#' JATSdecoder("file.xml")
+#' # extract specific content (here: abstract and text)
+#' JATSdecoder("file.xml",output=c("abstract","text"))
+#' # or use specific functions
+#' get.abstract("file.xml")
+#' get.text("file.xml")
+#' }
 
-# define function
 JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experiment","conclu","implica","discussion"),grepsection="",
                          sentences=FALSE,paragraph=FALSE,abstract2sentences=TRUE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,
                       countryconnection=FALSE,authorconnection=FALSE){

@@ -3,6 +3,7 @@
 #' Extracts mentioned software from text by dictionary search for 63 software names (object: .software_names).
 #' @param x text string to process.
 #' @param add.software a text vector with additional software name patterns to search for.
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 #' @return Character. Vector with identified statistical software/s.
 #' @export
 

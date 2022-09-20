@@ -3,6 +3,7 @@
 #' Extracts country tag from NISO-JATS coded XML file or text as vector of unique countries.
 #' @param x a NISO-JATS coded XML file or text.
 #' @param unifyCountry Logical. If TRUE replaces country name with standardised country name.
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
 #' @return Character vector with the extracted country name/s.
 #' @export
 #' @examples

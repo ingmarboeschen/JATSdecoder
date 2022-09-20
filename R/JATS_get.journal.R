@@ -3,6 +3,7 @@
 #' Extracts journal tag from NISO-JATS coded XML file or text.
 #' @param x a NISO-JATS coded XML file or text.
 #' @return Character string with the extracted journal name.
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
 #' @export
 #' @examples
 #' x<-"Some text <journal-title>PLoS One</journal-title> some text"

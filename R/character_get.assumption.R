@@ -3,6 +3,7 @@
 #' Extracts the mentioned statistical assumptions from a text string by a dictionary search of 22 common statistical assumptions.
 #' @param x text string to process.
 #' @param hits_only Logical. If TRUE returns the detected assumtions only, else a hit matrix with all potential assumptions is returned.
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 #' @return Character. Vector with identified statistical assumption/s.
 #' @export
 #' @examples

@@ -3,6 +3,7 @@
 #' Extracts category tag/s from NISO-JATS coded XML file or text as vector of categories.
 #' @param x a NISO-JATS coded XML file or text.
 #' @return Character vector with the extracted category name/s.
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
 #' @export
 #' @examples
 #' x<-"Some text <article-categories>Some category</article-categories> some text"

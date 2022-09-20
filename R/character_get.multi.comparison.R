@@ -2,6 +2,7 @@
 #'
 #' Extracts alpha-/p-value correction method for multiple comparisons from list with 15 correction methods.
 #' @param x text string to process.
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 #' @return Character. Identified author/method of multiple comparison correction procedure.
 #' @export
 #' @examples

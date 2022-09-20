@@ -3,6 +3,7 @@
 #' Extracts available publishing history tags from NISO-JATS coded XML file or text and compute pubDate and pubyear.
 #' @param x a NISO-JATS coded XML file or text.
 #' @param remove.na Logical. If TRUE hides non available date stamps.
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
 #' @return Character vector with the extracted dates of publishing history.
 #' @export
 

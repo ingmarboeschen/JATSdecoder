@@ -6,6 +6,7 @@
 #' @param remove.title Logical. If TRUE removes section titles in abstract.
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
 #' @param cermine Logical. If TRUE and if 'letter.convert=TRUE' CERMINE specific letter correction is carried out (e.g. inserting of missing operators to statistical results).
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
 #' @return Character. The abstract/s text as floating text or vector of sentences.
 #' @export
 #' @examples

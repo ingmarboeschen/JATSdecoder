@@ -2,7 +2,8 @@
 #'
 #' Extracts mentioned R packages from text.
 #' @param x text string to process.
-#' @param update.package.list Logical. If TRUE update of list with available packages is downloaded from CRAN with available.packages().
+#' @param update.package.list Logical. If TRUE update of list with available packages is downloaded from CRAN with utils::available.packages().
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 #' @return Character. Vector with identified R package/s.
 #' @importFrom utils available.packages
 #' @export

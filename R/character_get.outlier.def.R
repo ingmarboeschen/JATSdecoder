@@ -1,19 +1,22 @@
 #' get.outlier.def
 #'
 #' Extracts outlier/extreme value definition/removal in standard deviations, if present in text.
-#' @param x text string to process.
+#' @param x Character. A text string to process.
+#' @param range Numeric vector with length=2. Possible result space of extracted value/s in standard deviations. Use 'c(0,Inf)' for no restriction.
 #' @return Numeric. Vector with identified outlier definition in standard deviations.
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 #' @export
 #' @examples
 #' x<-"We removed 4 extreme values that were 3 SD above mean."
 #' get.outlier.def(x)
 
-get.outlier.def<-function(x){
+get.outlier.def<-function(x,range=c(1,10)){
 # convert to sentences if has length 1
 if(length(x)==1) x<-text2sentences(x)
 # remove num%* SDS
 x<-gsub("[0-9\\.]*%* SDS","",x)
-
+# add space between operator and number
+x<-gsub("([<>=])([0-9])","\\1 \\2",x)
 # lowerize
 x<-tolower(x)
 # remove numbers with percent sign
@@ -41,8 +44,8 @@ if(length(out)>0){
   # extract unique values and reduce to plausible values >1 and <10
   if(length(temp)>0){
     temp<-unique(temp)
-    temp<-temp[temp>1]
-    temp<-temp[temp<10]
+    temp<-temp[temp>=min(abs(range))]
+    temp<-temp[temp<=max(abs(range))]
   } else temp<-character(0)
 } else temp<-character(0)
 

@@ -3,6 +3,7 @@
 #' Extracts a priori power and empirial power values from text.
 #' @param x text string to process.
 #' @return Numeric. Identified power values.
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 #' @export
 #' @examples
 #' x<-"We used G*Power 3 to calculate the needed sample with 

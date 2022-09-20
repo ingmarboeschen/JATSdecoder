@@ -4,7 +4,7 @@
 #' Performs four different extraction heuristics for sample sizes mentioned in abstract, text and statistical results.
 #' 
 #' Sample size extraction from abstract:\cr
-#' - Extracts N= from abstract text and performs POS search with list of synonyms of sample units
+#' - Extracts N= from abstract text and performs position-of-speech search with list of synonyms of sample units
 #' 
 #' Sample size extraction from text:\cr
 #' - Unifies and extracts textlines with age descriptions, than computes sum of hits as nage
@@ -24,7 +24,8 @@
 #' @param quantileDF quantile of (df1-1)+(df2+2) to extract.
 #' @param max.only Logical. If TRUE only the final estimate will be returned, if FALSE all sub estimates are returned as well.
 #' @param max.parts Logical. If FALSE outputs all captured sample sizes in sub inputs.
-#' @return Numeric. Vector with estimated sample sizes by part of text.
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+#' @return Numeric vector with extracted sample sizes by input and estimated sample size.
 #' @importFrom utils head
 #' @importFrom stats quantile
 #' @importFrom NLP as.String

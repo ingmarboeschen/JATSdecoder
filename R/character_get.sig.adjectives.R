@@ -3,6 +3,7 @@
 #' Extracts adjectives used for in/significance out of list with 37 potential adjectives.
 #' @param x text string to process.
 #' @param unique_only Logical. If TRUE returns unique hits only.
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 #' @return Character. Vector with identified adjectives.
 #' @export
 #' @examples

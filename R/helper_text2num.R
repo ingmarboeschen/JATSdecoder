@@ -36,6 +36,8 @@ if(fraction==TRUE)   x<-unlist(lapply(x,function(y) tryCatch(frac2num(y),error=f
 x<-gsub("([<=>]-) ([\\.0-9])","\\1\\2",x)
 # remove spaces in front of "." at end 
 x<-gsub(" \\.",".",x)
+# correct "[;,].num" -> "[;,] .num"
+x<-gsub("([,;])(\\.[0-9])","\\1 \\2",x)
 # output
 return(x)
 }
@@ -201,7 +203,7 @@ x<-unlist(strsplit2(x,"[\\(]*[^-\\.0-9][-\\.0-9][-\\.0-9]*?[\\)]*\\^","before"))
         res<-rep(NA,length(a))
         # if has: (-num)^num
         if(length(grep("\\(-[0-9\\.]",a))>0) res[grep("\\(-[0-9\\.]",a)]<-as.numeric((gsub("[\\(\\)]","",a[grep("\\(-[0-9\\.]",a)])))^as.numeric(pow[grep("\\(-[0-9\\.]",a)])
-        if(length(grep("\\(-[0-9\\.]",a,inv=T))>0) res[grep("\\(-[0-9\\.]",a,inv=T)]<-as.numeric((gsub("[\\(\\)]","",a[grep("\\(-[0-9\\.]",a,inv=T)])))^as.numeric(pow[grep("\\(-[0-9\\.]",a,inv=T)])*sign(as.numeric((gsub("[\\(\\)]","",a[grep("\\(-[0-9\\.]",a,inv=T)]))))
+        if(length(grep("\\(-[0-9\\.]",a,invert=TRUE))>0) res[grep("\\(-[0-9\\.]",a,invert=TRUE)]<-as.numeric((gsub("[\\(\\)]","",a[grep("\\(-[0-9\\.]",a,invert=TRUE)])))^as.numeric(pow[grep("\\(-[0-9\\.]",a,invert=TRUE)])*sign(as.numeric((gsub("[\\(\\)]","",a[grep("\\(-[0-9\\.]",a,invert=TRUE)]))))
         return(res)
     }
     
@@ -320,4 +322,5 @@ if(length(grep("\\*[-\\.0-9]|\\* [-\\.0-9]",x))>0){
     
     return(x)
 },error=function(e) return(x))
-}
+
+    }

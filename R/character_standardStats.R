@@ -1,7 +1,7 @@
 #' standardStats
 #'
-#' Extracts and restructures statistical standard results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values into a matrix. Performs a recomputation of two- and one-sided p-values if possible. This function is implemented in [get.stas()].
-#' @param x result vector by [allStats()].
+#' Extracts and restructures statistical standard results like Z, t, Cohen's d, F, eta^2, r, R^2, chi^2, BF_10, Q, U, H, OR, RR, beta values into a matrix. Performs a recomputation of two- and one-sided p-values if possible. This function is implemented in \code{\link[JATSdecoder]{get.stats}} which returns the results of \code{\link[JATSdecoder]{allStats}} and \code{\link[JATSdecoder]{standardStats}}. Besides only plain textual input, \code{\link[JATSdecoder]{get.stats}} enables direct processing of different file formats (NISO-JATS coded XML, DOCX, HTML) without text preprocessing.
+#' @param x result vector by \code{\link[JATSdecoder]{allStats}} or chracter vector with a statistical test result per cell, e.g. c("t(12)=1.2, p>.05","chi2(2)=12.7, p<.05")
 #' @param stats.mode Select subset of standard stats. One of: c("all", "checkable", "computable", "uncomputable").
 #' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible.
 #' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").
@@ -10,16 +10,18 @@
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation.
 #' @param select Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA.
-#' @return Matrix with recognized statistical standard results and recalculated p-values.
+#' @return Matrix with recognized statistical standard results and recalculated p-values. Empty, if no result is detected.
+#' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+#' @seealso \code{\link[JATSdecoder]{get.stats}} for extracting statistical results from textual input and different file formats.
 #' @importFrom stats pf pchisq pt pnorm
-#' @source A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
-#' @source Statistical results from subsets of articles in the PubMed Central library can be analyzed and used to identify studies with specific measures and effect and sample sizes. Further, p-value checking is possible on selections of less than 20,000 articles.  is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+#' @source A minimal web application that extracts statistical results from single documents with \code{\link[JATSdecoder]{get.stats}} is hosted at: \href{https://www.get-stats.app}{https://www.get-stats.app/}
+#' @source Statistical results extracted with \code{\link[JATSdecoder]{get.stats}} can be analyzed and used to identify articles stored in the PubMed Central library at: \href{https://www.scianalyzer.com}{https://www.scianalyzer.com/}. 
 #' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 #' @export
 #' @examples
-#' x<-c("t(38.8)<=>1.96, p=.002","F(2,39)<=>4, p<=>.05",
-#' "U(2)=200, p>.25","Z<=>2.1, F(20.8,22.6)=200, p<.005, 
-#' BF(01)<=>4","chi=3.2, r(34)<=>-.7, p<.01, R2=76%.")
+#' x<-c("t(38.8)<=>1.96, p<=>.002","F(2,39)<=>4, p<=>.05",
+#' "U(2)=200, p>.25","Z=2.1, F(20.8,22.6)=200, p<.005, 
+#' BF(01)>4","chi=3.2, r(34)=-.7, p<.01, R2=76%.")
 #' standardStats(x)
 
 standardStats<-function(x,stats.mode="all",recalculate.p=TRUE,alternative="undirected",estimateZ=FALSE,T2t=FALSE,R2r=FALSE,select=NULL,rm.na.col=TRUE){

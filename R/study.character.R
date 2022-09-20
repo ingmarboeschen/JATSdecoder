@@ -1,7 +1,7 @@
 #' study.character
 #'
 #' Extracts study characteristics out of a NISO-JATS coded XML file. Use \href{https://github.com/CeON/CERMINE}{CERMINE} to convert PDF to CERMXML files.
-#' @param x JATS coded XML file.
+#' @param x NISO-JATS coded XML file.
 #' @param text.mode Numeric. Defines text parts to extract statistical results from (text.mode=1: abstract and full text, text.mode=2: method and result section, text.mode=3: result section only).
 #' @param captions Logical. If TRUE captions text will be scanned for statistical results.
 #' @param stats.mode Character. Select subset of standard stats. One of: c("all", "checkable", "computable").
@@ -23,11 +23,22 @@
 #' "test_direction", "sig_adjectives", "software", "Rpackage", "stats", \cr
 #' "standardStats", "estimated_sample_size").
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA in extracted standard statistics.
+#' @note A short tutorial on how to work with JATSdecoder and the generated outputs can be found at: \href{https://github.com/ingmarboeschen/JATSdecoder}{https://github.com/ingmarboeschen/JATSdecoder}
 #' @return List with extracted study characteristics.
-#' @source An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+#' @seealso \code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+#' @seealso \code{\link[JATSdecoder]{get.stats}} for extracting statistical results from textual input and different file formats.
+#' @source An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{https://www.scianalyzer.com}{https://www.scianalyzer.com/}
 #' @source The XML version of PubMed Central database articles can be downloaded in bulk from: \cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}
 #' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 #' @export
+#' @examples
+#' \dontrun{
+#' # download example XML file via URL
+#' URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
+#' download.file(URL,"file.xml")
+#' # convert full article to list with study characteristics
+#' study.character("file.xml")
+#' }
 
 study.character<-function(x,
                           stats.mode="all",
