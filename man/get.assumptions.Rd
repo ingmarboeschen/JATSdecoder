@@ -21,3 +21,6 @@ Extracts the mentioned statistical assumptions from a text string by a dictionar
 x<-"Sphericity assumption and gaus-marcov was violated."
 get.assumptions(x)
 }
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+}

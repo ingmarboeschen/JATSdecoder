@@ -29,3 +29,6 @@ grep2(c("a","b"),x)
 grep2(c("a","b"),x,invert=TRUE)
 grep2(c("a","b"),x,value=FALSE)
 }
+\seealso{
+\code{\link[base]{grep}}
+}

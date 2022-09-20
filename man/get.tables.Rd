@@ -15,3 +15,6 @@ Character vector with extracted table in html coding.
 \description{
 Extracts HTML tables as vector of tables.
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

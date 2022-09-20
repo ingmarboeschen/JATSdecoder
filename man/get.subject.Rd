@@ -27,3 +27,6 @@ x<-"Some text <subject>Some subject</subject> TEXT ...
 get.subject(x)
 get.subject(x,paste=", ")
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

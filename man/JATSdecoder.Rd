@@ -4,7 +4,7 @@
 \alias{JATSdecoder}
 \title{JATSdecoder}
 \source{
-An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{https://www.scianalyzer.com}{https://www.scianalyzer.com/}
 
 The XML version of PubMed Central database articles can be downloaded in bulk from:\cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}
 }
@@ -62,6 +62,25 @@ Function to extract and restructure NISO-JATS coded XML file or text into a list
 \note{
 A short tutorial on how to work with JATSdecoder and the generated outputs can be found at: \href{https://github.com/ingmarboeschen/JATSdecoder}{https://github.com/ingmarboeschen/JATSdecoder}
 }
+\examples{
+\dontrun{
+# download example XML file via URL
+URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
+download.file(URL,"file.xml")
+# convert full article to list with metadata, sectioned text and reference list
+JATSdecoder("file.xml")
+# extract specific content (here: abstract and text)
+JATSdecoder("file.xml",output=c("abstract","text"))
+# or use specific functions
+get.abstract("file.xml")
+get.text("file.xml")
+}
+}
 \references{
 Böschen (2021). "Software review: The JATSdecoder package - extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed Central’s open access database.” \emph{Scientometrics.} doi: \href{https://link.springer.com/article/10.1007/s11192-021-04162-z}{10.1007/s1119202104162z}.
+}
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting different study characteristics at once.
+
+\code{\link[JATSdecoder]{get.stats}} for extracting statistical results from textual input and different file formats.
 }

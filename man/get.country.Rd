@@ -22,3 +22,6 @@ x<-"Some text <country>UK</country> some text <country>England</country>
     Text<country>Berlin, Germany</country>"
 get.country(x)
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

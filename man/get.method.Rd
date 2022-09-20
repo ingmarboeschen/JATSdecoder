@@ -24,3 +24,6 @@ x<-"We used multiple regression analysis and
 two sample t tests to evaluate our results."
 get.method(x)
 }
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+}

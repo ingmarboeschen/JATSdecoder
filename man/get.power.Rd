@@ -20,3 +20,6 @@ x<-"We used G*Power 3 to calculate the needed sample with
 beta error rate set to 12\% and alpha error to .05."
 get.power(x)
 }
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+}

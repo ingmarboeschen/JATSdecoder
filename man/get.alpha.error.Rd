@@ -4,12 +4,12 @@
 \alias{get.alpha.error}
 \title{get.alpha.error}
 \usage{
-get.alpha.error(x, p2alpha = FALSE, output = "list")
+get.alpha.error(x, p2alpha = TRUE, output = "list")
 }
 \arguments{
 \item{x}{text string to process.}
 
-\item{p2alpha}{Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections).}
+\item{p2alpha}{Logical. If TRUE detects and extracts alpha errors denoted with a critical p-value (may lead to some false positive detections).}
 
 \item{output}{One of c("list","vector"). If output="list" returns a list containing: alpha_error, \cr
 corrected_alpha, alpha_from_CI, alpha_max, alpha_min. If output="vector" returns unique alpha errors but no distinction of types.}
@@ -28,4 +28,7 @@ x<-c("We used p<.05 as level of significance.",
      "We display .95 CIs and use an adjusted alpha of .10/3.",
      "The effect was significant with p<.025.")
 get.alpha.error(x)
+}
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 }

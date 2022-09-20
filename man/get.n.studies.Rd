@@ -12,8 +12,11 @@ get.n.studies(x, tolower = TRUE)
 \item{tolower}{Logical. If TRUE lowerises text and search patterns for processing.}
 }
 \value{
-Numeric number of identified number of studies.
+Numeric number of identified number of studies. Returns '1' as standard output.
 }
 \description{
 Extracts number of studies/experiments from text.
+}
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 }

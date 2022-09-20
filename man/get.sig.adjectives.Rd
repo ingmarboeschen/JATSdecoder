@@ -22,3 +22,6 @@ get.sig.adjectives(
  x<-"We found very highly significance for type 1 effect"
 )
 }
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+}

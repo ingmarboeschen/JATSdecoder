@@ -30,7 +30,7 @@ est.ss(
 \item{max.parts}{Logical. If FALSE outputs all captured sample sizes in sub inputs.}
 }
 \value{
-Numeric. Vector with estimated sample sizes by part of text.
+Numeric vector with extracted sample sizes by input and estimated sample size.
 }
 \description{
 Function to estimate studies sample size by maximizing different conservative estimates.
@@ -38,7 +38,7 @@ Performs four different extraction heuristics for sample sizes mentioned in abst
 }
 \details{
 Sample size extraction from abstract:\cr
-- Extracts N= from abstract text and performs POS search with list of synonyms of sample units
+- Extracts N= from abstract text and performs position-of-speech search with list of synonyms of sample units
 
 Sample size extraction from text:\cr
 - Unifies and extracts textlines with age descriptions, than computes sum of hits as nage
@@ -56,4 +56,7 @@ Sample size extraction by degrees of freedom with result of standardStats(allSta
  x<-"Our sample consists of three hundred twenty five undergraduate students.
      The F-test indicates significant differences in means F(2,102)=3.21, p<.05."
  est.ss(abstract=a,text=x)
+}
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 }

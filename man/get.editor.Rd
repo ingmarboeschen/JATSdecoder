@@ -21,3 +21,6 @@ Character string with the extracted editor name/s.
 \description{
 Extracts editor tag from NISO-JATS coded XML file or text as vector of editors.
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

@@ -21,3 +21,6 @@ Character vector with the extracted author name/s.
 \description{
 Extracts author tag information from NISO-JATS coded XML file or text.
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

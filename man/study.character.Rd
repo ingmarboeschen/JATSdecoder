@@ -4,7 +4,7 @@
 \alias{study.character}
 \title{study.character}
 \source{
-An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{https://www.scianalyzer.com}{https://www.scianalyzer.com/}
 
 The XML version of PubMed Central database articles can be downloaded in bulk from: \cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}
 }
@@ -18,7 +18,7 @@ study.character(
   T2t = FALSE,
   R2r = FALSE,
   selectStandardStats = NULL,
-  p2alpha = FALSE,
+  p2alpha = TRUE,
   alpha_output = "list",
   captions = TRUE,
   text.mode = 1,
@@ -31,7 +31,7 @@ study.character(
 )
 }
 \arguments{
-\item{x}{JATS coded XML file.}
+\item{x}{NISO-JATS coded XML file.}
 
 \item{stats.mode}{Character. Select subset of standard stats. One of: c("all", "checkable", "computable").}
 
@@ -77,6 +77,23 @@ List with extracted study characteristics.
 \description{
 Extracts study characteristics out of a NISO-JATS coded XML file. Use \href{https://github.com/CeON/CERMINE}{CERMINE} to convert PDF to CERMXML files.
 }
+\note{
+A short tutorial on how to work with JATSdecoder and the generated outputs can be found at: \href{https://github.com/ingmarboeschen/JATSdecoder}{https://github.com/ingmarboeschen/JATSdecoder}
+}
+\examples{
+\dontrun{
+# download example XML file via URL
+URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
+download.file(URL,"file.xml")
+# convert full article to list with study characteristics
+study.character("file.xml")
+}
+}
 \references{
 Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
+}
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+
+\code{\link[JATSdecoder]{get.stats}} for extracting statistical results from textual input and different file formats.
 }

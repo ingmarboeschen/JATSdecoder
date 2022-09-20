@@ -19,3 +19,6 @@ Extracts category tag/s from NISO-JATS coded XML file or text as vector of categ
 x<-"Some text <article-categories>Some category</article-categories> some text"
 get.category(x)
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

@@ -56,3 +56,6 @@ List with two elements. 1: Character vector with section title/s, 2: Character v
 \description{
 Extracts main textual content from NISO-JATS coded XML file or text as sectioned text.
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

@@ -36,3 +36,6 @@ x<-"Some text <abstract>Some abstract</abstract> TEXT <abstract with subsettings
 Some other abstract</abstract> Some text "
 get.abstract(x)
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

@@ -4,9 +4,9 @@
 \alias{get.stats}
 \title{get.stats}
 \source{
-A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
+A minimal web application that extracts statistical results from single documents with \code{\link[JATSdecoder]{get.stats}} is hosted at: \href{https://www.get-stats.app}{https://www.get-stats.app/}
 
-Statistical results from subsets of articles in the PubMed Central library can be analyzed and used to identify studies with specific measures and effect and sample sizes. Further, p-value checking is possible on selections of less than 20,000 articles.  is hosted at: \href{www.scianalyzer.com}{https://www.scianalyzer.com/}
+Statistical results extracted with \code{\link[JATSdecoder]{get.stats}} can be analyzed and used to identify articles stored in the PubMed Central library at: \href{https://www.scianalyzer.com}{https://www.scianalyzer.com/}.
 }
 \usage{
 get.stats(
@@ -24,13 +24,13 @@ get.stats(
 )
 }
 \arguments{
-\item{x}{DOCX file path, NISO-JATS coded XML file path or plain textual content}
+\item{x}{NISO-JATS coded XML or DOCX file path or plain textual content.}
 
 \item{output}{Select the desired output. One of c("both", "allStats", "standardStats").}
 
-\item{stats.mode}{Select subset of standardStats. One of: c("all", "checkable", "computable", "uncomputable").}
+\item{stats.mode}{Select a subset of test results by p-value checkability for output. One of: c("all", "checkable", "computable", "uncomputable").}
 
-\item{recalculate.p}{Logical. If TRUE recalculates p-values of standardStats if possible.}
+\item{recalculate.p}{Logical. If TRUE recalculates p-values of test results if possible.}
 
 \item{alternative}{Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").}
 
@@ -47,7 +47,7 @@ get.stats(
 \item{cermine}{Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results.}
 }
 \value{
-List with two elements: vector of extracted results by [allStats()] and matrix of standard results by [standardStats()].
+If output="all": list with two elements. E1: vector of extracted results by \code{\link[JATSdecoder]{allStats}} and E2: matrix of standard results by \code{\link[JATSdecoder]{standardStats}}.\cr If output="allStats": vector of extracted results by \code{\link[JATSdecoder]{allStats}}.\cr If output="standardStats": matrix of standard results by \code{\link[JATSdecoder]{standardStats}}.
 }
 \description{
 Extracts statistical results from text string, XML, CERMXML, HTML or DOCX files. The result is a list with a vector containing all identified sticked results and a matrix containing the reported standard statistics and recalculated p-values if computation is possible.
@@ -61,4 +61,7 @@ get.stats(x)
 }
 \references{
 Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
+}
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting different study characteristics at once.
 }

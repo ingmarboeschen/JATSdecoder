@@ -31,3 +31,6 @@ x<-"Some text <kwd>Keyword 1</kwd>, <kwd>Keyword 2</kwd> some text"
 get.keywords(x)
 get.keywords(x,paste(", "))
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

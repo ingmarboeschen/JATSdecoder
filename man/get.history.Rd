@@ -17,3 +17,6 @@ Character vector with the extracted dates of publishing history.
 \description{
 Extracts available publishing history tags from NISO-JATS coded XML file or text and compute pubDate and pubyear.
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

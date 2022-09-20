@@ -4,19 +4,19 @@
 \alias{allStats}
 \title{allStats}
 \source{
-A minimal web application that extracts statistical results from single documents with [get.stats()] is hosted at: \href{www.get-stats.app}{https://www.get-stats.app/}
+A minimal web application that extracts statistical results from single documents with \code{\link[JATSdecoder]{get.stats}} is hosted at: \href{https://www.get-stats.app}{https://www.get-stats.app/}
 }
 \usage{
 allStats(x)
 }
 \arguments{
-\item{x}{text string}
+\item{x}{A character string that may contain statistical results.}
 }
 \value{
-Vector with sticked results.
+Vector with sticked results. Empty, if no result is detected.
 }
 \description{
-Extracts any statistical results from text string with some uniformizations as vector. This function is implemented in [get.stas()].
+Extracts statistical results within a text string and outputs a vector of sticked results, e.g.: c("t(12)=1.2, p>.05","r's(33)>.7, ps<.05"), that can be further processed with \code{\link[JATSdecoder]{standardStats}}. This function is implemented in \code{\link[JATSdecoder]{get.stats}} which returns the results of \code{\link[JATSdecoder]{allStats}} and \code{\link[JATSdecoder]{standardStats}}. Besides only plain textual input, \code{\link[JATSdecoder]{get.stats}} enables direct processing of different file formats (NISO-JATS coded XML, DOCX, HTML) without text preprocessing.
 }
 \examples{
 x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05)",
@@ -26,4 +26,9 @@ allStats(x)
 }
 \references{
 Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
+}
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+
+\code{\link[JATSdecoder]{get.stats}} for extracting statistical results from textual input and different file formats.
 }

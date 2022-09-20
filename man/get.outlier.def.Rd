@@ -4,10 +4,12 @@
 \alias{get.outlier.def}
 \title{get.outlier.def}
 \usage{
-get.outlier.def(x)
+get.outlier.def(x, range = c(1, 10))
 }
 \arguments{
-\item{x}{text string to process.}
+\item{x}{Character. A text string to process.}
+
+\item{range}{Numeric vector with length=2. Possible result space of extracted value/s in standard deviations. Use 'c(0,Inf)' for no restriction.}
 }
 \value{
 Numeric. Vector with identified outlier definition in standard deviations.
@@ -18,4 +20,7 @@ Extracts outlier/extreme value definition/removal in standard deviations, if pre
 \examples{
 x<-"We removed 4 extreme values that were 3 SD above mean."
 get.outlier.def(x)
+}
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 }

@@ -20,3 +20,6 @@ Extracts mentioned software from text by dictionary search for 63 software names
 \examples{
 get.software("We used the R Software and Excel 4.0 to analyse our data.")
 }
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+}

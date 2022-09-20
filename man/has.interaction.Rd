@@ -15,3 +15,6 @@ Character vector with type/s of identified interaction/moderator/mediator effect
 \description{
 Identifies mentiones of interaction/moderator/mediator effect in text.
 }
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+}

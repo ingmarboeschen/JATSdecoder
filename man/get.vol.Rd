@@ -15,3 +15,6 @@ Character string with extracted journal volume.
 \description{
 Extracts volume, first and last page from NISO-JATS coded XML file or text.
 }
+\seealso{
+\code{\link[JATSdecoder]{JATSdecoder}} for simultaneous extraction of meta-tags, abstract, sectioned text and reference list.
+}

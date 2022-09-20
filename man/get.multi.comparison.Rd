@@ -19,3 +19,6 @@ Extracts alpha-/p-value correction method for multiple comparisons from list wit
 x<-"We used Bonferroni corrected p-values."
 get.multi.comparison(x)
 }
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+}

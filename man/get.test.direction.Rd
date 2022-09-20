@@ -15,3 +15,6 @@ Character.
 \description{
 Extracts mentioned test direction/s (one sided, two sided, one and two sided) from text.
 }
+\seealso{
+\code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
+}
