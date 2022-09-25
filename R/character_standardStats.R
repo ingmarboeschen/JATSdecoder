@@ -56,7 +56,7 @@ x<-gsub("[A-Za-z]chi[a-z]","",x)
      
      
 # remove letter or number behind effect d
-x<-gsub(" d *[a-zA-Z0-9]([^a-zA-Z0-9])|^d *[a-zA-Z0-9]([^a-zA-Z0-9])"," d\\1\\2",x)
+x<-gsub(" d *[a-eg-zA-EG-Z0-9]([^a-zA-Z0-9])|^d *[a-eg-zA-EG-Z0-9]([^a-zA-Z0-9])"," d\\1\\2",x)
 # remove chi/letter=num
 x<-gsub("chi2*/[a-z0-9]*[<=>]*[0-9\\.]*","",x)
 
@@ -215,9 +215,8 @@ i<-grep("([0-9]*?)\\^\\-[0-9]",x)
 v<-as.numeric(gsub(".*[^0-9\\.]","",gsub("([0-9]*?)\\^\\-[0-9\\.].*","\\1",x[i])))
 e<-as.numeric(gsub("[^0-9\\.].*","",gsub(".*\\^\\-([0-9\\.]*?)","\\1",x[i])))
 input<-round(1/(v^e),7)
- for(j in 1:length(i)){
-  x[i[j]]<-gsub("([0-9\\.]*?)\\^\\-[0-9\\.]*",input[j],x[i[j]])
- }
+if(length(i)>0) for(j in 1:length(i))  x[i[j]]<-gsub("([0-9\\.]*?)\\^\\-[0-9\\.]*",input[j],x[i[j]])
+ 
 }
 
 # unify use of e^[\\-1-9] 
