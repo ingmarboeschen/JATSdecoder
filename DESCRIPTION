@@ -1,15 +1,21 @@
 Package: JATSdecoder
 Title: A Metadata and Text Extraction and Manipulation Tool Set
-Date: 2022-09-09
+Date: 2022-09-26
 Version: 1.1
-Authors@R: person("Ingmar", "Böschen", email = "ingmar.boeschen@uni-hamburg.de", role = c("aut", "cre"))
-Description: Provides a function collection to extract metadata, sectioned text and study characteristics from scientific articles. Articles in PDF format can be converted to NISO-JATS with the Content ExtRactor and MINEr (CERMINE, <https://github.com/CeON/CERMINE>). For convenience, two functions bundle the extraction heuristics: JATSdecoder() converts NISO-JATS-tagged XML files to a structured list with elements title, author, journal, history, doi abstract, sectioned text and reference list. study.character() extracts multiple study characteristics like number of included studies, statistical methods used, alpha error, power, statistical results, correction method for multiple testing, software used. An estimation of the involved sample size is performed based on reports within the abstract and the reported degrees of freedom within statistical results. In addition, the package contains some useful functions to process text (text2sentences(), text2num(), ngram(), strsplit2(), grep2()).
+Authors@R: c(person("Ingmar", "Böschen", email = "ingmar.boeschen@uni-hamburg.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1159-3991")))
+Maintainer: Ingmar Böschen <ingmar.boeschen@uni-hamburg.de>
+Description: Provides a function collection to extract metadata, sectioned text and study characteristics from scientific articles in 'NISO-JATS' format. Articles in PDF format can be converted to 'NISO-JATS' with the 'Content ExtRactor and MINEr' ('CERMINE', <https://github.com/CeON/CERMINE>). For convenience, two functions bundle the extraction heuristics: JATSdecoder() converts 'NISO-JATS'-tagged XML files to a structured list with elements title, author, journal, history, 'DOI', abstract, sectioned text and reference list. study.character() extracts multiple study characteristics like number of included studies, statistical methods used, alpha error, power, statistical results, correction method for multiple testing, software used. An estimation of the involved sample size is performed based on reports within the abstract and the reported degrees of freedom within statistical results. In addition, the package contains some useful functions to process text (text2sentences(), text2num(), ngram(), strsplit2(), grep2()).
 Depends: R (>= 3.1.1)
-Imports: utils, stats, NLP, openNLP
+Imports: 
+    utils,
+    stats,
+    NLP,
+    openNLP
 License: GPL-3
 URL: https://github.com/ingmarboeschen/JATSdecoder
+BugReports: https://github.com/ingmarboeschen/JATSdecoder/issues
 Language: en-US
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.2.1
+References: Böschen, I. (2021) Software review: The JATSdecoder package—extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed central’s open access database. Scientometrics (2021). <https://doi.org/10.1007/s11192-021-04162-z>
 
