@@ -34,10 +34,13 @@
 #' @importFrom openNLP Maxent_Word_Token_Annotator
 #' @export
 #' @examples
+#' \dontrun{
 #'  a<-"One hundred twelve students participated in our study."
+#'  est.ss(abstract=a)
 #'  x<-"Our sample consists of three hundred twenty five undergraduate students.
 #'      The F-test indicates significant differences in means F(2,102)=3.21, p<.05."
-#'  est.ss(abstract=a,text=x)
+#'  est.ss(text=x)
+#' }
 
 ###############################################################
 ## Function to combine results and find max of extracted N's

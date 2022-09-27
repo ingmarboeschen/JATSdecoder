@@ -5,8 +5,8 @@
 #' @return Character vector with one word per cell.
 #' @export
 #' @examples
-#' text<-"One hundred twenty-eight students participated in our Study, 
-#' that was administred in thirteen clinics."
+#' text<-"One hundred twenty-eight students participated in our  
+#' Study, that was administred in thirteen clinics."
 #' vectorize.text(text)
 
 # Function to convert text to vector of words

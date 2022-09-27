@@ -34,8 +34,8 @@
 #' @examples
 #' \dontrun{
 #' # download example XML file via URL
-#' URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
-#' download.file(URL,"file.xml")
+#' x<-"https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
+#' download.file(x,"file.xml")
 #' # convert full article to list with study characteristics
 #' study.character("file.xml")
 #' }

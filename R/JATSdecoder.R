@@ -25,13 +25,13 @@
 #' @examples
 #' \dontrun{
 #' # download example XML file via URL
-#' URL <- "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
-#' download.file(URL,"file.xml")
+#' x<-"https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
+#' download.file(x,"file.xml")
 #' # convert full article to list with metadata, sectioned text and reference list
 #' JATSdecoder("file.xml")
 #' # extract specific content (here: abstract and text)
 #' JATSdecoder("file.xml",output=c("abstract","text"))
-#' # or use specific functions
+#' # or use specific functions, e.g.:
 #' get.abstract("file.xml")
 #' get.text("file.xml")
 #' }
