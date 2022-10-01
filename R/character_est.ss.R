@@ -34,7 +34,7 @@
 #' @importFrom openNLP Maxent_Word_Token_Annotator
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'  a<-"One hundred twelve students participated in our study."
 #'  est.ss(abstract=a)
 #'  x<-"Our sample consists of three hundred twenty five undergraduate students.

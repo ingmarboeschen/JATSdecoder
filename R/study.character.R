@@ -32,13 +32,14 @@
 #' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 #' @export
 #' @examples
-#' \dontrun{
 #' # download example XML file via URL
 #' x<-"https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
-#' download.file(x,"file.xml")
+#' # file name
+#' file<-paste0(tempdir(),"/file.xml")
+#' # download URL as "file.xml" in tempdir()
+#' download.file(x,file)
 #' # convert full article to list with study characteristics
-#' study.character("file.xml")
-#' }
+#' study.character(file)
 
 study.character<-function(x,
                           stats.mode="all",
