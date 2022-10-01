@@ -53,11 +53,22 @@ If output="all": list with two elements. E1: vector of extracted results by \cod
 Extracts statistical results from text string, XML, CERMXML, HTML or DOCX files. The result is a list with a vector containing all identified sticked results and a matrix containing the reported standard statistics and recalculated p-values if computation is possible.
 }
 \examples{
+## Extract results from plain text input
 x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05).",
 "The ANOVA yielded significant results on 
  faktor A (F(2,18)=6, p<.05, eta(g)2<-.22)",
 "the correlation of x and y was r=.37.")
 get.stats(x)
+
+## Extract results from native NISO-JATS XML file
+# download example XML file via URL
+x<-"https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
+# file name
+file<-paste0(tempdir(),"/file.xml")
+# download URL as "file.xml" in tempdir()
+download.file(x,file)
+# apply get.stats() to file
+get.stats(file)
 }
 \references{
 Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.

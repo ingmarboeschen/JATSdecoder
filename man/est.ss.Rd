@@ -52,7 +52,7 @@ Sample size extraction by degrees of freedom with result of standardStats(allSta
 - Extracts df1 and df2 if possible and neither containing a ".", than calculates specified quantile of (df1+1)+(df2+2) (at least 2 group comparison assumed)
 }
 \examples{
-\dontrun{
+\donttest{
  a<-"One hundred twelve students participated in our study."
  est.ss(abstract=a)
  x<-"Our sample consists of three hundred twenty five undergraduate students.
