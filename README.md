@@ -81,6 +81,10 @@ JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar BÃ
 
 [https://github.com/ingmarboeschen/JATSdecoderEvaluation/](https://github.com/ingmarboeschen/JATSdecoderEvaluation/)
 
+** JATSdecoder on CRAN:**
+[https://CRAN.R-project.org/package=JATSdecoder/](https://CRAN.R-project.org/package=JATSdecoder/)
+
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
