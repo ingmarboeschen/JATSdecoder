@@ -68,7 +68,7 @@ The contained functions are listed below. For a detailed description, see the fu
 
 ### How to cite JATSdecoder
 ```
-JATSdecoder: A metadata and text extraction and manipulation tool set. Ingmar Böschen (2021). R package version 1.1.
+JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar Böschen (2022). R package version 1.1.
 ```
 ### Resources
 **Articles:**
