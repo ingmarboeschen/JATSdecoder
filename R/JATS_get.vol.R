@@ -7,9 +7,9 @@
 #' @export
 
 get.vol<-function(x){
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
-
+  # run prechecks or readLines(x) if x is file
+  x<-preCheck(x)
+  
 x<-paste(x,collapse=" ")
 x<-gsub("<abstract.*|<body.*","",x)
 vol<-gsub("</.*","",unlist(strsplit(x,"<volume>"))[2])

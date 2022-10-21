@@ -8,9 +8,10 @@
 #' @export
 
 get.history<-function(x,remove.na=FALSE){
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
-# prepare
+  # run prechecks or readLines(x) if x is file
+  x<-preCheck(x)
+  
+  # prepare
 temp<-paste(x,collapse=" ")
 temp<-unlist(strsplit(temp,"<history>|<pub-history>|<pub-date"))[-1]
 temp<-gsub("<history>|<pub-history>|<pub-date.*","",gsub("</history.*|</pub-*","",temp))

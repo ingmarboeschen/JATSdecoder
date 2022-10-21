@@ -9,9 +9,9 @@
 #' @return Character vector with extracted references from reference list.
 #' @export
 get.references<-function(x,letter.convert=FALSE, remove.html=FALSE,extract="full"){ 
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
-
+  # run prechecks or readLines(x) if x is file
+  x<-preCheck(x)
+  
 if(length(grep("<ref-list",x))>0){
   temp<-paste(x,collapse=" ")
 # extract content within ref-list tag

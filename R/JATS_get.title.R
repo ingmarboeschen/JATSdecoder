@@ -6,9 +6,9 @@
 #' @return Character string with extracted article title.
 #' @export
 get.title<-function(x){
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
-# extract title
+  # run prechecks or readLines(x) if x is file
+  x<-preCheck(x)
+  # extract title
 if(length(grep("</article-title",x))>0&length(grep("<article-title",x))>0) {
   title<-gsub("<.*?>","",letter.convert(paste(gsub(".*<article-title","",gsub("</article-title>.*","",
          x[grep("<article-title",x)[1]:grep("</article-title",x)[1]]

@@ -14,9 +14,9 @@
 #' get.keywords(x,paste(", "))
 
 get.keywords<-function(x,paste="",letter.convert=TRUE,include.max=length(keyword)){
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
-
+  # run prechecks or readLines(x) if x is file
+  x<-preCheck(x)
+  
 if(length(grep("</kwd",x))>0) {
  keyword<-paste(x,collapse=" ")
  if(!is.null(unlist(strsplit(keyword,"</kwd>")))){

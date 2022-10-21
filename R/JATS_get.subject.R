@@ -16,9 +16,9 @@
 #' get.subject(x,paste=", ")
 
 get.subject<-function(x,letter.convert=TRUE,paste=""){
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
-
+ # run prechecks or readLines(x) if x is file
+ x<-preCheck(x)
+        
 if(length(grep("<subject",x,value=TRUE))>0){
  # collapse to one row
  temp<-paste(x,collapse=" ")

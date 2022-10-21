@@ -44,6 +44,10 @@ get.stats<-function(x,output="both",
                     select=NULL,
                     rm.na.col=TRUE,
                     cermine=FALSE){
+# prechecks: is.null(), is.na()
+  if(is.null(x)) return(list(stats=character(0),standardStats=character(0)))
+  if(length(x)==1) if(is.na(x)) return(list(stats=character(0),standardStats=character(0)))
+  
 # get text and abstract if x is file
   if(!is.list(x)) if(file.exists(x[1])){
    #  if is website

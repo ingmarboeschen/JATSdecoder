@@ -40,6 +40,9 @@
 JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experiment","conclu","implica","discussion"),grepsection="",
                          sentences=FALSE,paragraph=FALSE,abstract2sentences=TRUE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,
                       countryconnection=FALSE,authorconnection=FALSE){
+# check if x is an object else return standard error message
+if(is.na(x)) tryCatch(x,error=function(e) message(e))
+    
 # presettings
 rm.na.history<-TRUE
 rm.xref.text<-TRUE
@@ -47,7 +50,7 @@ rm.table.text<-TRUE
 rm.formula.text<-TRUE
 rm.graphic.text<-TRUE
 # check if x is xml file else stop
-if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0) stop("file is not in XML nor NISO-JATS format")
+if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0) stop("x must be NISO-JATS coded XML format")
 
 # check if x is cermine file
 ifelse(length(grep("cermxml$",x[1]))==1,cerm<-TRUE,cerm<-FALSE)
@@ -62,7 +65,7 @@ if(length(grep("\\.nxml$|cermxml$|\\.xml$|XML$",x[1]))==1){
 x<-x[nchar(x)>0]
 
 # if x is not JATS coded stop
-if(length(grep("!DOCTYPE",x[1:15]))==0) stop("x seems not to be a JATS coded file or text")
+if(length(grep("!DOCTYPE|-- PMCEdit",x[1:15]))==0) stop("x seems not to be a JATS coded file or text")
 
 if(sum(is.element(c("all","sections","text","captions"),output))>0){
 temp<-get.text(x,sectionsplit=sectionsplit,grepsection=grepsection,letter.convert=letter.convert,rm.table=rm.table.text,rm.xref=rm.xref.text, rm.graphic=rm.graphic.text,rm.formula=rm.formula.text,cermine=cerm,greek2text=greek2text,sentences=sentences,paragraph=paragraph)

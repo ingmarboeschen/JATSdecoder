@@ -10,9 +10,10 @@
 #' @export
 
 get.editor<-function(x,role=FALSE,short.names=FALSE,letter.convert=FALSE){
-cleanup<-TRUE
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
+   # run prechecks or readLines(x) if x is file
+   x<-preCheck(x)
+
+   cleanup<-TRUE
 # extract contrib tag
 if(length(grep("^contrib",x))!=length(x)) x<-get.contrib(x)
 # extract editor

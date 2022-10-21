@@ -10,9 +10,9 @@
 #' get.category(x)
 
 get.category<-function(x){
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
-
+ # run prechecks or readLines(x) if x is file
+ x<-preCheck(x)
+        
 if(length(grep("<article-categories>",x,value=TRUE))>0){
  # collapse to one row
  temp<-paste(x,collapse=" ")

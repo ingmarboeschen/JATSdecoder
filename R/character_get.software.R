@@ -11,6 +11,7 @@
 #' get.software("We used the R Software and Excel 4.0 to analyse our data.")
 
 get.software<-function(x,add.software=NULL){
+
 # convert / * and - to space
 x<-gsub("[/\\*]|-"," ",unlist(x))
 # remove html

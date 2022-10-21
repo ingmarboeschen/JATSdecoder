@@ -33,12 +33,17 @@ get.text<-function(x,sectionsplit="",
                   rm.graphic=TRUE,
                   rm.ext_link=TRUE
 ){
-captions<-character(0)
+  captions<-character(0)
+  # check if x is an object else return standard error message
+  if(length(x)>0) if(is.na(x)[1]) tryCatch(x,error=function(e) message(e))
+  
+  # set cermine if "auto"
+  if(cermine=="auto") cermine<-ifelse(length(grep("cermxml$",x[1]))>0,TRUE,FALSE)
+  
+  # run prechecks or readLines(x) if x is file
+  x<-preCheck(x)
+  
 
-# set cermine if "auto"
-if(cermine=="auto") cermine<-ifelse(length(grep("cermxml$",x[1]))>0,TRUE,FALSE)
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
 # remove strangely converted lines in CERMXML (mostly from tables)
 if(cermine==TRUE){
 # remove lines with at least "num (num), num (num)" or "num (num) num (num)"

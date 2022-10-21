@@ -59,6 +59,8 @@ study.character<-function(x,
                           N.max.only=FALSE,
                           output="all",
                           rm.na.col=TRUE){
+   # check if x is an object else return standard error message
+   if(is.na(x)) tryCatch(x,error=function(e) message(e))
    # prepare captions object
    caps<-character(0)
    # create empty objects
@@ -66,7 +68,7 @@ study.character<-function(x,
    t<-NULL
    
    # check if x is xml file or list else stop
-   if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0&!is.list(x)) stop("file is not in XML nor NISO-JATS format nor a JATSdecoder result")
+   if(length(grep("^<\\?xml",x))==0) if(length(grep("xml$|XML$",x[1]))==0&!is.list(x)) stop("x must be NISO-JATS coded XML format")
    # if x is xml file readLines else copy to temp
    if(length(grep("\\.nxml$|cermxml$|\\.xml$|XML$",x[1]))==1){
       temp<-readLines(x,warn=F,encoding="UTF-8")
@@ -80,9 +82,9 @@ study.character<-function(x,
    ifelse(length(grep("cermxml$",x[1]))==1, cermine<-TRUE,  cermine<-FALSE)
    
    ## get method and result text from plain xml text
-   if(length(grep("!DOCTYPE",temp[1:5]))>0|sum(is.element(c("sections","text"),names(temp)))==2){
+   if(length(grep("!DOCTYPE|-- PMCEdit",temp[1:15]))>0|sum(is.element(c("sections","text"),names(temp)))==2){
       # for JATS coded xml
-      if(length(grep("!DOCTYPE",temp[1:5]))>0){
+      if(length(grep("!DOCTYPE|-- PMCEdit",temp[1:15]))>0){
          t<-get.text(temp,sectionsplit=c("intro|background","data|statistic|method|material|sample|solution|analys|procedure|measures","participants|subjects|animals|patients","experiment|study","result|finding","conclusion","discussion","implication|limitation","conflict of|author contrib|ethic"),letter.convert=TRUE,cermine=cermine,greek2text=TRUE)
          if(is.element("captions",names(t))) caps<-t$captions
       }

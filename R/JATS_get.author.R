@@ -10,10 +10,9 @@
 #' @export
 
 get.author<-function(x,paste="",short.names=FALSE,letter.convert=FALSE){
-
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
-
+  # run prechecks or readLines(x) if x is file
+  x<-preCheck(x)
+  
 if(length(grep("^contrib",x))!=length(x)) x<-get.contrib(x)
 # collapse x for cases with many spaces (cermine export)
 if(length(grep("^contrib",x))==0) x<-paste(x,collapse=" ")

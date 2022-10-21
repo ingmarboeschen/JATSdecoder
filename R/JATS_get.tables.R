@@ -7,9 +7,10 @@
 #' @export
 
 get.tables<-function(x){
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
-tables<-character(0)
+  # run prechecks or readLines(x) if x is file
+  x<-preCheck(x)
+  
+  tables<-character(0)
 if(sum(grep("</table>",x))>0){
 # split lines with table
 tables<-paste(x,collapse=" ")

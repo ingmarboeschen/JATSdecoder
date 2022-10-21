@@ -14,8 +14,8 @@
 #' get.aff(x)
 
 get.aff<-function(x,remove.html=FALSE,letter.convert=TRUE){
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
+# run prechecks or readLines(x) if x is file
+ x<-preCheck(x)
 
 if(length(grep("<aff",x))>0){
   x<-paste(x,collapse=" ")

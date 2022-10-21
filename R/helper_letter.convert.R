@@ -299,7 +299,7 @@ x[i]<-unlist(lapply(x[i],udecode))
 
 ## OLD: manual conversion
 if(length(grep("&#",x))>0){
-x<-gsub("&#x00102;","\u0102",x) # Ă, LATIN CAPITAL LETTER A WITH BREVE 
+x<-gsub("&#x00102;","\u0102",x) # LATIN CAPITAL LETTER A WITH BREVE 
 x<-gsub("&#x000C1;","\u00C1",x) # Á 
 x<-gsub("&#x000c1;","\u00c1",x) # Á 
 x<-gsub("&#x000c4;","\u00c4",x) # Ä
@@ -314,30 +314,30 @@ x<-gsub("&#x000f9;","\u00f9",x) # ù
 x<-gsub("&#x000df;","\u00df",x) # ß
 x<-gsub("&#x000e1;","\u00e1",x) # á
 x<-gsub("&#x000e0;","\u00e0",x) # à
-x<-gsub("&#x000e2;","\u00e2",x) # â a with hat
-x<-gsub("&#x00103;","\u0103",x) # ă a with little u on top
+x<-gsub("&#x000e2;","\u00e2",x) # a with hat
+x<-gsub("&#x00103;","\u0103",x) # a with little u on top
 x<-gsub("&#x00101;","\u0101",x) # a with bar
 x<-gsub("&#x000e5;","\u00e5",x) # a with ° on top
 x<-gsub("&#x000e6;","\u00E6",x) # a with e connected: &aelig;
 x<-gsub("&#x0017C;","\u017C",x) # z with dot on top
 x<-gsub("&#x0017c;","\u017C",x) # z with dot on top
-x<-gsub("&#x0015b;","\u015B",x) # ś
+x<-gsub("&#x0015b;","\u015B",x) # s with ` on top`
 x<-gsub("&#x00161;","\u0161",x) # s with turned ^ on top: &scaron;
 x<-gsub("&#x0010d;","\u010d",x) # c with turned ^ on top: &ccaron;
 x<-gsub("&#x000c7;","\u00C7",x) # C with little thingy: &Ccedil;
-x<-gsub("&#x0010c;","\u010C",x) # Č, C with turned ^ on
-x<-gsub("&#x00107;","\u0107",x) # ć
-x<-gsub("&#x00108;","\u0108",x) # Ĉ, C with two dots
-x<-gsub("&#x00109;","\u0109",x) # ĉ, c with hat
+x<-gsub("&#x0010c;","\u010C",x) # C with turned ^ on top
+x<-gsub("&#x00107;","\u0107",x) # c with ` on top
+x<-gsub("&#x00108;","\u0108",x) # C with ^ on top
+x<-gsub("&#x00109;","\u0109",x) # c with hat
 x<-gsub("&#x000e7;","\u00e7",x) # french c: &ccedil;
 x<-gsub("&#x000c5;","\u00c5",x) # Angstrom letter: capital A with °
 x<-gsub("&#x000e3;","\u00e3",x) # a with ~
 x<-gsub("&#x000e8;","\u00e8",x) # è
 x<-gsub("&#x000e9;","\u00e9",x) # é
-x<-gsub("&#x0012b;","\u011b",x) # ě e with turned ^ on
-x<-gsub("&#x0017b;","\u017b",x) # Ż, Z with dot on top
+x<-gsub("&#x0012b;","\u011b",x) # e with turned ^ on top
+x<-gsub("&#x0017b;","\u017b",x) # Z with dot on top
 x<-gsub("&#x000d3;","\u00d3",x) # Ó O acute
-x<-gsub("&#x00117;","\u0117",x) # ė e with point on top
+x<-gsub("&#x00117;","\u0117",x) # e with point on top
 x<-gsub("&#x000c9;","\u00C9",x) # É, e acute
 x<-gsub("&#x000ea;","\u00ea",x) # ê
 x<-gsub("&#x000ed;","\u00ed",x) # í i with '
@@ -347,16 +347,16 @@ x<-gsub("&#x00130;","\u0130",x) # I with a dot on top
 x<-gsub("&#x00159;","\u0159",x) # r with turned ^on top ;  &rcaron;
 x<-gsub("&#x00281;","\u02B6",x) # LATIN LETTER SMALL CAPITAL INVERTED R
 x<-gsub("&#x0017e;","\u017E",x) # z with turned ^ on top: &zcaron;
-x<-gsub("&#x0015a;","\u015A",x) # Ś with '
+x<-gsub("&#x0015a;","\u015A",x) # with ' on top
 x<-gsub("&#x00160;","\u0160",x) # S with turned ^ on top: &Scaron;
 x<-gsub("&#x0015e;","\u015E",x) # S with little thingy below: &Scedil;
-x<-gsub("&#x01e6a;","\u1E6A",x) # Ṫ LATIN CAPITAL LETTER T WITH DOT ABOVE
-x<-gsub("&#x0021b;","\u021B",x) # t with coma below ț
+x<-gsub("&#x01e6a;","\u1E6A",x) # LATIN CAPITAL LETTER T WITH DOT ABOVE
+x<-gsub("&#x0021b;","\u021B",x) # t with ' below 
 x<-gsub("&#x0016b;","\u016B",x) # u with bar
-x<-gsub("&#x00219;","\u0219",x) # ș s with 'below
-x<-gsub("&#x00141;","\u0141",x) # Ł: L with little / &Lstrok; Ł
-x<-gsub("&#x00142;","\u0141",x) # ł: l with little / &lstrok;
-x<-gsub("&#x000ef;","\u00EF",x) # iuml - ï - i with two dots on top
+x<-gsub("&#x00219;","\u0219",x) # s with 'below
+x<-gsub("&#x00141;","\u0141",x) # L with little / &Lstrok;
+x<-gsub("&#x00142;","\u0141",x) # l with little / &lstrok;
+x<-gsub("&#x000ef;","\u00EF",x) # iuml - i with two dots
 x<-gsub("&#x00131;","\u0131",x) # &imath;
 x<-gsub("&#x0011f;","\u011F",x) # g with small u on top: &gbreve;
 x<-gsub("&#x000d6;","\u00D6",x) # Ö
@@ -372,13 +372,13 @@ x<-gsub("&#x000f4;","\u00F4",x) # ô
 x<-gsub("&#x000fd;","\u00FD",x) # ý
 x<-gsub("&#x00176;","\u0176",x) # Y hat
 x<-gsub("&#x003a5;","\u03a5",x) # Y 
-x<-gsub("&#x0017a;","\u017A",x) # ź
-x<-gsub("&#x000fa;","\u00FA",x) # ú
+x<-gsub("&#x0017a;","\u017A",x) # z with ' on top
+x<-gsub("&#x000fa;","\u00FA",x) # u with ' on top
 x<-gsub("&#x0016f;","\u016F",x) # u with ° on top
 x<-gsub("&#x000f1;","\u00F1",x) # n-je ñ
 x<-gsub("&#x05358;","\u00F1",x) # n-je ñ
-x<-gsub("&#x00144;","\u0144",x) # ń
-x<-gsub("&#x000eb;","\u00EB",x) # ë
+x<-gsub("&#x00144;","\u0144",x) # n with ' on top
+x<-gsub("&#x000eb;","\u00EB",x) # e with two dots on top
 # special signs
 x<-gsub("&#x000ae;","\u00ae",x) #  REG-sign
 x<-gsub("&#x000a9;","\u00a9",x) #  COPYRIGHT-sign
@@ -496,7 +496,7 @@ x<-gsub("&#x02223;","\u2223",x) # &mid;
 x<-gsub("&#x02209;","\u2209",x) # not element of
 x<-gsub("&#x02227;","\u2227",x) # &and;
 x<-gsub("&#x000ac;","\u00ac",x) # NOT-sign
-x<-gsub("&#x02200;","\u2200",x) # ∀ for all-sign
+x<-gsub("&#x02200;","\u2200",x) # A upside down: for all sign
 x<-gsub("&#x02194;","\u2194",x) # Left right arrow
 x<-gsub("&#x02193;","\u2193",x) # downwards arrow
 x<-gsub("&#x02191;","\u2191",x) # upwards arrow

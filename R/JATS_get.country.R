@@ -12,9 +12,11 @@
 #' get.country(x)
 
 get.country<-function(x,unifyCountry=TRUE){
-# readLines if x is file
-if(file.exists(x[1])) x<-readLines(x,warn=FALSE,encoding="UTF-8")
- t<-x
+  # run prechecks or readLines(x) if x is file
+  x<-preCheck(x)
+  
+  # make copy
+  t<-x
 
 if(length(grep("<country",t))>0){
  t<-paste(t,collapse="")
