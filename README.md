@@ -273,11 +273,11 @@ vol. 18, no. 4, pp. 317-335, doi: 10.1007/s10032-015-0249-8.
 </div>
   
 <div id="get.stats">
-- Böschen, I. (2021). Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports. Scientific Reports **11**, 19525. https://doi.org/10.1038/s41598-021-98782-3
+- Böschen, I. (2021). Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports. Scientific Reports. 11, 19525. https://doi.org/10.1038/s41598-021-98782-3
 </div>
   
 <div id="study.character">
-- Böschen, I. (2023). Evaluation of the extraction of methodological study characteristics with JATSdecoder. Scientific Reports **13**, 193. https://doi.org/10.1038/s41598-022-27085-y
+- Böschen, I. (2023). Evaluation of the extraction of methodological study characteristics with JATSdecoder. Scientific Reports. 13, 193. https://doi.org/10.1038/s41598-022-27085-y
 </div>
 
 </div>
