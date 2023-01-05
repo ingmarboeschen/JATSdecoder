@@ -277,7 +277,7 @@ vol. 18, no. 4, pp. 317-335, doi: 10.1007/s10032-015-0249-8.
 </div>
   
 <div id="study.character">
-- Böschen, I. (2023). Evaluation of the extraction of methodological study characteristics with JATSdecoder. Scientific Reports. 13, 193. https://doi.org/10.1038/s41598-022-27085-y
+- Böschen, I. (2023). Evaluation of the extraction of methodological study characteristics with JATSdecoder. Scientific Reports. 13, 139. https://doi.org/10.1038/s41598-022-27085-y
 </div>
 
 </div>
