@@ -77,6 +77,8 @@ JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar B�
 
 - Böschen, I. (2021). Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports. Scientific Reports <b>11</b>, 19525. [https://doi.org/10.1038/s41598-021-98782-3](https://doi.org/10.1038/s41598-021-98782-3)
 
+- Böschen, I. (2023). Evaluation of the extraction of methodological study characteristics with JATSdecoder. Scientific Reports **13**, 139. https://doi.org/10.1038/s41598-022-27085-y
+
 **Evaluation data and code:** 
 
 [https://github.com/ingmarboeschen/JATSdecoderEvaluation/](https://github.com/ingmarboeschen/JATSdecoderEvaluation/)
