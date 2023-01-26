@@ -96,7 +96,7 @@ Option 1: Install **JATSdecoder** from [CRAN](https://cran.r-project.org/)
 ``` r
 install.packages("JATSdecoder")
 ``` 
-Option 2: Install **JATSdecoder** from [github](https://github.com/ingmarboeschen/JATSdecoder)
+Option 2: Install **JATSdecoder** from [github](https://github.com/ingmarboeschen/JATSdecoder) with the [devtools](https://cran.r-project.org/web/packages/devtools/index.html) package
 ``` r
 if(require(devtools)!=TRUE) install.packages("devtools")
 devtools::install_github("ingmarboeschen/JATSdecoder")
