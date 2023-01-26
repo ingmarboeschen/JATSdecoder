@@ -92,11 +92,11 @@ JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar BÃ
 To install **JATSdecoder** run the following steps:
 
 ### Installation
-Option 1: Install *JATSdecoder* from [CRAN](https://cran.r-project.org/)
+Option 1: Install **JATSdecoder** from [CRAN](https://cran.r-project.org/)
 ``` r
 install.packages("JATSdecoder")
 ``` 
-Option 2: Install *JATSdecoder* from [github](https://github.com/ingmarboeschen/JATSdecoder)
+Option 2: Install **JATSdecoder** from [github](https://github.com/ingmarboeschen/JATSdecoder)
 ``` r
 if(require(devtools)!=TRUE) install.packages("devtools")
 devtools::install_github("ingmarboeschen/JATSdecoder")
