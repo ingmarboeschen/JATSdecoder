@@ -20,7 +20,7 @@ Its function `text2sentences()` is especially designed to break floating text wi
 You can extract adjustable n words around a pattern match in a sentence with `ngram()`. 
 `letter.convert()` unifies hexadecimal to Unicode characters and, if [CERMINE](https://github.com/CeON/CERMINE) generated CERMXML files are processed, special error correction and special letter uniformization is performed, which is extremely relevant for `get.stats()`'s ability to extract and recompute statistical results in text. 
 
-The contained functions are listed below. For a detailed description, see the full [manual](https://github.com/ingmarboeschen/JATSdecoder/blob/main/JATSdecoder_1.1.pdf).
+The contained functions are listed below. For a detailed description, see the documentation on [CRAN](https://cran.r-project.org/web/packages/JATSdecoder/index.html).
 
 - **JATSdecoder::JATSdecoder()** uses functions that can be applied stand alone on NISO-JATS coded XML files or text input:
   - get.title()      # extracts title                
