@@ -67,15 +67,22 @@ A short tutorial on how to work with JATSdecoder and the generated outputs can b
 x<-"https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
 # file name
 file<-paste0(tempdir(),"/file.xml")
-# download URL as "file.xml" in tempdir()
+# download URL as "file.xml" in tempdir() if a connection is possible
+tryCatch({
+readLines(x,n=1)
 download.file(x,file)
+},
+warning = function(w) message(
+  "Something went wrong. Check your internet connection and the link address."),
+error = function(e) message(
+  "Something went wrong. Check your internet connection and the link address."))
 # convert full article to list with metadata, sectioned text and reference list
-JATSdecoder(file)
+if(file.exists(file)) JATSdecoder(file)
 # extract specific content (here: abstract and text)
-JATSdecoder(file,output=c("abstract","text"))
+if(file.exists(file)) JATSdecoder(file,output=c("abstract","text"))
 # or use specific functions, e.g.:
-get.abstract(file)
-get.text(file)
+if(file.exists(file)) get.abstract(file)
+if(file.exists(file)) get.text(file)
 }
 \references{
 Böschen (2021). "Software review: The JATSdecoder package - extract metadata, abstract and sectioned text from NISO-JATS coded XML documents; Insights to PubMed Central’s open access database.” \emph{Scientometrics.} doi: \href{https://link.springer.com/article/10.1007/s11192-021-04162-z}{10.1007/s1119202104162z}.

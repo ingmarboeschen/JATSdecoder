@@ -85,12 +85,21 @@ A short tutorial on how to work with JATSdecoder and the generated outputs can b
 x<-"https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
 # file name
 file<-paste0(tempdir(),"/file.xml")
-# download URL as "file.xml" in tempdir()
+# download URL as "file.xml" in tempdir() if a connection is possible
+tryCatch({
+readLines(x,n=1)
 download.file(x,file)
+},
+warning = function(w) message(
+  "Something went wrong. Check your internet connection and the link address."),
+error = function(e) message(
+  "Something went wrong. Check your internet connection and the link address."))
 # convert full article to list with study characteristics
-study.character(file)
+if(file.exists(file)) study.character(file)
 }
 \references{
+Böschen (2023). "Evaluation of the extraction of methodological study characteristics with JATSdecoder.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-022-27085-y}{10.1038/s41598-022-27085-y}.
+
 Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 }
 \seealso{
