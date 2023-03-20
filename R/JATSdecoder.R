@@ -27,15 +27,22 @@
 #' x<-"https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
 #' # file name
 #' file<-paste0(tempdir(),"/file.xml")
-#' # download URL as "file.xml" in tempdir()
+#' # download URL as "file.xml" in tempdir() if a connection is possible
+#' tryCatch({
+#' readLines(x,n=1)
 #' download.file(x,file)
+#' },
+#' warning = function(w) message(
+#'   "Something went wrong. Check your internet connection and the link address."),
+#' error = function(e) message(
+#'   "Something went wrong. Check your internet connection and the link address."))
 #' # convert full article to list with metadata, sectioned text and reference list
-#' JATSdecoder(file)
+#' if(file.exists(file)) JATSdecoder(file)
 #' # extract specific content (here: abstract and text)
-#' JATSdecoder(file,output=c("abstract","text"))
+#' if(file.exists(file)) JATSdecoder(file,output=c("abstract","text"))
 #' # or use specific functions, e.g.:
-#' get.abstract(file)
-#' get.text(file)
+#' if(file.exists(file)) get.abstract(file)
+#' if(file.exists(file)) get.text(file)
 
 JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experiment","conclu","implica","discussion"),grepsection="",
                          sentences=FALSE,paragraph=FALSE,abstract2sentences=TRUE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,

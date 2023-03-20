@@ -29,6 +29,7 @@
 #' @seealso \code{\link[JATSdecoder]{get.stats}} for extracting statistical results from textual input and different file formats.
 #' @source An interactive web application for selecting and analyzing extracted article metadata and study characteristics for articles linked to PubMed Central is hosted at: \href{https://www.scianalyzer.com}{https://www.scianalyzer.com/}
 #' @source The XML version of PubMed Central database articles can be downloaded in bulk from: \cr\href{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/}
+#' @references Böschen (2023). "Evaluation of the extraction of methodological study characteristics with JATSdecoder.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-022-27085-y}{10.1038/s41598-022-27085-y}.
 #' @references Böschen (2021). "Evaluation of JATSdecoder as an automated text extraction tool for statistical results in scientific reports.” \emph{Scientific Reports.} doi: \href{https://www.nature.com/articles/s41598-021-98782-3}{10.1038/s41598-021-98782-3}.
 #' @export
 #' @examples
@@ -36,10 +37,17 @@
 #' x<-"https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
 #' # file name
 #' file<-paste0(tempdir(),"/file.xml")
-#' # download URL as "file.xml" in tempdir()
+#' # download URL as "file.xml" in tempdir() if a connection is possible
+#' tryCatch({
+#' readLines(x,n=1)
 #' download.file(x,file)
+#' },
+#' warning = function(w) message(
+#'   "Something went wrong. Check your internet connection and the link address."),
+#' error = function(e) message(
+#'   "Something went wrong. Check your internet connection and the link address."))
 #' # convert full article to list with study characteristics
-#' study.character(file)
+#' if(file.exists(file)) study.character(file)
 
 study.character<-function(x,
                           stats.mode="all",

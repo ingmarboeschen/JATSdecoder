@@ -27,14 +27,22 @@
 #' get.stats(x)
 #' 
 #' ## Extract results from native NISO-JATS XML file
-#' # download example XML file via URL
+#' # download example XML file via URL if a connection is possible
 #' x<-"https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0114876&type=manuscript"
 #' # file name
 #' file<-paste0(tempdir(),"/file.xml")
-#' # download URL as "file.xml" in tempdir()
-#' download.file(x,file)
+#' # download URL as "file.xml" in tempdir() if a connection is possible
+#' tryCatch({
+#'   readLines(x,n=1)
+#'   download.file(x,file)
+#'   },
+#'   warning = function(w) message(
+#'   "Something went wrong. Check your internet connection and the link address."),
+#'   error = function(e) message(
+#'   "Something went wrong. Check your internet connection and the link address.")
+#' )
 #' # apply get.stats() to file
-#' get.stats(file)
+#' if(file.exists(file)) get.stats(file)
 
 get.stats<-function(x,output="both",
                     stats.mode="all",
