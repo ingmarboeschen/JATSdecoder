@@ -8,7 +8,9 @@ Description: Provides a function collection to extract metadata, sectioned text 
 Depends: R (>= 3.1.1)
 Imports: 
     utils,
-    stats
+    stats,
+    NLP,
+    openNLP
 License: GPL-3
 URL: https://github.com/ingmarboeschen/JATSdecoder
 BugReports: https://github.com/ingmarboeschen/JATSdecoder/issues
