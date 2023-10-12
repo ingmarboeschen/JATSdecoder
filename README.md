@@ -43,7 +43,7 @@ The contained functions are listed below. For a detailed description, see the do
   - get.n.studies()   # extracts number of studies from sections or abstract
   - get.alpha.error()  # extracts alpha error from text 
   - get.method()  # extracts statistical methods from method and result section with `ngram()`
-  - get.stats()  # extracts statistical results reported in text (abstract and full text, method and result section, result section only) 
+  - get.stats()  # extracts statistical results reported in text (abstract and full text, method and result section, result section only) and compare extracted recalculated p-values if possible 
   - get.software()  # extracts software name/s mentioned in method and result section with dictionary search
   - get.R.package()  # extracts mentioned R package/s in method and result section with dictionary search on all available R packages created with `available.packages()`
   - get.power()  # extracts power (1-beta-error) if mentioned in text
