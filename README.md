@@ -140,10 +140,10 @@ The [PubMed Central](https://www.ncbi.nlm.nih.gov/pmc/) database offers more tha
 
 1. Get XML file names from working directory
 ``` r
-setwd("/home/PMC") # choose a specific journal folder with NISO-JATS coded articles on your device
+setwd("/home/PMC") # choose a specific folder with NISO-JATS coded articles in XML files on your device
 files<-list.files(pattern="XML$|xml$",recursive=TRUE)
 ``` 
-2. Apply extraction of article content to all files (replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multicore processing)
+2. Apply the extraction of article content to all files (replace `lapply()` with `future.apply()` from [future.apply](https://github.com/HenrikBengtsson/future.apply) package for multicore processing)
 ``` r
 library(JATSdecoder)
 # extract full article content
