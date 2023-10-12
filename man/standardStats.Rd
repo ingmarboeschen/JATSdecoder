@@ -18,7 +18,8 @@ standardStats(
   T2t = FALSE,
   R2r = FALSE,
   select = NULL,
-  rm.na.col = TRUE
+  rm.na.col = TRUE,
+  warnings = TRUE
 )
 }
 \arguments{
@@ -28,7 +29,7 @@ standardStats(
 
 \item{recalculate.p}{Logical. If TRUE recalculates p values (for 2 sided test) if possible.}
 
-\item{alternative}{Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").}
+\item{alternative}{Character. Select test sidedness for recomputation of p-values from t-, r- and beta-values. One of c("undirected", "directed"). If "directed" is specified, p-values for directed null-hypothesis are added to the table but still require a manual inspection on consistency of the direction.}
 
 \item{estimateZ}{Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.}
 
@@ -39,6 +40,8 @@ standardStats(
 \item{select}{Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).}
 
 \item{rm.na.col}{Logical. If TRUE removes all columns with only NA.}
+
+\item{warnings}{Logical. If FALSE warning messages are omitted.}
 }
 \value{
 Matrix with recognized statistical standard results and recalculated p-values. Empty, if no result is detected.

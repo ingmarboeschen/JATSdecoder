@@ -18,6 +18,9 @@ study.character(
   T2t = FALSE,
   R2r = FALSE,
   selectStandardStats = NULL,
+  checkP = TRUE,
+  criticalDif = 0.02,
+  alpha = 0.05,
   p2alpha = TRUE,
   alpha_output = "list",
   captions = TRUE,
@@ -37,7 +40,7 @@ study.character(
 
 \item{recalculate.p}{Logical. If TRUE recalculates p values (for 2 sided test) if possible.}
 
-\item{alternative}{Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto", "undirected", "directed", "both"). If set to "auto" 'alternative' will be be set to 'both' if get.test.direction() detects one-directional hypotheses/tests in text. If no directional hypotheses/tests are dtected only "undirected" recomputed p-values will be returned.}
+\item{alternative}{Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto", "undirected", "directed"). If set to "auto" 'alternative' will be be set to 'directed' if get.test.direction() detects one-directional hypotheses/tests in text. If no directional hypotheses/tests are dtected only "undirected" recomputed p-values will be returned.}
 
 \item{estimateZ}{Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.}
 
@@ -46,6 +49,12 @@ study.character(
 \item{R2r}{Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats().}
 
 \item{selectStandardStats}{Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).}
+
+\item{checkP}{Logical. If TRUE observed and recalculated p-values are checked for consistency.}
+
+\item{criticalDif}{Numeric. Sets the absolute maximum difference in reported and recalculated p-values for error detection.}
+
+\item{alpha}{Numeric. Defines the alpha level to be used for error assignment of detected incosistencies.}
 
 \item{p2alpha}{Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections).}
 

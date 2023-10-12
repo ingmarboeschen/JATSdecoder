@@ -14,13 +14,17 @@ get.stats(
   output = "both",
   stats.mode = "all",
   recalculate.p = TRUE,
+  checkP = FALSE,
+  alpha = 0.05,
+  criticalDif = 0.02,
   alternative = "undirected",
   estimateZ = FALSE,
   T2t = FALSE,
   R2r = FALSE,
   select = NULL,
   rm.na.col = TRUE,
-  cermine = FALSE
+  cermine = FALSE,
+  warnings = TRUE
 )
 }
 \arguments{
@@ -32,7 +36,13 @@ get.stats(
 
 \item{recalculate.p}{Logical. If TRUE recalculates p-values of test results if possible.}
 
-\item{alternative}{Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").}
+\item{checkP}{Logical. If TRUE observed and recalculated p-values are checked for consistency.}
+
+\item{alpha}{Numeric. Defines the alpha level to be used for error assignment.}
+
+\item{criticalDif}{Numeric. Sets the absolute maximum difference in reported and recalculated p-values for error detection.}
+
+\item{alternative}{Character. Select test sidedness for recomputation of p-values from t-, r- and beta-values. One of c("undirected", "directed"). If "directed" is specified, p-values for directed null-hypothesis are added to the table but still require a manual inspection on consistency of the direction.}
 
 \item{estimateZ}{Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.}
 
@@ -45,6 +55,8 @@ get.stats(
 \item{rm.na.col}{Logical. If TRUE removes all columns with only NA from standardStats.}
 
 \item{cermine}{Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results.}
+
+\item{warnings}{Logical. If FALSE warning messages are omitted.}
 }
 \value{
 If output="all": list with two elements. E1: vector of extracted results by \code{\link[JATSdecoder]{allStats}} and E2: matrix of standard results by \code{\link[JATSdecoder]{standardStats}}.\cr If output="allStats": vector of extracted results by \code{\link[JATSdecoder]{allStats}}.\cr If output="standardStats": matrix of standard results by \code{\link[JATSdecoder]{standardStats}}.
