@@ -6,11 +6,16 @@
 #' @param captions Logical. If TRUE captions text will be scanned for statistical results.
 #' @param stats.mode Character. Select subset of standard stats. One of: c("all", "checkable", "computable").
 #' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible.
-#' @param alternative Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto", "undirected", "directed", "both"). If set to "auto" 'alternative' will be be set to 'both' if get.test.direction() detects one-directional hypotheses/tests in text. If no directional hypotheses/tests are dtected only "undirected" recomputed p-values will be returned.
+#' @param alternative Character. Select sidedness of recomputed p-values for t-, r- and Z-values. One of c("auto", "undirected", "directed"). If set to "auto" 'alternative' will be be set to 'directed' if get.test.direction() detects one-directional hypotheses/tests in text. If no directional hypotheses/tests are dtected only "undirected" recomputed p-values will be returned.
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
 #' @param T2t Logical. If TRUE capital letter T is treated as t-statistic when extracting statistics with get.stats().
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation when extracting statistics with get.stats().
 #' @param selectStandardStats Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
+
+#' @param checkP Logical. If TRUE observed and recalculated p-values are checked for consistency.
+#' @param alpha Numeric. Defines the alpha level to be used for error assignment of detected incosistencies.
+#' @param criticalDif Numeric. Sets the absolute maximum difference in reported and recalculated p-values for error detection.
+
 #' @param p2alpha Logical. If TRUE detects and extracts alpha errors denoted with critical p-value (what may lead to some false positive detections).
 #' @param alpha_output One of c("list", "vector"). If alpha_output = "list" a list with elements: alpha_error, corrected_alpha, alpha_from_CI, alpha_max, alpha_min is returned. If alpha_output = "vector" unique alpha errors without a distinction of types is returned.
 #' @param update.package.list Logical. If TRUE updates available R packages with utils::available.packages() function.
@@ -57,6 +62,9 @@ study.character<-function(x,
                           T2t=FALSE,
                           R2r=FALSE,
                           selectStandardStats=NULL,
+                          checkP=TRUE,
+                          criticalDif=.02,
+                          alpha=.05,
                           p2alpha=TRUE, 
                           alpha_output="list",
                           captions=TRUE,
@@ -238,10 +246,12 @@ study.character<-function(x,
       
       # get standard stats if output is desired
       if(sum(is.element(c("all","statsOnStats","standardStats","estimated_sample_size"),output))>0){
-         # set direction to "both" for alternative if has one sided hypotheses/tests
-         if(length(grep("^one ",test_direction))>0){
-            direction<-"both"}else{direction<-"undirected"}
+         # set direction to "directed" for alternative if has one sided hypotheses/tests
+         if(length(grep("^one ",test_direction))>0|length(grep("^direct",alternative))>0){
+            direction<-"directed"}else{direction<-"undirected"}
          standardStats<-standardStats(stats,stats.mode=stats.mode,recalculate.p=recalculate.p,alternative=direction,T2t=T2t,R2r=R2r,estimateZ=estimateZ,rm.na.col=rm.na.col,select=selectStandardStats)
+         if(checkP==TRUE&recalculate.p==TRUE) standardStats<-pCheck(standardStats,alpha=alpha,criticalDif=criticalDif)
+         
       }else standardStats<-NA
    }else{
       stats<-NA;standardStats<-NA}
@@ -260,11 +270,17 @@ study.character<-function(x,
       nPcheck<-sum(!is.na(standardStats[,"p"])&!is.na(standardStats[,"recalculatedP"]))
       nPcheck[is.na(nPcheck)]<-0
    }else nPcheck<-0
+   if(sum(is.element(c("p","error"),colnames(standardStats)))==2){
+      nError<-sum(standardStats[,"error"],na.rm=T)
+      nError[is.na(nError)]<-0
+   }else nError<-0
+   
    }else{
-   nPvalues<-0;nPcheck<-0;nPcomp<-0
+   nPvalues<-0;nPcheck<-0;nPcomp<-0;nError<-NA
    }
    
-   statsOnStats<-list(nPvalues=nPvalues,nPcomputable=nPcomp,nPcheckable=nPcheck)
+   statsOnStats<-list(nPvalues=nPvalues,nPcomputable=nPcomp,nPcheckable=nPcheck,nInconsistencies=nError)
+   
    # adjectives in front of significant/insignificant
    if(sum(is.element(c("all","sig_adjectives"),output))>0){
           sig.adjectives<-unique(get.sig.adjectives(both)$sig_adjective)
@@ -403,4 +419,5 @@ categorize.methods<-function(x){
    methodsCat<-unlist(lapply(x,function(x) gsub("\\|.*|^ |\\^|\\$","",which.term(x,names,hits_only=T))))
    return(unique(methodsCat))
    }
+
 

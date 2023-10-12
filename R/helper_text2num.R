@@ -197,8 +197,8 @@ x<-unlist(strsplit2(x,"[\\(]*[^-\\.0-9][-\\.0-9][-\\.0-9]*?[\\)]*\\^","before"))
 
     # add space to end
     x<-paste0(x," ")
-    # if has num^num calculate and and replace 
-    ind<-grep("[^a-zA-Z][0-9][\\)]*\\^[-\\.0-9]|^[0-9]\\^[-\\.0-9]",x)
+    # if has (-num)^num or num^num calculate and and replace 
+    ind<-grep("[\\(][-0-9\\.]*[\\)]\\^[-\\.0-9]|^[0-9]\\^[-\\.0-9]",x)
     exponent <- function(a, pow){
         res<-rep(NA,length(a))
         # if has: (-num)^num

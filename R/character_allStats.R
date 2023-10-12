@@ -275,7 +275,7 @@ stats[index]<-temp
 stats<-unlist(strsplit(stats,"SPLIT"))
 
 # convert =1,000 -> =1000 in lines without "F([1-9]"
-Fpattern<-"^[fF][\\[\\(][1-9]|[^a-zA-Z][fF][\\[\\(][1-9]"
+Fpattern<-"^[fF]'*s*[\\[\\(][1-9]|[^a-zA-Z][fF]'*s*[\\[\\(][1-9]"
 if(length(grep(Fpattern,stats,invert=TRUE))>0){
   ind<-grep(Fpattern,stats,invert=TRUE)
   stats[ind]<-gsub("([0-9]),([0-9]{3})","\\1\\2",stats[ind])

@@ -4,12 +4,13 @@
 #' @param x result vector by \code{\link[JATSdecoder]{allStats}} or chracter vector with a statistical test result per cell, e.g. c("t(12)=1.2, p>.05","chi2(2)=12.7, p<.05")
 #' @param stats.mode Select subset of standard stats. One of: c("all", "checkable", "computable", "uncomputable").
 #' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible.
-#' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").
+#' @param alternative Character. Select test sidedness for recomputation of p-values from t-, r- and beta-values. One of c("undirected", "directed"). If "directed" is specified, p-values for directed null-hypothesis are added to the table but still require a manual inspection on consistency of the direction.
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
 #' @param T2t Logical. If TRUE capital letter T is treated as t-statistic.
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation.
 #' @param select Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA.
+#' @param warnings Logical. If FALSE warning messages are omitted. 
 #' @return Matrix with recognized statistical standard results and recalculated p-values. Empty, if no result is detected.
 #' @seealso \code{\link[JATSdecoder]{study.character}} for extracting multiple study characteristics at once.
 #' @seealso \code{\link[JATSdecoder]{get.stats}} for extracting statistical results from textual input and different file formats.
@@ -24,7 +25,7 @@
 #' BF(01)>4","chi=3.2, r(34)=-.7, p<.01, R2=76%.")
 #' standardStats(x)
 
-standardStats<-function(x,stats.mode="all",recalculate.p=TRUE,alternative="undirected",estimateZ=FALSE,T2t=FALSE,R2r=FALSE,select=NULL,rm.na.col=TRUE){
+standardStats<-function(x,stats.mode="all",recalculate.p=TRUE,alternative="undirected",estimateZ=FALSE,T2t=FALSE,R2r=FALSE,select=NULL,rm.na.col=TRUE,warnings=TRUE){
 # set warning massages to FALSE
 warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.d<-FALSE;warn.eta<-FALSE;warn.multi.p<-FALSE
    x<-unlist(x)
@@ -37,7 +38,13 @@ x<-gsub("([^0-9]10)(-[1-9]*)$","\\1^\\2",x)
 y<-x
 # remove space between letter and (
 x<-gsub("([A-Za-z]) (\\([0-9Nnd])","\\1\\2",x)
-# remove 'Letter'chi'letter'
+
+# remove space between number and e_num
+x<-gsub("([0-9]) [Ee] *([+-][0-9])","\\1e\\2",x)
+x<-gsub("([0-9]) [Ee]([0-9])","\\1e+\\2",x)
+
+# remove 'Letter'chi'letter' 
+x<-gsub("[A-Za-z]chi[a-z]","",x)
 x<-gsub("[A-Za-z]chi[a-z]","",x)
 
 # capital T to small t
@@ -59,6 +66,8 @@ x<-gsub("[A-Za-z]chi[a-z]","",x)
 x<-gsub(" d *[a-eg-zA-EG-Z0-9]([^a-zA-Z0-9])|^d *[a-eg-zA-EG-Z0-9]([^a-zA-Z0-9])"," d\\1\\2",x)
 # remove chi/letter=num
 x<-gsub("chi2*/[a-z0-9]*[<=>]*[0-9\\.]*","",x)
+# remove chi2/df=num
+x<-gsub("chi[\\^]*2* */ *df=[0-9]*\\.[0-9]","",x)
 
  # remove percent value in brackets
    x<-gsub(" \\([0-9\\.]*\\%\\)","",x)     
@@ -120,7 +129,7 @@ x<-unlist(lapply(x,percent2number))
    x<-gsub(" [pP]artial | [Cc]hange |[pP]artial|[Cc]hange","",x)
    # remove hyphen
    x<-gsub("'","",x)
-   x<-unlist(strsplit(x,"children|child|childrens"))
+   x<-gsub("children|child|childrens|chicken"," ",x)
    # remove " [text]"
    x<-gsub(" \\[[a-zA-Z]*?\\]","",x)
    x<-gsub("\\[[a-zA-Z]*?\\]","",x)
@@ -185,13 +194,15 @@ x<-unlist(lapply(x,percent2number))
    # remove all second results (.num.num)
    x<-gsub("(\\.[0-9]*?)\\.[0-9\\.]*","\\1",x)
    #   gsub("([<=>][\\.0-9]*?)[^a-zA-Z]*","\\1 ",x)
-# remove coma in BF(0,1), B
+  # remove coma in BF(0,1)
   x<-gsub("(BF[(][01])[,;]([01][)])","\\1\\2",x)
-# remove front of F value   
+  # remove space in BF 01 and convert to BF(01)
+  x<-gsub(" BF *([01][01])([^0-9])"," BF(\\1)\\2",x)
+  # remove front of F value   
   x<-gsub("[a-zA-Z]*?(F[(][0-9\\.]*?,)","\\1",x)
-# remove space between letter or 2 and "(num"
+  # remove space between letter or 2 and "(num"
   x<-gsub("([A-Za-z2]) (\\([0-9])","\\1\\2",x)
-# remove label from "statistic label ([0-9]"
+  # remove label from "statistic label ([0-9]"
   x<-gsub("^([rtFQH])[a-z0-9]*? (\\([0-9])","\\1\\2",x)
   x<-gsub("^([rtFQH]) [a-z0-9]*?(\\([0-9])","\\1\\2",x)
   x<-gsub("^([tFQH])[a-z0-9]*?(\\([0-9])","\\1\\2",x)
@@ -225,13 +236,17 @@ if(length(i)>0) for(j in 1:length(i))  x[i[j]]<-gsub("([0-9\\.]*?)\\^\\-[0-9\\.]
  x<-gsub("\\^\\+","e+",x)
  x<-gsub("([0-9])[Ee]\\^([0-9])","\\1e+\\2",x)
  x<-gsub("([0-9])[Ee]([0-9])","\\1e+\\2",x)
-
+ 
 # remove second number after second operator: ps<.9<05/6 ->ps<.9
  x<-gsub("([0-9\\.][0-9])[<>=]+[0-9\\./]*","\\1",x)
  x<-gsub("([0-9\\.]/[0-9])[<>=]+[0-9\\./]*","\\1",x)
  
 # function to convert e num
 e2num<-function(x){
+   # remove space between number and e_num
+   x<-gsub("([0-9]) [Ee] *([+-][0-9])","\\1e\\2",x)
+   x<-gsub("([0-9]) [Ee]([0-9])","\\1e+\\2",x)
+# unify   
 if(length(grep("[0-9][Ee][-\\+\\.0-9]",x))>0){
     x<-gsub("([0-9])[Ee]([0-9])","\\1e+\\2",x)
     x<-gsub("([0-9])E([-\\+\\.0-9])","\\1e\\2",x)
@@ -306,7 +321,7 @@ x<-gsub("([<=>]) ","\\1",x)
 x<-gsub("([<=>]-) ([\\.0-9])","\\1\\2",x)
 
 # prepare results colnames
-cnames<-c("result","Z_op","Z","F_op","F","eta2","omega2","t_op","t","d","SE","r_op","r","R2_op","R2","U_op","U","H_op","H","G2_op","G2","OR","RR","Chi2","Q_op","Q","df1","df2","beta","SEbeta","Zest","BF10_op","BF10","BF_op","BF","p_op","p","recalculatedP","p_H0_less","p_H0_greater")
+cnames<-c("result","Z_op","Z","F_op","F","eta2","omega2","t_op","t","d","SE","r_op","r","R2_op","R2","U_op","U","H_op","H","G2_op","G2","OR","RR","Chi2","Q_op","Q","df1","df2","beta","SEbeta","Zest","BF10_op","BF10","BF_op","BF","p_op","p","recalculatedP","p_H1_less","p_H1_greater")
 res<-matrix(NA,nrow=length(x),ncol=length(cnames))
 colnames(res)<-cnames
 
@@ -957,18 +972,18 @@ suppressWarnings({
 
 # for directed tests alternative="directed|both" Z-,t-,r-values 
 suppressWarnings({
-  recalculatedPrg<-round((1-stats::pt((abs(as.numeric(res[,"r"]))*sqrt(as.numeric(res[,"df2"])))/sqrt(1-as.numeric(res[,"r"])^2),as.numeric(res[,"df2"]))),5)
-  recalculatedPtg<-round((1-stats::pt(abs(as.numeric(res[,"t"])),as.numeric(res[,"df2"]))),5)
-  recalculatedPZg<-round((1-stats::pnorm(abs(as.numeric(res[,"Z"])))),5)
-  recalculatedPZgest<-round((1-stats::pnorm(abs(as.numeric(res[,"Zest"])))),5)
+  recalculatedPrg<-round((1-stats::pt(((as.numeric(res[,"r"]))*sqrt(as.numeric(res[,"df2"])))/sqrt(1-as.numeric(res[,"r"])^2),as.numeric(res[,"df2"]))),5)
+  recalculatedPtg<-round((1-stats::pt((as.numeric(res[,"t"])),as.numeric(res[,"df2"]))),5)
+  recalculatedPZg<-round((1-stats::pnorm((as.numeric(res[,"Z"])))),5)
+  recalculatedPZgest<-round((1-stats::pnorm((as.numeric(res[,"Zest"])))),5)
 })
 
 # for directed tests alternative="directed|both" Z-,t-,r-values 
 suppressWarnings({
-  recalculatedPrl<-round((stats::pt((abs(as.numeric(res[,"r"]))*sqrt(as.numeric(res[,"df2"])))/sqrt(1-as.numeric(res[,"r"])^2),as.numeric(res[,"df2"]))),5)
-  recalculatedPtl<-round((stats::pt(abs(as.numeric(res[,"t"])),as.numeric(res[,"df2"]))),5)
-  recalculatedPZl<-round((stats::pnorm(abs(as.numeric(res[,"Z"])))),5)
-  recalculatedPZlest<-round((stats::pnorm(abs(as.numeric(res[,"Zest"])))),5)
+  recalculatedPrl<-round((stats::pt(((as.numeric(res[,"r"]))*sqrt(as.numeric(res[,"df2"])))/sqrt(1-as.numeric(res[,"r"])^2),as.numeric(res[,"df2"]))),5)
+  recalculatedPtl<-round((stats::pt((as.numeric(res[,"t"])),as.numeric(res[,"df2"]))),5)
+  recalculatedPZl<-round((stats::pnorm((as.numeric(res[,"Z"])))),5)
+  recalculatedPZlest<-round((stats::pnorm((as.numeric(res[,"Zest"])))),5)
 })
 
 # overwrite empty recalculated PZ with PZest 
@@ -994,16 +1009,16 @@ d<-data.frame(recalculatedPtl,recalculatedPrl,recalculatedPZl)
 recalcPless<-NULL
 for(i in 1:dim(d)[1]) recalcPless[i]<-d[i,][!is.na(d[i,])][1]
 # add to res
-  if(!is.null(dim(res))) res[,"p_H0_less"]<-recalcPless
-  if(is.null(dim(res))) res["p_H0_less"]<-recalcPless
+  if(!is.null(dim(res))) res[,"p_H1_less"]<-recalcPless
+  if(is.null(dim(res))) res["p_H1_less"]<-recalcPless
   
 d<-data.frame(recalculatedPrg,recalculatedPtg,recalculatedPZg)
 # get p value by rank r, t, Z
 recalcPgreater<-NULL
 for(i in 1:dim(d)[1]) recalcPgreater[i]<-d[i,][!is.na(d[i,])][1]
 # add to res
-  if(!is.null(dim(res))) res[,"p_H0_greater"]<-recalcPgreater
-  if(is.null(dim(res))) res["p_H0_greater"]<-recalcPgreater
+  if(!is.null(dim(res))) res[,"p_H1_greater"]<-recalcPgreater
+  if(is.null(dim(res))) res["p_H1_greater"]<-recalcPgreater
   
 }
   
@@ -1059,8 +1074,8 @@ if(!is.matrix(res)){
 
 # remove sided test p-values if not requested by alternative and reduce cnames
 if(is.element(alternative,c("undirected"))){
-   res<-res[,-which(is.element(cnames,c("p_H0_greater","p_H0_less")))]
-   cnames<-cnames[-which(is.element(cnames,c("p_H0_greater","p_H0_less")))]
+   res<-res[,-which(is.element(cnames,c("p_H1_greater","p_H1_less")))]
+   cnames<-cnames[-which(is.element(cnames,c("p_H1_greater","p_H1_less")))]
    if(!is.matrix(res)){
    res<-matrix(res,1)
    colnames(res)<-cnames
@@ -1136,7 +1151,8 @@ if(warn.p==TRUE) report<-c(report,"- One or more detected p-values are out of ra
 if(warn.d==TRUE) report<-c(report,"- A rather big effect was detected. One or more |d|-values > 1.\n")
 if(warn.eta==TRUE) report<-c(report,"- A rather big effect was detected. One or more eta^2-values > .3.\n")
 if(warn.multi.p==TRUE) report<-c(report,"- There are one or more results with several recomputable test statistics. Please split the result manually and proceed checking.\n")
-if(!is.null(report)) warning(report)
+
+if(warnings==TRUE&!is.null(report)) warning(report)
    
    # prepare output
    stats<-res

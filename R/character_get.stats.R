@@ -4,7 +4,10 @@
 #' @param x NISO-JATS coded XML or DOCX file path or plain textual content.
 #' @param stats.mode Select a subset of test results by p-value checkability for output. One of: c("all", "checkable", "computable", "uncomputable").
 #' @param recalculate.p Logical. If TRUE recalculates p-values of test results if possible.
-#' @param alternative Character. Select sidedness of recomputed p-values from t-, r- and beta-values. One of c("undirected", "directed", "both").
+#' @param checkP Logical. If TRUE observed and recalculated p-values are checked for consistency.
+#' @param alpha Numeric. Defines the alpha level to be used for error assignment.
+#' @param criticalDif Numeric. Sets the absolute maximum difference in reported and recalculated p-values for error detection.
+#' @param alternative Character. Select test sidedness for recomputation of p-values from t-, r- and beta-values. One of c("undirected", "directed"). If "directed" is specified, p-values for directed null-hypothesis are added to the table but still require a manual inspection on consistency of the direction.
 #' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
 #' @param T2t Logical. If TRUE capital letter T is treated as t-statistic.
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation.
@@ -12,6 +15,7 @@
 #' @param select Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
 #' @param rm.na.col Logical. If TRUE removes all columns with only NA from standardStats.
 #' @param cermine Logical. If TRUE CERMINE specific letter conversion will be peformed on allStats results.
+#' @param warnings Logical. If FALSE warning messages are omitted. 
 #' @return If output="all": list with two elements. E1: vector of extracted results by \code{\link[JATSdecoder]{allStats}} and E2: matrix of standard results by \code{\link[JATSdecoder]{standardStats}}.\cr If output="allStats": vector of extracted results by \code{\link[JATSdecoder]{allStats}}.\cr If output="standardStats": matrix of standard results by \code{\link[JATSdecoder]{standardStats}}.
 #' @source A minimal web application that extracts statistical results from single documents with \code{\link[JATSdecoder]{get.stats}} is hosted at: \href{https://www.get-stats.app}{https://www.get-stats.app/}
 #' @source Statistical results extracted with \code{\link[JATSdecoder]{get.stats}} can be analyzed and used to identify articles stored in the PubMed Central library at: \href{https://www.scianalyzer.com}{https://www.scianalyzer.com/}. 
@@ -47,11 +51,15 @@
 get.stats<-function(x,output="both",
                     stats.mode="all",
                     recalculate.p=TRUE,
+                    checkP=FALSE,
+                    alpha=.05,
+                    criticalDif=.02,
                     alternative="undirected",
                     estimateZ=FALSE,T2t=FALSE,R2r=FALSE,
                     select=NULL,
                     rm.na.col=TRUE,
-                    cermine=FALSE){
+                    cermine=FALSE,
+                    warnings=TRUE){
 # prechecks: is.null(), is.na()
   if(is.null(x)) return(list(stats=character(0),standardStats=character(0)))
   if(length(x)==1) if(is.na(x)) return(list(stats=character(0),standardStats=character(0)))
@@ -73,11 +81,15 @@ get.stats<-function(x,output="both",
 stats<-allStats(x)
 if(output=="standardStats"|output=="both"){
 if(cermine==TRUE) stats<-letter.convert(stats,cermine=cermine)
-sStats<-standardStats(stats,stats.mode=stats.mode,recalculate.p=recalculate.p,alternative=alternative,T2t=T2t,R2r=R2r,rm.na.col=rm.na.col,estimateZ=estimateZ,select=select)
+sStats<-standardStats(stats,stats.mode=stats.mode,recalculate.p=recalculate.p,alternative=alternative,T2t=T2t,R2r=R2r,rm.na.col=rm.na.col,estimateZ=estimateZ,select=select,warnings=warnings)
 }
+
+## check p-values on consistency with recalculated p-values 
+if(checkP==TRUE&recalculate.p==TRUE&output!="allStats") sStats<-pCheck(sStats,alpha=alpha,criticalDif=criticalDif,warnings=warnings)
+
 # output
 if(output=="both") return(list(stats=stats,standardStats=sStats))
-if(output=="stats")   return(stats)
+if(output=="allStats")   return(stats)
 if(output=="standardStats") return(sStats)
 }
 
@@ -146,4 +158,5 @@ html2text<-function(file
   #if(w==1&warn==TRUE) warning("The file is NISO-JATS coded.\n You might want to use study.character() to extract text and have further options.")
   return(y)
 }
+
 
