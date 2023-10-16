@@ -1136,7 +1136,12 @@ check<-x
   x<-gsub("([^a-z])p \\\\","\\1p <",x)
 # convert "num 9 num" to num*num (for ANOVA)
   while(length(grep("[2-9] 9 [2-9]",x)>0)) x<-gsub("([2-9]) 9 ([2-9])","\\1*\\2",x)
-# chi2
+
+  # insert exponential sign for num*10^-num
+  x<-gsub("([0-9]) *(\\*) *(10) *(-[0-9])","\\1\\2\\3^\\4",x)
+  
+  
+  # chi2
   x<-gsub("chi 2","chi2",x)
   x<-gsub("chi\\^2|chi\u00B2","chi2",x)
   x<-gsub("v\\^2\\(","chi2(",x)
