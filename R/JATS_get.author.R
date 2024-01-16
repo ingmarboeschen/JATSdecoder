@@ -12,13 +12,13 @@
 get.author<-function(x,paste="",short.names=FALSE,letter.convert=FALSE){
   # run prechecks or readLines(x) if x is file
   x<-preCheck(x)
-  
-if(length(grep("^contrib",x))!=length(x)) x<-get.contrib(x)
+if(length(grep("^contrib",x))!=length(x)) x<-JATSdecoder::get.contrib(x)
 # collapse x for cases with many spaces (cermine export)
 if(length(grep("^contrib",x))==0) x<-paste(x,collapse=" ")
 # remove double \\
 x<-gsub("\\\\","",x)
-
+# remove role = Editor
+x<-grep("<role>[A-Z][a-z]*? [eE]ditor|<role>[eE]ditor",x,invert=TRUE,value=TRUE)
  if(length(grep("contrib-type=\"author\"",x))>0){
   # author vector raw
   temp<-grep("contrib-type=\"author\"",x,value=TRUE)
