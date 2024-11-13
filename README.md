@@ -7,6 +7,7 @@ The function `study.character()` uses the `JATSdecoder()` result to perform fine
 
 Note:  
 - PDF article collections can be converted to NISO-JATS coded XML files with the open source software [CERMINE](https://github.com/CeON/CERMINE).
+- To extract statistical test results reported in simple/unpublished PDF documents with get.stats(), the R package pdftools and its function pdf_text() may help to extract textual content (be aware that tabled content may cause corrupt text)  
 
 Note too:  
 - A minimal web app to extract statistical results from textual resources with get.stats() is hosted at:  
@@ -133,6 +134,12 @@ study.character("file.xml",output="standardStats",stats.mode="checkable")
 install.packages("statcheck")
 library(statcheck)
 checkHTML("file.xml")
+
+# extract results with get.stats() from simple/unpublished manuscripts with pdftools::pdf_text()
+x<-pdftools::pdf_text("path2file.pdf")
+x<-unlist(strsplit(x,"\\n"))
+JATSdecoder::get.stats(x)
+
 ```
 
 ## Usage for a collection of XML files
