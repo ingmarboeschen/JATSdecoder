@@ -530,6 +530,9 @@ stats<-gsub("(\\[[0-9\\. ,;\\-]*?)$","\\1]\\2",stats)
 # add space to ",95%"
 stats<-gsub("([,;])([0-9\\.]*?\u0025)","\\1 \\2",stats)
 
+# unify CI
+stats<-gsub("[Cc]onfidence [Ii]ntervall*|[Cc]onf\\.*[ -][Ii]nt\\.*","CI",stats)
+stas<-gsub("CI for [[:alpha:]]*","CI",stats)
 # add ")" in CI=( without (
 stats<-gsub("(CI[:= ][(][0-9, ;\\.\\-]*?$)","\\1)",stats)
 stats<-gsub("(CI[:= ][(][0-9, ;\\.\\-]*?), ([^0-9\\.\\-])","\\1), \\2",stats)

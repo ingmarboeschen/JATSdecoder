@@ -187,18 +187,21 @@ if(length(grep("\\%|[0-9] percent",x))>0){
 
 # function to convert ^num
 hight2num<-function(x){
-if(length(grep("[0-9]\\)*\\^[-\\.0-9]",x))>0){
-x<-unlist(strsplit2(x,"\\.$","before"))
-# 1 new line 
-#x<-unlist(strsplit2(x,"[\\(]*[^-\\.0-9][-\\.0-9][-\\.0-9]*?[\\)]*\\^[-\\.0-9]","before"))
-x<-unlist(strsplit2(x,"[\\(]*[^-\\.0-9][-\\.0-9][-\\.0-9]*?[\\)]*\\^","before"))
-# 1 old line
-# x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?\\^[-\\.0-9]","before"))
+if(length(grep("[0-9]\\)* *\\^ *[-\\.0-9]",x))>0){
+    x<-gsub(" *(\\^) ([-\\.0-9])","\\1\\2",x)
+    x<-gsub("(\\^-) ([\\.0-9])","\\1\\2",x)
+    
+    x<-unlist(strsplit2(x,"\\.$","before"))
+    # 1 new line 
+    #x<-unlist(strsplit2(x,"[\\(]*[^-\\.0-9][-\\.0-9][-\\.0-9]*?[\\)]*\\^[-\\.0-9]","before"))
+    x<-unlist(strsplit2(x,"[\\(]*[^-\\.0-9][-\\.0-9][-\\.0-9]*?[\\)]*\\^","before"))
+    # 1 old line
+    # x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?\\^[-\\.0-9]","before"))
 
     # add space to end
     x<-paste0(x," ")
     # if has (-num)^num or num^num calculate and and replace 
-    ind<-grep("[\\(][-0-9\\.]*[\\)]\\^[-\\.0-9]|^[0-9]\\^[-\\.0-9]",x)
+    ind<-grep("[\\(][-0-9\\.]*[\\)]\\^ *[-\\.0-9]|^ *[0-9\\.-]*\\^[-\\.0-9]",x)
     exponent <- function(a, pow){
         res<-rep(NA,length(a))
         # if has: (-num)^num

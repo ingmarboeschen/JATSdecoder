@@ -32,10 +32,10 @@ warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.
 # convert with all.stats() if has " [<=>] [0-9\\.-]"
 if(length(grep(" [<=>] [0-9\\.-]|[<=>] [0-9\\.-]",x))>0) x<-allStats(x)
 if(length(x)>0){
-# convert 10-num to 10^-num
-x<-gsub("([^0-9]10)(-[1-9]*)$","\\1^\\2",x)  
 # take copy for raw output
 y<-x
+# convert 10-num to 10^-num
+x<-gsub("([^0-9]10)(-[1-9][0-9]*)","\\1^\\2",x)  
 # remove space between letter and (
 x<-gsub("([A-Za-z]) (\\([0-9Nnd])","\\1\\2",x)
 
@@ -115,7 +115,9 @@ x<-unlist(lapply(x,percent2number))
    # remove ^ from "letter^2"
    x<-gsub("([a-zA-Z])[\\^]2","\\12",x)
    # unify p-value
-   x<-gsub("([^a-z])p[- ]value","\\1p",x)
+   x<-gsub("([^a-z])p[- ][vV]alue","\\1p",x)
+   # remove "value"
+   x<-gsub("[- ][vV]alue"," ",x)
    # remove " all"
    x<-gsub("all ","",x)
    x<-gsub("-","-",x)
@@ -175,7 +177,8 @@ x<-unlist(lapply(x,percent2number))
    x<-gsub("eta G|eta\\([gG]\\)","eta",x)
    x<-gsub("eta2|eta2 G|eta2\\([gG]\\)","eta2",x)
    # unify SE
-   x<-gsub("[sS]\\.[eE]\\.","SE",x)
+   x<-gsub(" [sS]\\.[eE]\\.","SE",x)
+   x<-gsub("^[sS]\\.[eE]\\.","SE",x)
    # plural to singular
    x<-gsub("([^a-z][tFrpZd])s([^a-z])","\\1\\2",x)
    x<-gsub("^([tFrpZd])s([^a-z])","\\1\\2",x)
@@ -342,7 +345,7 @@ if(length(grep("^b[<=>]| b[<=>]",x))>0){
    index<-grep("^b[<=>]| b[<=>]",x)
    # extract
    beta<-suppressWarnings(as.numeric(gsub("[,; ].*","",unlist(lapply(strsplit(x[index]," b[<=>]*|^b[<=>]*"),"[",2)))))
-   SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>]*","",x[index]))))
+   SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>]*|^SE[<=>]*","",x[index]))))
    # add to res
    res[index,"beta"]<-beta
    res[index,"SEbeta"]<-SE
@@ -375,10 +378,10 @@ if(length(grep("^d[<=>]| d[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-
 }
 
 ## if has SE but no beta or d extract SE
-if(length(grep(" SE[<=>]",x))>0&length(grep("^b[<=>]| b[<=>]",x))==0&length(grep("^d[<=>]| d[<=>]",x))==0){
-   index<-grep(" SE[<=>]",x)
+if(length(grep(" SE[<=>]|^SE[<=>]",x))>0&length(grep("^b[<=>]| b[<=>]",x))==0&length(grep("^d[<=>]| d[<=>]",x))==0){
+   index<-grep(" SE[<=>]|^SE[<=>]",x)
    # extract
-   SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>]*","",x[index]))))
+   SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>]*|^SE[<=>]*","",x[index]))))
    # add to res
    res[index,"SE"]<-SE
    res[index,"result"]<-y[index]
