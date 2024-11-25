@@ -119,6 +119,8 @@ singleTable2matrix<-function(x,letter.convert=TRUE,# Logical. If TRUE hex codes 
   ##############
   # function to insert cells to vector
   insert<-function(value,x,at){
+    if(length(value)==0) return(x)
+    if(is.na(value)) return(x)
     if(at<=1) out<-c(value,x[(at):length(x)])  
     if(at>1&at<=length(x)) out<-c(x[1:(at-1)],value,x[(at):length(x)])  
     if(at>length(x)) out<-c(x[1:length(x)],value)  
