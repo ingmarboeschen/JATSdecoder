@@ -46,7 +46,7 @@
 #' if(file.exists(file)) get.text(file)
 
 JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experiment","conclu","implica","discussion"),grepsection="",
-                         sentences=FALSE,paragraph=FALSE,abstract2sentences=TRUE,table2matrix=TRUE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,
+                         sentences=FALSE,paragraph=FALSE,abstract2sentences=TRUE,table2matrix=FALSE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,
                       countryconnection=FALSE,authorconnection=FALSE){
 # check if x is an object else return standard error message
 if(is.na(x)) tryCatch(x,error=function(e) message(e))
