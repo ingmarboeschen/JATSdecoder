@@ -82,7 +82,7 @@ JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar B�
 
 - Böschen, I. (2023). Changes in methodological study characteristics in psychology between 2010-2021. PLOS ONE 18(5). https://doi.org/10.1371/journal.pone.0283353. [link to [repo](https://github.com/ingmarboeschen/JATSdecoderEvaluation/tree/main/Study_ChangesInMethodologyInPsychology)]
 
-- Böschen, I. (submitted 2023). statcheck is flawed by design and no valid spell checker. [link to [repo](https://github.com/ingmarboeschen/JATSdecoderEvaluation/tree/main/Check_statcheck)]
+- Böschen, I. (2024). statcheck is flawed by design and no valid spell checker for statistical results. [https://arxiv.org/abs/2408.07948](https://arxiv.org/abs/2408.07948). [link to [repo](https://github.com/ingmarboeschen/JATSdecoderEvaluation/tree/main/Check_statcheck)]. [link to [repo](https://github.com/ingmarboeschen/JATSdecoderEvaluation/tree/main/Check_statcheck)]
 
 **Evaluation data and code:** 
 
