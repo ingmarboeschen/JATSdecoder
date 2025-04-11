@@ -17,6 +17,7 @@ JATSdecoder(
   sentences = FALSE,
   paragraph = FALSE,
   abstract2sentences = TRUE,
+  table2matrix = FALSE,
   output = "all",
   letter.convert = TRUE,
   unify.country.name = TRUE,
@@ -38,6 +39,8 @@ JATSdecoder(
 \item{paragraph}{Logical. IF TRUE "<New paragraph>" is added at the end of each paragraph to enable manual splitting at paragraphs.}
 
 \item{abstract2sentences}{Logical. IF TRUE abstract is returned as vector with sentences.}
+
+\item{table2matrix}{Logical. IF TRUE html tables are returned as list of matrices.}
 
 \item{output}{selection of specific results to output c("all", "title", "author", "affiliation", "journal", "volume", "editor", "doi", "type", "history", "country", "subject", "keywords", "abstract", "sections", "text", "tables", "captions", "references").}
 

@@ -14,6 +14,9 @@ standardStats(
   stats.mode = "all",
   recalculate.p = TRUE,
   alternative = "undirected",
+  checkP = FALSE,
+  alpha = 0.05,
+  criticalDif = 0.02,
   estimateZ = FALSE,
   T2t = FALSE,
   R2r = FALSE,
@@ -31,7 +34,13 @@ standardStats(
 
 \item{alternative}{Character. Select test sidedness for recomputation of p-values from t-, r- and beta-values. One of c("undirected", "directed"). If "directed" is specified, p-values for directed null-hypothesis are added to the table but still require a manual inspection on consistency of the direction.}
 
-\item{estimateZ}{Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.}
+\item{checkP}{Logical. If TRUE observed and recalculated p-values are checked for consistency.}
+
+\item{alpha}{Numeric. Defines the alpha level to be used for error assignment.}
+
+\item{criticalDif}{Numeric. Sets the absolute maximum difference in reported and recalculated p-values for error detection.}
+
+\item{estimateZ}{Logical. If TRUE detected beta-/d-values are divided by the reported standard error "SE" to estimate Z-values ("Zest") for observed beta/d and computation of p-values. Further, t-values that are reported without degrees of freedom will be treated as an estimate for Z. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value with degrees of freedom is detected in a report of a beta-/d-coefficient with SE, no estimation of Z will be performed, although set to TRUE.}
 
 \item{T2t}{Logical. If TRUE capital letter T is treated as t-statistic.}
 

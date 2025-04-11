@@ -64,6 +64,9 @@ If output="all": list with two elements. E1: vector of extracted results by \cod
 \description{
 Extracts statistical results from text string, XML, CERMXML, HTML or DOCX files. The result is a list with a vector containing all identified sticked results and a matrix containing the reported standard statistics and recalculated p-values if computation is possible.
 }
+\note{
+In order to extract statistical test results reported in simple/unpublished PDF documents with get.stats(), the function \emph{pdf_text()} from the \href{https://CRAN.R-project.org/package=pdftools/}{pdftools} package may help to extract textual content from pdf files (be aware that tabled content may cause corrupt text).
+}
 \examples{
 ## Extract results from plain text input
 x<-c("The mean difference of scale A was significant (beta=12.9, t(18)=2.5, p<.05).",
