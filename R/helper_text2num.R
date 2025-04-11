@@ -23,6 +23,8 @@
 #' text2num(x)
 
 text2num<-function(x,exponent=TRUE,percentage=TRUE,fraction=TRUE,e=TRUE,product=TRUE,words=TRUE){
+# add 0 to digits without 0 "(.123)"
+x<-gsub("([-<=> \\(])(\\.[0-9])","\\10\\2",x)
 # convert textual representations of numbers
 if(exponent==TRUE)   x<-unlist(lapply(x,hight2num))
 if(percentage==TRUE)    x<-unlist(lapply(x,percent2number))

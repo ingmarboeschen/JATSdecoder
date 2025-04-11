@@ -10,6 +10,7 @@
 #' @param rm.html Logical. If TRUE all HTML tags are removed, except <sub> and <sup> , </break> is converted to space
 #' @param collapseHeader Logical. If TRUE header cells are collapsed for each column if header has 2 or more lines
 #' @param header2colnames Logical. If TRUE and 'collapseHeader=TRUE' first table row is used for column names and removed from table
+#' @param unifyMatrix Logical. If TRUE matrix cells are further unified for better post processing.
 #' @examples 
 #' x<-readLines("https://en.wikipedia.org/wiki/R_(programming_language)",warn=FALSE)
 #' tabs<-table2matrix(x)
@@ -25,13 +26,16 @@ table2matrix<-function(x,
                        rm.html=FALSE,
                        rm.empty.rows=TRUE,
                        collapseHeader=TRUE,
-                       header2colnames=FALSE 
+                       header2colnames=FALSE,
+                       unifyMatrix=FALSE
+                       
 ){
   
   # run prechecks or readLines(x) if x is file
   x<-preCheck(x)
   if(length(grep("<table",substr(x[1],1,7)))==0) x<-get.tables(x)
-  
+  # remove newline sign
+  x<-gsub("\\n"," ",x)
   # if has multiple tables within a table-wrap, split input at <table>-tag and repeat <table-wrap> for every table
   multiTable<-function(x){
     # function for single cell with table
@@ -61,8 +65,8 @@ table2matrix<-function(x,
   
   # apply function singleTable2matrix
   out<-list()
-  if(length(x)==1) out[[1]]<-singleTable2matrix(x,letter.convert=letter.convert,replicate=replicate,rm.html=rm.html,rm.duplicated=rm.duplicated,collapseHeader=collapseHeader,header2colnames=header2colnames)
-  if(length(x)>1) out<-lapply(x,singleTable2matrix,letter.convert=letter.convert,replicate=replicate,rm.html=rm.html,rm.duplicated=rm.duplicated,collapseHeader=collapseHeader,header2colnames=header2colnames)
+  if(length(x)==1) out[[1]]<-singleTable2matrix(x,letter.convert=letter.convert,replicate=replicate,rm.html=rm.html,rm.duplicated=rm.duplicated,collapseHeader=collapseHeader,header2colnames=header2colnames,unifyMatrix=unifyMatrix)
+  if(length(x)>1) out<-lapply(x,singleTable2matrix,letter.convert=letter.convert,replicate=replicate,rm.html=rm.html,rm.duplicated=rm.duplicated,collapseHeader=collapseHeader,header2colnames=header2colnames,unifyMatrix=unifyMatrix)
   if(length(out)==0) return(list())
   # remove empty lists
   if(length(out)>0){
@@ -88,7 +92,9 @@ singleTable2matrix<-function(x,letter.convert=TRUE,# Logical. If TRUE hex codes 
                              rm.empty.rows=TRUE,
                              rm.html=FALSE,
                              collapseHeader=TRUE, # Logical. If TRUE header cells are collapsed for each column if header has 2 or more lines
-                             header2colnames=FALSE # Logical. If TRUE and collapse header==TRUE first table row is used for column names and removed from table
+                             header2colnames=FALSE, # Logical. If TRUE and collapse header==TRUE first table row is used for column names and removed from table
+                             unifyMatrix=FALSE
+                             
 ){
   # escape if x is empty
   if(length(x)==0) return(NULL)
@@ -179,7 +185,7 @@ singleTable2matrix<-function(x,letter.convert=TRUE,# Logical. If TRUE hex codes 
       # lines with rowspan left 
       line<-which(grepl('rowspan=..[1-9]',cells))
     }
-    if(warn==TRUE) warning("Table compiling might have gone wrong due to complexety of cell connections.")
+    if(warn==TRUE) warning("Table compiling might have gone wrong due to complexety of cell connections.",call.=FALSE)
     
     return(cells)
   }
@@ -202,7 +208,7 @@ singleTable2matrix<-function(x,letter.convert=TRUE,# Logical. If TRUE hex codes 
     ind[min((1:length(ind))[!ind]):length(ind)]<-FALSE
     # abort if table has multiple headers  
     if(sum(ind1)!=sum(ind)){
-      warnings("The table contains multiple headers. Collapsing headers and concersion to data.frame was omitted.")
+      warnings("The table contains multiple headers. Collapsing headers and conversion to data.frame was omitted.",call.=FALSE)
       collapseHeader<-FALSE
     }else{
       # set index for second block of header lines to FALSE 
@@ -227,12 +233,17 @@ singleTable2matrix<-function(x,letter.convert=TRUE,# Logical. If TRUE hex codes 
   cells<-lapply(cells,function(x) gsub("</t[dr]>|</t[dr]>|<t[dr]/*>|<t[dr] [^>]*>","",x))
   
   if(rm.html==TRUE){
-    # convert </break> to space and remove all html-tags except <su[pb]> tags
+    # convert </break> to space, <sub> to _, <sup> to ^ and remove all other html-tags
     cells<-lapply(cells,function(x) gsub("</*break/*>"," ",x))
-    cells<-lapply(cells,function(x) gsub("<(/*)su([bp])>","\\1TEMPSU\\2",x))
+    cells<-lapply(cells,function(x) gsub(" *<sub> *","_",x))
+    cells<-lapply(cells,function(x) gsub(" *<sup> *","^",x))
+    #    cells<-lapply(cells,function(x) gsub("<(/*)su([bp])>","\\1TEMPSU\\2",x))
     cells<-lapply(cells,function(x) gsub("</*[a-z][^>]*/*>|</*[a-z]/*>","",x))
-    cells<-lapply(cells,function(x) gsub("(/*)TEMPSU([pb])","<\\1su\\2>",x))
-  }
+    cells<-lapply(cells,function(x) gsub("</*inline[^>]*/*>|</*inline[^>]*/*>","",x))
+#    cells<-lapply(cells,function(x) gsub("(/*)TEMPSU([pb])","<\\1su\\2>",x))
+    }
+  
+  
   
   # remove empty rows
   if(rm.empty.rows==TRUE){
@@ -258,6 +269,10 @@ singleTable2matrix<-function(x,letter.convert=TRUE,# Logical. If TRUE hex codes 
     colnames(m)<-m[1,]
     m<-m[-1,]
   }
+  
+  if(unifyMatrix==TRUE) m<-unifyMatrix(m)
+  
+  
   return(m)
   
 }# end  singleTable2matrix

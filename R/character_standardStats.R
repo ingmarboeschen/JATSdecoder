@@ -5,7 +5,10 @@
 #' @param stats.mode Select subset of standard stats. One of: c("all", "checkable", "computable", "uncomputable").
 #' @param recalculate.p Logical. If TRUE recalculates p values (for 2 sided test) if possible.
 #' @param alternative Character. Select test sidedness for recomputation of p-values from t-, r- and beta-values. One of c("undirected", "directed"). If "directed" is specified, p-values for directed null-hypothesis are added to the table but still require a manual inspection on consistency of the direction.
-#' @param estimateZ Logical. If TRUE detected beta-/d-value is divided by reported standard error "SE" to estimate Z-value ("Zest") for observed beta/d and recompute p-value. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value is detected in a report of a beta-/d-coefficient with SE, no estimation will be performed, although set to TRUE.
+#' @param checkP Logical. If TRUE observed and recalculated p-values are checked for consistency.
+#' @param alpha Numeric. Defines the alpha level to be used for error assignment.
+#' @param criticalDif Numeric. Sets the absolute maximum difference in reported and recalculated p-values for error detection.
+#' @param estimateZ Logical. If TRUE detected beta-/d-values are divided by the reported standard error "SE" to estimate Z-values ("Zest") for observed beta/d and computation of p-values. Further, t-values that are reported without degrees of freedom will be treated as an estimate for Z. Note: This is only valid, if Gauss-Marcov assumptions are met and a sufficiently large sample size is used. If a Z- or t-value with degrees of freedom is detected in a report of a beta-/d-coefficient with SE, no estimation of Z will be performed, although set to TRUE.
 #' @param T2t Logical. If TRUE capital letter T is treated as t-statistic.
 #' @param R2r Logical. If TRUE capital letter R is treated as correlation.
 #' @param select Select specific standard statistics only (e.g.: c("t", "F", "Chi2")).
@@ -25,7 +28,17 @@
 #' BF(01)>4","chi=3.2, r(34)=-.7, p<.01, R2=76%.")
 #' standardStats(x)
 
-standardStats<-function(x,stats.mode="all",recalculate.p=TRUE,alternative="undirected",estimateZ=FALSE,T2t=FALSE,R2r=FALSE,select=NULL,rm.na.col=TRUE,warnings=TRUE){
+standardStats<-function(x,stats.mode="all",
+                        recalculate.p=TRUE,
+                        alternative="undirected",
+                        checkP=FALSE,
+                        alpha=.05,
+                        criticalDif=.02,
+                        estimateZ=FALSE,
+                        T2t=FALSE,R2r=FALSE,
+                        select=NULL,
+                        rm.na.col=TRUE,
+                        warnings=TRUE){
 # set warning massages to FALSE
 warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.d<-FALSE;warn.eta<-FALSE;warn.multi.p<-FALSE
    x<-unlist(x)
@@ -68,6 +81,8 @@ x<-gsub(" d *[a-eg-zA-EG-Z0-9]([^a-zA-Z0-9])|^d *[a-eg-zA-EG-Z0-9]([^a-zA-Z0-9])
 x<-gsub("chi2*/[a-z0-9]*[<=>]*[0-9\\.]*","",x)
 # remove chi2/df=num
 x<-gsub("chi[\\^]*2* */ *df=[0-9]*\\.[0-9]","",x)
+# remove delta chi2=num
+x<-gsub("delta chi[\\^]*2* *=[0-9]*\\.[0-9]","",x)
 
  # remove percent value in brackets
    x<-gsub(" \\([0-9\\.]*\\%\\)","",x)     
@@ -117,7 +132,9 @@ x<-unlist(lapply(x,percent2number))
    # unify p-value
    x<-gsub("([^a-z])p[- ][vV]alue","\\1p",x)
    # remove "value"
-   x<-gsub("[- ][vV]alue"," ",x)
+   x<-gsub("[- ][vV]alues*"," ",x)
+   # remove "statistics*"
+   x<-gsub("[- ][Ss]tatisti[ck]s*"," ",x)
    # remove " all"
    x<-gsub("all ","",x)
    x<-gsub("-","-",x)
@@ -153,6 +170,7 @@ x<-unlist(lapply(x,percent2number))
    x<-gsub("\u00DF","beta",x) # sharp s
    x<-gsub("\u0392","beta",x) # greek capital BETA
    x<-gsub("[Bb]etas","beta",x) # singular
+   x<-gsub(" [B]([<=>])"," beta\\1",x) # singular
    # unify chi2s -> chi2
    x<-gsub("X2|[Cc]hi2s|X 2 ","Chi2",x) 
    x<-gsub("[Cc]hi[- ][Ss]quare|[Cc]hisquare","Chi2",x) 
@@ -285,7 +303,7 @@ x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?\\^[-\\.0-9]","before"))
                                        as.numeric(gsub("[^-0-9\\.].*","\\1",gsub(".*[-0-9\\.]*?\\^([-\\.0-9]*)","\\1",x[ind])))),
                                  scientific=F))
 
-        # clean up white spaces
+    # clean up white spaces
     res<-gsub("^ *|(?<= ) | *$", "", res, perl = TRUE)
     # remove only zeros at end
     res<-gsub("\\.[0]*$","",res)
@@ -324,11 +342,12 @@ x<-gsub("([<=>]) ","\\1",x)
 x<-gsub("([<=>]-) ([\\.0-9])","\\1\\2",x)
 
 # prepare results colnames
-cnames<-c("result","Z_op","Z","F_op","F","eta2","omega2","t_op","t","d","SE","r_op","r","R2_op","R2","U_op","U","H_op","H","G2_op","G2","OR","RR","Chi2","Q_op","Q","df1","df2","beta","SEbeta","Zest","BF10_op","BF10","BF_op","BF","p_op","p","recalculatedP","p_H1_less","p_H1_greater")
+cnames<-c("result","Z_op","Z","F_op","F","eta2","omega2","t_op","t","d","SE","r_op","r","R2_op","R2","U_op","U","H_op","H","G2_op","G2","OR","RR","Chi2","Q_op","Q","df1","df2","beta","SEbeta","Zest","BF10_op","BF10","BF_op","BF",
+          "p_op","p","codedP_op","codedP","recalculatedP","p_H1_less","p_H1_greater")
 res<-matrix(NA,nrow=length(x),ncol=length(cnames))
 colnames(res)<-cnames
 
-## extract beta and d and standarderror than calculate Zest
+## extract beta and d and standard error than calculate Zest
 # unify
 x<-gsub("[Ss]lope|[Bb]eta"," b",x)
 x<-gsub(" [Ss][Ee]\\([a-zA-Z]*)"," SE",x)
@@ -340,11 +359,27 @@ x<-gsub("  "," ",x)
 x<-gsub("Cohen.s d.*?([<=>])","d\\1",x)
 x<-gsub("Cohens d.*?([<=>])","d\\1",x)
 
+# if has codedP extract
+if(length(grep(";; p[<=>]",x))>0){
+   index<-grep(";; p[<=>]",x)
+   # extract
+   codedP<-suppressWarnings(as.numeric(gsub(".*;; p *[<=>][<=>]* *([0\\.]*[0-9][0-9]*).*","\\1",x[index])))
+   codedP_op<-gsub(".*;; p *([<=>][<=>]*) *[0\\.]*[0-9][0-9]*.*","\\1",x[index])
+   # add to res
+   res[index,"codedP"]<-codedP
+   res[index,"codedP_op"]<-codedP_op
+   res[index,"result"]<-y[index]
+   
+   # remove codedP from x for further processing
+   x[index]<-gsub(";; p *[<=>][<=>]* *[0\\.]*[0-9][0-9]*","",x[index])
+}
+
+
 # if has beta extract beta and SE beta
 if(length(grep("^b[<=>]| b[<=>]",x))>0){
    index<-grep("^b[<=>]| b[<=>]",x)
    # extract
-   beta<-suppressWarnings(as.numeric(gsub("[,; ].*","",unlist(lapply(strsplit(x[index]," b[<=>]*|^b[<=>]*"),"[",2)))))
+   beta<-suppressWarnings(as.numeric(gsub("[,; ].*","",unlist(lapply(strsplit(x[index]," b[<=>]|^b[<=>]"),"[",2)))))
    SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>]*|^SE[<=>]*","",x[index]))))
    # add to res
    res[index,"beta"]<-beta
@@ -398,29 +433,38 @@ x<-gsub("( )t[a-zA-Z]\\(([1-9])|^t[a-zA-Z]\\(([1-9])","\\1t(\\2\\3",x)
 index<-grep(" t[<>=]|^t[<>=]| t[(][\\.0-9 df=]*[)]|^t[(][\\.0-9 df=]*[)]",x)
 if(length(index>0)){
   tval<-x[index]
-# remove till first t value if has 2
+  # take a copy
+  tval2<-tval
+  # remove till first t value if has 2
   ft<-function(x){lapply(strsplit2(tval,"^t[<>=(]| t[<>=(]","before"),function(x) grep("^t[<>=(]| t[<>=(]",x,value=TRUE)[1])}
   tval<-unlist(ft(tval))
   tval<-gsub(".* t([(<>=])","t\\1",tval)
-  # remove'df='
+  # remove "df=" from "(df="
   tval<-gsub("\\(df=([1-9])","(\\1",tval)
-  # df
+  # extract df
   tdf<-rep(NA,length(tval))
-  # index for lines with df
+  # index for lines with t(df)
   ind<-grep(" t[(]|^t[(]",tval)
   if(length(ind)>0) tdf[ind]<-gsub("[,;].*","",gsub("[)].*","",gsub(".*t[(]","",tval[ind])))
-  ind<-grep(" df=",tval)
-  if(length(ind)>0) tdf[ind]<-gsub(",;.*","",gsub("[^0-9\\.].*","",gsub(".* df=","",tval[ind])))
+  # index for lines with df= and no t(df)
+  ind<-which(is.element(grep(" df=",tval2),grep(" t\\([1-9]|^t\\([1-9]",tval,invert=TRUE)))
+  if(length(ind)>0) tdf[ind]<-gsub(",;.*","",gsub("[^0-9\\.].*","",gsub(".* df=","",tval2[ind])))
   # get sign
   sign<-gsub("[^<>=].*","",sub("[^<>=]*([=<>])", "\\1",sub(".* t([\\(=<>])","\\1",tval)))
   # clean up t value
   tval<-gsub("\\([0-9\\.,;]*\\)|\\]","",tval) # remove df within brackets
   tval<-suppressWarnings(as.numeric(gsub(".*[=<>]","",gsub("[;,] .*| .*|[;,]$","",gsub(".*t[(<>=]|^t[(<>=]","",tval)))))
+  
   # insert results to res
   res[index,c("t_op","t","df2")]<-cbind(sign,tval,tdf)
   res[index,"result"]<-y[index]
 }
 
+# convert t to Zest if t-value but no df is detected
+if(estimateZ==TRUE){ 
+   index<-!is.na(res[,"t"])&is.na(res[,"df2"])
+   res[index,"Zest"]<-res[index,"t"]
+}   
 
 ## get F-value and its df1 and df2
 # remove number of numbered F-values
@@ -687,7 +731,7 @@ res[index,"df1"][use]<-G2df[use]
 
 
 ## extracts only R2 no type yet
-index<-grep("^[Rr]2[(<= ]|[^A-Za-z][Rr]2[(<= ]|[Rr] 2[(<= ]|[^A-Za-z][Rr] 2[(<= ]",x)
+index<-grep("^[Rr] *2 *[(<= ]|[^A-Za-z][Rr] *2 *[(<= ]",x)
 if(length(index)>0){
 R2<-x[index]
 # unify
@@ -937,6 +981,7 @@ res[index,c("df1")][i2]<-cbind(Qdf)[i2]
 }
 
 
+
 ############
 ## clean up
 ##########
@@ -1136,13 +1181,14 @@ names(res)<-n
 } # end remove columns
 
 # set empty result to character(0)
-if(is.null(res)) res<-character(0)
+if(is.null(res)) res<-NULL
 
-if(!is.null(ncol(res))) if(ncol(res)==0) res<-character(0)
-if(!is.null(ncol(res))) if(nrow(res)==0) res<-character(0)
+if(!is.null(ncol(res))) if(ncol(res)==0) res<-NULL
+if(!is.null(ncol(res))) if(nrow(res)==0) res<-NULL
 
-}else res<-character(0)
-}else res<-character(0) # end escape
+}else res<-NULL
+}else res<-NULL
+# end escape
 
 ## Warning massages
    report<-NULL
@@ -1165,7 +1211,12 @@ if(dim(stats)[1]>0){
 if(length(grep("_op|result",names(stats),invert=TRUE))>0){
   for(i in grep("_op|result",names(stats),invert=TRUE)) stats[,i]<-as.numeric(stats[,i],warn=F)
 }
-}else stats<-character(0)
+}else stats<-NULL
+
+if(checkP==TRUE) stats<-pCheck(stats,alpha=alpha,criticalDif=criticalDif,warnings=warnings)
+
+# insert copy of input to column result
+
 return(stats)
 
 }

@@ -209,6 +209,10 @@ x<-gsub("&x0037;","7",x) # DIGIT seven
 x<-gsub("&x0038;","8",x) # DIGIT eight
 x<-gsub("&x0039;","9",x) # DIGIT nine
 x<-gsub("&x0044;","D",x) #     LATIN CAPITAL LETTER D
+
+x<-gsub("\u0420","P",x) # cyrillic Er to P
+x<-gsub("\u0440","p",x) # cyrillic er to p
+
 x<-gsub("&#x00421;","C",x) #  CYRILLIC CAPITAL LETTER ES
 x<-gsub("&#x00406;","I",x) # CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
 x<-gsub("&#x00441;","c",x) # CYRILLIC SMALL LETTER ES

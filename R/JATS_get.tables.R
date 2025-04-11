@@ -9,6 +9,8 @@
 get.tables<-function(x){
   # run prechecks or readLines(x) if x is file
   x<-JATSdecoder::preCheck(x)
+  # remove newline sign
+  x<-gsub("\\n"," ",x)
   
   tables<-character(0)
   if(sum(grep("<table[-> ]",x))>0){
