@@ -151,8 +151,8 @@ x<-gsub("&#x0223c;","~",x) # tilde
 x<-gsub("&#x002dc;","~",x) # tilde
 x<-gsub("&#x02261;","=",x) # identical to
 x<-gsub("&#x02245;","=~",x) # tilde full equal
-x<-gsub("&#x00026;","& ",x) #  &
-x<-gsub("&#x00023;","# ",x) #  # , num
+x<-gsub("&#x00026;","&",x) #  &
+x<-gsub("&#x00023;","#",x) #  # , num
 x<-gsub("&#x02026;","...",x) # ...
 x<-gsub("&#x02192;","->",x)# rightwards arrow
 x<-gsub("&#x025b8;","->",x)# rightwards arrow
@@ -988,7 +988,7 @@ x<-gsub("&#x0010e;","\u010e",x) # LATIN CAPITAL LETTER D WITH CARON
 }# End hexadecimal conversion
 
 ## unify some html letters  
-x<-gsub("&amp;","& ",x) #  &
+x<-gsub("&amp;","&",x) #  &
 x<-gsub("&lt;","<",x) # less than
 x<-gsub("&le;","<=",x) # less equal 
 x<-gsub("&gt;",">",x) # greater than
@@ -1038,8 +1038,11 @@ if(greek2text==TRUE){
 # alpha
 x<-gsub("\u03b1|\u0251|\u221d","alpha",x)
 # beta
-x<-gsub("\u03b2|\u03d0|\u1e9e","b",x)
+x<-gsub("\u03b2|\u03d0|\u1e9e|\u00DF","b",x)
 x<-gsub("\u0392","Beta",x)
+# unify minus/hyphen sign
+x<-gsub("\u2212|\u02D7|\u002D|\u2013","-",x)
+
 # r
 x<-gsub("\u027e","r",x)
 x<-gsub("\u211b","R",x)

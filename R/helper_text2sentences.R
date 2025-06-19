@@ -8,10 +8,9 @@
 #' x<-"Some text with result (t(18)=1.2, p<.05). This shows how text2sentences works."
 #' text2sentences(x)
 
-# Depends on strsplit2, NLP & openNLP
 text2sentences<-function(x){
 x[is.na(x)]<-""
-#t<-x
+
 helper<-function(x){
   # unify some spacing errors
   temp<-gsub("  *"," ",x)

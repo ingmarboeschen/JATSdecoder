@@ -234,7 +234,7 @@ pCheck<-function(stats,
         
         # prepare output
         out2<-data.frame(
-          deltaP2tailed=difference,
+          deltaP2tailed=round(difference,4),
           #absDif,
           error=error,
           errorType=errorType)
@@ -248,6 +248,9 @@ pCheck<-function(stats,
     out$error[which(out1$error==1|out2$error==1)]<-1
     out$errorType<-gsub("NA, |, NA","",paste(out1$errorType,out2$errorType,sep=", "))
     out$errorType[which(out$errorType=="NA")]<-NA
+    # override NA in out$error and out$deltaP2tailed if out2 has value
+    out$error[is.na(out$error)&!is.na(out2$error)]<-out2$error[is.na(out$error)&!is.na(out2$error)]
+    out$deltaP2tailed[is.na(out$deltaP2tailed)&!is.na(out2$deltaP2tailed)]<-out2$deltaP2tailed[is.na(out$deltaP2tailed)&!is.na(out2$deltaP2tailed)]
 
     # add to input table
     if(add==TRUE) out<-data.frame(stats,out)

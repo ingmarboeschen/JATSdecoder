@@ -44,6 +44,11 @@ warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.
    x<-unlist(x)
 # convert with all.stats() if has " [<=>] [0-9\\.-]"
 if(length(grep(" [<=>] [0-9\\.-]|[<=>] [0-9\\.-]",x))>0) x<-allStats(x)
+# get lines with operator-number
+x<-grep("[<=>]-*[\\.0-9]",x,value=TRUE)
+# escape
+if(length(x)==0) return(NULL)
+
 if(length(x)>0){
 # take copy for raw output
 y<-x
@@ -56,9 +61,17 @@ x<-gsub("([A-Za-z]) (\\([0-9Nnd])","\\1\\2",x)
 x<-gsub("([0-9]) [Ee] *([+-][0-9])","\\1e\\2",x)
 x<-gsub("([0-9]) [Ee]([0-9])","\\1e+\\2",x)
 
+# remove 'Total' 
+x<-gsub("Total[a-z]*| total[a-z]*","",x)
+
 # remove 'Letter'chi'letter' 
 x<-gsub("[A-Za-z]chi[a-z]","",x)
 x<-gsub("[A-Za-z]chi[a-z]","",x)
+
+# remove stars behind number
+x<-gsub("([0-9])\\^*\\*\\**([^\\*0-9\\.])","\\1\\2",x)
+# remove superscripted text behind number
+x<-gsub("([0-9])\\^[A-z[:punct:]][A-z0-9]*","\\1",x)
 
 # capital T to small t
    if(T2t==TRUE){
@@ -82,7 +95,9 @@ x<-gsub("chi2*/[a-z0-9]*[<=>]*[0-9\\.]*","",x)
 # remove chi2/df=num
 x<-gsub("chi[\\^]*2* */ *df=[0-9]*\\.[0-9]","",x)
 # remove delta chi2=num
-x<-gsub("delta chi[\\^]*2* *=[0-9]*\\.[0-9]","",x)
+x<-gsub("delta chi[\\^]*2* *=-*[0-9]*\\.[0-9]","",x)
+# remove delta anything=num
+x<-gsub("delta [A-z][A-z]*[\\^2]*[<=>][<=>]*-*[0-9\\.][0-9\\.]*","",x)
 
  # remove percent value in brackets
    x<-gsub(" \\([0-9\\.]*\\%\\)","",x)     
@@ -341,8 +356,15 @@ x<-gsub("([<=>]) ","\\1",x)
 # remove spaces in operator-space-num 
 x<-gsub("([<=>]-) ([\\.0-9])","\\1\\2",x)
 
+# remove first of two beta values followed by SE
+x<-gsub(" [bB]=[-\\.0-9]*, ([bB]=[-\\.0-9]*.* SE=[-\\.0-9]*),"," \\1",x)
+x<-gsub(" [bB]=[-\\.0-9]*, ([bB]eta=[-\\.0-9]*.* SE=[-\\.0-9]*),"," \\1",x)
+x<-gsub(" [bB]eta=[-\\.0-9]*, ([bB]=[-\\.0-9]*.* SE=[-\\.0-9]*),"," \\1",x)
+x<-gsub(" [bB]eta=[-\\.0-9]*, ([bB]eta=[-\\.0-9]*.* SE=[-\\.0-9]*),"," \\1",x)
+
+
 # prepare results colnames
-cnames<-c("result","Z_op","Z","F_op","F","eta2","omega2","t_op","t","d","SE","r_op","r","R2_op","R2","U_op","U","H_op","H","G2_op","G2","OR","RR","Chi2","Q_op","Q","df1","df2","beta","SEbeta","Zest","BF10_op","BF10","BF_op","BF",
+cnames<-c("result","beta","SEbeta","t_op","t","d","SE","Z_op","Z","Zest","F_op","F","eta2","omega2","r_op","r","R2_op","R2","U_op","U","H_op","H","G2_op","G2","OR","RR","Chi2","Q_op","Q","df1","df2","BF10_op","BF10","BF_op","BF",
           "p_op","p","codedP_op","codedP","recalculatedP","p_H1_less","p_H1_greater")
 res<-matrix(NA,nrow=length(x),ncol=length(cnames))
 colnames(res)<-cnames
@@ -380,7 +402,7 @@ if(length(grep("^b[<=>]| b[<=>]",x))>0){
    index<-grep("^b[<=>]| b[<=>]",x)
    # extract
    beta<-suppressWarnings(as.numeric(gsub("[,; ].*","",unlist(lapply(strsplit(x[index]," b[<=>]|^b[<=>]"),"[",2)))))
-   SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>]*|^SE[<=>]*","",x[index]))))
+   SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>][<=>]*|^SE[<=>][<=>]*","",x[index]))))
    # add to res
    res[index,"beta"]<-beta
    res[index,"SEbeta"]<-SE
@@ -415,8 +437,9 @@ if(length(grep("^d[<=>]| d[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-
 ## if has SE but no beta or d extract SE
 if(length(grep(" SE[<=>]|^SE[<=>]",x))>0&length(grep("^b[<=>]| b[<=>]",x))==0&length(grep("^d[<=>]| d[<=>]",x))==0){
    index<-grep(" SE[<=>]|^SE[<=>]",x)
+   
    # extract
-   SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>]*|^SE[<=>]*","",x[index]))))
+   SE<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* SE[<=>][<=>]*|^SE[<=>][<=>]*","",x[index]))))
    # add to res
    res[index,"SE"]<-SE
    res[index,"result"]<-y[index]
@@ -447,8 +470,8 @@ if(length(index>0)){
   ind<-grep(" t[(]|^t[(]",tval)
   if(length(ind)>0) tdf[ind]<-gsub("[,;].*","",gsub("[)].*","",gsub(".*t[(]","",tval[ind])))
   # index for lines with df= and no t(df)
-  ind<-which(is.element(grep(" df=",tval2),grep(" t\\([1-9]|^t\\([1-9]",tval,invert=TRUE)))
-  if(length(ind)>0) tdf[ind]<-gsub(",;.*","",gsub("[^0-9\\.].*","",gsub(".* df=","",tval2[ind])))
+  ind<-which(is.element(grep(" df2*=",tval2),grep(" t\\([1-9]|^t\\([1-9]",tval,invert=TRUE)))
+  if(length(ind)>0) tdf[ind]<-gsub(",;.*","",gsub("[^0-9\\.].*","",gsub(".* df2*=","",tval2[ind])))
   # get sign
   sign<-gsub("[^<>=].*","",sub("[^<>=]*([=<>])", "\\1",sub(".* t([\\(=<>])","\\1",tval)))
   # clean up t value
@@ -460,9 +483,9 @@ if(length(index>0)){
   res[index,"result"]<-y[index]
 }
 
-# convert t to Zest if t-value but no df is detected
+# convert t to Zest if t-value but no df is detected and Zest wasn't computed before
 if(estimateZ==TRUE){ 
-   index<-!is.na(res[,"t"])&is.na(res[,"df2"])
+   index<-!is.na(res[,"t"])&is.na(res[,"df2"])&is.na(res[,"Zest"])
    res[index,"Zest"]<-res[index,"t"]
 }   
 
@@ -528,11 +551,11 @@ Fval<-suppressWarnings(as.numeric(Fval))
 # don't overwrite dfs (here copy value if not NA)
 if(length(index)==1){
 df2[which(!is.na(res[index,"df2"]))]<-res[index,"df2"][!is.na(res[index,"df2"])]
-df1[which(!is.na(res[index,"df2"]))]<-res[index,"df1"][!is.na(res[index,"df2"])]
+df1[which(!is.na(res[index,"df1"]))]<-res[index,"df1"][!is.na(res[index,"df1"])]
 }
 if(length(index)>1){
 df2[which(!is.na(res[index,"df2"]))]<-res[index,][!is.na(res[index,"df2"]),"df2"]
-df1[which(!is.na(res[index,"df2"]))]<-res[index,][!is.na(res[index,"df2"]),"df1"]
+df1[which(!is.na(res[index,"df1"]))]<-res[index,][!is.na(res[index,"df1"]),"df1"]
 }
 
 
@@ -665,7 +688,7 @@ res[index,"df2"][use]<-rdf[use]
 }
 
 ## extract H
-index<-grep("[\\( ]H[<=>]|^H[<=>]|[\\( ]H \\([0-9]|^H \\([1-9]|[\\( ]H\\([0-9]|^H\\([1-9]",x)
+index<-grep("[\\( ]H[<=>]|^H[<=>]|[\\( ]H *\\([1-9][0-9]*\\) *[<=>]|^H *\\([1-9][0-9]*\\) *[<=>]",x)
 if(length(index)>0){
 H<-x[index]
 H<-gsub(", [Nn]=[0-9]*","",H)
@@ -1047,6 +1070,9 @@ if(sum(rowSums(!is.na(d))>1)>0) warn.multi.p<-TRUE
 # get p value by rank t, F, r, chi, Z, H, G2, Q
 recalculatedP<-NULL
 for(i in 1:dim(d)[1]) recalculatedP[i]<-d[i,][!is.na(d[i,])][1]
+# round recalculatedP and deltaP2tailed
+recalculatedP<-round(recalculatedP,4)
+
 # add to res
   if(!is.null(dim(res))) res[,"recalculatedP"]<-recalculatedP
   if(is.null(dim(res))) res["recalculatedP"]<-recalculatedP
