@@ -40,8 +40,9 @@ standardStats<-function(x,stats.mode="all",
                         rm.na.col=TRUE,
                         warnings=TRUE){
 # set warning massages to FALSE
-warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.d<-FALSE;warn.eta<-FALSE;warn.multi.p<-FALSE
-   x<-unlist(x)
+warn.T2t<-FALSE;warn.R2r<-FALSE;warn.r<-FALSE;warn.R2<-FALSE;warn.p<-FALSE;warn.d<-FALSE;warn.eta<-FALSE;warn.multi.p<-FALSE;warn.Zest<-FALSE; warn.ZestT<-FALSE 
+Zest<-FALSE;ZestT<-FALSE
+x<-unlist(x)
 # convert with all.stats() if has " [<=>] [0-9\\.-]"
 if(length(grep(" [<=>] [0-9\\.-]|[<=>] [0-9\\.-]",x))>0) x<-allStats(x)
 # get lines with operator-number
@@ -52,6 +53,8 @@ if(length(x)==0) return(NULL)
 if(length(x)>0){
 # take copy for raw output
 y<-x
+# remove page number
+x<-gsub("[ \\(]p\\. [1-9][0-9]*","",x)  
 # convert 10-num to 10^-num
 x<-gsub("([^0-9]10)(-[1-9][0-9]*)","\\1^\\2",x)  
 # remove space between letter and (
@@ -407,7 +410,10 @@ if(length(grep("^b[<=>]| b[<=>]",x))>0){
    res[index,"beta"]<-beta
    res[index,"SEbeta"]<-SE
    res[index,"result"]<-y[index]
+   temp<-res
    if(estimateZ==TRUE) res[index,"Zest"]<-beta/SE
+   if(!identical(temp,res)) Zest<-TRUE
+   
 }
 
 ## get d value
@@ -431,7 +437,10 @@ if(length(grep("^d[<=>]| d[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-
    res[index,"d"]<-d
    res[index,"SE"]<-SE
    res[index,"result"]<-y[index]
+   temp<-res
    if(estimateZ==TRUE) res[index,"Zest"]<-d/SE
+   if(!identical(temp,res)) Zest<-TRUE
+   
 }
 
 ## if has SE but no beta or d extract SE
@@ -485,8 +494,11 @@ if(length(index>0)){
 
 # convert t to Zest if t-value but no df is detected and Zest wasn't computed before
 if(estimateZ==TRUE){ 
+   temp<-res
    index<-!is.na(res[,"t"])&is.na(res[,"df2"])&is.na(res[,"Zest"])
    res[index,"Zest"]<-res[index,"t"]
+   if(!identical(temp,res)) ZestT<-TRUE
+   
 }   
 
 ## get F-value and its df1 and df2
@@ -512,7 +524,7 @@ res[ind,"result"]<-x[ind]
 }
 
 # extract omega2 
-ind<-grep(" omega[2<=>]|^omega[2<>=]",x)
+ind<-grep(" omega\\^*2[<=>]|^omega\\^*2[<>=]",x)
 if(length(ind)>0){
 omega<-rep(NA,length(ind))
  omega<-gsub("[^0-9\\.].*","",gsub(".*[<=>]","",gsub("[,;] .*| [a-zA-Z].*","",unlist(lapply(strsplit(x[ind]," omega|^omega"),"[",2)))))
@@ -615,6 +627,10 @@ if(length(grep("^chi[A-Za-z]| chi[A-Za-z]",x))>0) x[grep("^chi[A-Za-z]| chi[A-Za
 index<-grep(" chi[<=>(]|^chi[<=>(]",x)
 if(length(index)>0){
 chi2<-x[index]
+# remove beginning from second occurance
+chi2<-gsub("(.*chi[<=>(].*) chi[<=>(].*","\\1",chi2)
+chi2<-gsub("(.*chi[<=>(].*) chi[<=>(].*","\\1",chi2)
+
 chidf<-rep(NA,length(chi2))
 # find df by coding chi(df)
 ind<-grep("chi[(]",chi2)
@@ -1170,6 +1186,9 @@ if(sum(as.numeric(res[,"p"])>1|as.numeric(res[,"p"])<0,na.rm=T)>0) warn.p=TRUE
 if(sum(as.numeric(abs(as.numeric(res[,"d"])))>1,na.rm=T)>0) warn.d<-TRUE   
 # need warning massage for eta^2 > .3
 if(sum(as.numeric(abs(as.numeric(res[,"eta2"])))>.3,na.rm=T)>0) warn.eta<-TRUE   
+# need warning massage Zest
+if(Zest & sum(as.numeric(abs(as.numeric(res[,"Zest"])))>0,na.rm=T)>0) warn.Zest<-TRUE   
+if(ZestT & sum(as.numeric(abs(as.numeric(res[,"Zest"])))>0,na.rm=T)>0) warn.ZestT<-TRUE   
 
 ## remove columns with only NA if something is left
 if(!is.null(dim(res))){
@@ -1226,8 +1245,10 @@ if(warn.p==TRUE) report<-c(report,"- One or more detected p-values are out of ra
 if(warn.d==TRUE) report<-c(report,"- A rather big effect was detected. One or more |d|-values > 1.\n")
 if(warn.eta==TRUE) report<-c(report,"- A rather big effect was detected. One or more eta^2-values > .3.\n")
 if(warn.multi.p==TRUE) report<-c(report,"- There are one or more results with several recomputable test statistics. Please split the result manually and proceed checking.\n")
-
-if(warnings==TRUE&!is.null(report)) warning(report)
+if(warn.Zest==TRUE) report<-c(report,"- Z-value estimation was performed by beta/SE, d/SE to recalculate p-values. This estimation is biased in small samples and may be the cause for deviations to the reported p-values.\n")
+if(warn.ZestT==TRUE) report<-c(report,"- Reported t-values with no degrees of freedom were treated as Z-values to recalculate p-values. This estimation is biased in small samples and may be the cause for deviations to the reported p-values.")
+   
+if(warnings==TRUE&!is.null(report)) warning(report,call.=FALSE)
    
    # prepare output
    stats<-res

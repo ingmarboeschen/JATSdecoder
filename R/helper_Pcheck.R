@@ -32,8 +32,8 @@ pCheck<-function(stats,
     if(is.element("recalculatedP",names(stats))&is.element("p",names(stats))){
       
       # absolute difference of p and reculated p value with all and X digits 
-      difference<-stats$recalculatedP-stats$p
-      absDif<-abs((stats$p)-(stats$recalculatedP))
+      difference<-round(stats$recalculatedP-stats$p,4)
+      absDif<-round(abs((stats$p)-(stats$recalculatedP)),4)
       
       ## find and classify ciritical differences
       # empty object
@@ -142,8 +142,8 @@ pCheck<-function(stats,
     if(is.element("recalculatedP",names(stats))&is.element("codedP",names(stats))){
         
         # absolute difference of coded p and recalculated p value with all and X digits 
-        difference<-stats$recalculatedP-stats$codedP
-        absDif<-abs((stats$codedP)-(stats$recalculatedP))
+        difference<-round(stats$recalculatedP-stats$codedP,4)
+        absDif<-round(abs((stats$codedP)-(stats$recalculatedP)),4)
         
         ## find and classify ciritical differences
         # empty object

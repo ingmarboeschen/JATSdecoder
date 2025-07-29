@@ -7,7 +7,6 @@
 #' @param sentences Logical. IF TRUE text is returned as sectioned list with sentences.
 #' @param paragraph Logical. IF TRUE "<New paragraph>" is added at the end of each paragraph to enable manual splitting at paragraphs.
 #' @param abstract2sentences Logical. IF TRUE abstract is returned as vector with sentences.
-#' @param table2matrix Logical. IF TRUE html tables are returned as list of matrices.
 #' @param output selection of specific results to output c("all", "title", "author", "affiliation", "journal", "volume", "editor", "doi", "type", "history", "country", "subject", "keywords", "abstract", "sections", "text", "tables", "captions", "references").
 #' @param letter.convert Logical. If TRUE converts hexadecimal and HTML coded characters to Unicode.
 #' @param warning Logical. If TRUE outputs a warning if processing CERMINE converted PDF files.
@@ -46,7 +45,7 @@
 #' if(file.exists(file)) get.text(file)
 
 JATSdecoder<-function(x,sectionsplit=c("intro","method","result","study","experiment","conclu","implica","discussion"),grepsection="",
-                         sentences=FALSE,paragraph=FALSE,abstract2sentences=TRUE,table2matrix=FALSE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,
+                         sentences=FALSE,paragraph=FALSE,abstract2sentences=TRUE,output="all",letter.convert=TRUE,unify.country.name=TRUE, greek2text=FALSE,warning=TRUE,
                       countryconnection=FALSE,authorconnection=FALSE){
 # check if x is an object else return standard error message
 if(is.na(x)) tryCatch(x,error=function(e) message(e))
@@ -102,11 +101,12 @@ if(sum(is.element(c("all","sections"),output))>0) sections<-sections else sectio
 if(sum(is.element(c("all","text"),output))>0) text<-text else text<-NA
 
 tables<-NA
-if(table2matrix==FALSE & sum(is.element(c("all","tables"),output))>0)          tables<-as.vector(get.tables(x))
-if(table2matrix==TRUE & sum(is.element(c("all","tables"),output))>0)          tables<-table2matrix(x,letter.convert=letter.convert,rm.html=TRUE) 
+#table2matrix==FALSE &
+if(sum(is.element(c("all","tables"),output))>0)          tables<-as.vector(get.tables(x))
+#if(table2matrix==TRUE & sum(is.element(c("all","tables"),output))>0)          tables<-table2matrix(x,letter.convert=letter.convert,rm.html=TRUE) 
 if(sum(is.element(c("all","captions"),output))>0)     captions<-as.vector(captions) else captions<-NA
 
-    if(sum(is.element(c("all","references"),output))>0) references<-as.vector(get.references(x,letter.convert=letter.convert,remove.html=T)) else references<-NA
+if(sum(is.element(c("all","references"),output))>0) references<-as.vector(get.references(x,letter.convert=letter.convert,remove.html=T)) else references<-NA
 
 ifelse(countryconnection==TRUE, countryconnections<-get.cons(country), countryconnections<-NA)
 ifelse(authorconnection==TRUE, authorconnections<-get.cons(author,max.items=25), authorconnections<-NA)
