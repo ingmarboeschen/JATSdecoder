@@ -7,10 +7,10 @@
 get.tables(x)
 }
 \arguments{
-\item{x}{HTML file or html text.}
+\item{x}{HTML file or text with html tags.}
 }
 \value{
-Character vector with extracted table in html coding.
+Character vector with extracted HTML tables.
 }
 \description{
 Extracts HTML tables as vector of tables.
