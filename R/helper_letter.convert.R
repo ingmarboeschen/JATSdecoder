@@ -49,6 +49,7 @@ x<-gsub("&#x0002b;","+",x) # high +
 x<-gsub("&#x000b1;","+-",x) # plus minus
 x<-gsub("&#x0ff0b;","+",x) #  FULLWIDTH PLUS SIGN
 x<-gsub("&#x02212;","-",x) # minus
+x<-gsub("&#8211;","-",x) # dash
 # quotes
 x<-gsub("&#x002bc;","'",x) # '
 x<-gsub("&#x00027;","'",x) # '
@@ -135,6 +136,8 @@ x<-gsub("&#x02217;","*",x) # times
 x<-gsub("&#x02606;","*",x) # white star
 x<-gsub("&#x02605;","*",x) # black star
 x<-gsub("&#x0002a;","*",x) # asterix
+x<-gsub("&#x0204e;","*",x) # lower asterix
+
 x<-gsub("&#x022c6;","*",x) # STAR OPERATOR
 x<-gsub("&#x00029;",")",x) # )
 x<-gsub("&#x00028;","(",x) # (
@@ -1042,6 +1045,9 @@ x<-gsub("\u03b2|\u03d0|\u1e9e|\u00DF","b",x)
 x<-gsub("\u0392","Beta",x)
 # unify minus/hyphen sign
 x<-gsub("\u2212|\u02D7|\u002D|\u2013","-",x)
+# sigma
+x<-gsub("\u03C3","sigma",x)
+x<-gsub("\u03A3","Sigma",x)
 
 # r
 x<-gsub("\u027e","r",x)

@@ -137,6 +137,9 @@ x<-gsub("p\\([<=>]\\|*[A-z]\\|\\)([<=>])","p\\1",x)
 # remove non-p-values
 x<-gsub(" p[<=>][<=>]*[^0-9\\.][^0-9\\.]*([,; ])| p[<=>][<=>]*[^0-9\\.][^0-9\\.]*$","\\1 ",x)
 
+# remove subscripts
+x<-gsub("_[A-z0-9\\*-+]*","",x)
+
 # remove letter or number behind effect d
 x<-gsub(" d *[a-eg-zA-EG-Z0-9]([^a-zA-Z0-9])|^d *[a-eg-zA-EG-Z0-9]([^a-zA-Z0-9])"," d\\1\\2",x)
 # remove chi/letter=num
