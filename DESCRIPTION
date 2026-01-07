@@ -1,6 +1,6 @@
 Package: JATSdecoder
 Title: A Metadata and Text Extraction and Manipulation Tool Set
-Date: 2025-07-28
+Date: 2026-01-06
 Version: 1.2.2
 Authors@R: c(person("Ingmar", "Böschen", email = "ingmar.boeschen@uni-hamburg.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1159-3991")))
 Maintainer: Ingmar Böschen <ingmar.boeschen@uni-hamburg.de>
