@@ -62,14 +62,14 @@ The contained functions are listed below. For a detailed description, see the do
   - which.term() # returns hit vector for a set of patterns to search for in text (can be reduced to hits only)
 
 ### Built With
-* [R Core 3.6](https://www.r-project.org)
+* [R Core 4.3.3](https://www.r-project.org)
 * [RKWard](https://rkward.kde.org/)
 * [devtools](https://github.com/r-lib/devtools) package
 
 
 ### How to cite JATSdecoder
 ```
-JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar Böschen (2023). R package version 1.2.0
+JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar Böschen (2026). R package version 1.2.2
 ```
 ### Resources
 **Articles:**
