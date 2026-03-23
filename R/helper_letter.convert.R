@@ -273,6 +273,9 @@ x<-gsub("&#x001a1;","o",x) # LATIN SMALL LETTER O WITH HORN
 x<-gsub("&#x000b9;","^1",x) # SUPERSCRIPT ONE
 x<-gsub("&#x000b2;","^2",x) # SUPERSCRIPT TWO
 x<-gsub("&#x000b3;","^3",x) # SUPERSCRIPT THREE
+x<-gsub("\u00b2","^2",x) # superscripted 2
+x<-gsub("\u00b3","^3",x) # superscripted 3
+
 x<-gsub("&#x00395;","E",x) # GREEK CAPITAL LETTER EPSILON
 x<-gsub("&#x0039d;","N",x) # GREEK CAPITAL LETTER NU
 x<-gsub("&#x0039a;","K",x) # GREEK CAPITAL LETTER KAPPA

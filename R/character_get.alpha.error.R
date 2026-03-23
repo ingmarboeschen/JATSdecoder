@@ -18,11 +18,12 @@
 #' get.alpha.error(x)
 
 get.alpha.error<-function(x,p2alpha=TRUE,output="list"){
-  # convert to sentences if x is of length 1
-  if(length(x)==1) x<-text2sentences(x)
+  # convert to sentences 
+  x<-text2sentences(x)
   # select lines with numbers  
   x<-grep("[0-9]",x,value=TRUE)
   ## unify
+  x<-letter.convert(x,greek2text = TRUE)
   # tolower
   x<-tolower(x)
   # remove alpha-num
@@ -64,14 +65,15 @@ get.alpha.error<-function(x,p2alpha=TRUE,output="list"){
   x<-gsub("([^0-9])1[ ]*\\%","\\10.01",x)
   
 ## extract alpha from CI
-    ci<-get.ci(x)
+  ci<-alphaCI(x)
   
   ## unify alpha error representation
   # if has no alpha error yet
   if(length(grep("alpha error",x))==0){
-    x<-gsub("alpha set to|alpha was set at|was set at alpha|two tailed alpha at|alpha level of|alpha level was|with alpha set to|alpha level of|tailed alpha at a","alpha error=",x)
+    x<-gsub("alpha set to|alpha was set at|was set at alpha|two tailed alpha at|alpha level of|alpha level was|with alpha set to|alpha level of|tailed alpha at a","alpha error",x)
     x<-gsub("level of alpha|alpha level|significance level|level of significance|level for significance|level for statistical significance|level of statistical significance|criterion for statistical significance|significance criterion|significant at alpha|level of significan[a-z]*","alpha error",x)
     x<-gsub("corrected error probability","corrected alpha error probability",x)
+    x<-gsub("(alpha error) *([0-9\\.])","\\1=\\2",x)
   }
 # if still has no alpha error yet but .0[15], 0.1 or 0.001 or bonf|tukey|holm|FRD|hochberg|scheff convert alpha to alpha error
   if(length(grep("alpha error",x))==0){
@@ -92,6 +94,8 @@ get.alpha.error<-function(x,p2alpha=TRUE,output="list"){
   # remove word between alpha error and number if no number is in front
   x<-gsub("([^0-9]*)alpha error [^=\\.0-9,;]* ([\\.0-9])","\\1alpha error=\\2",x)
 
+  i<-grep("alpha error",x)
+  x[i]<-gsub("alpha *= *([\\.0-9])","alpha error=\\1",x[i])
   ###################################
   ## convert p value to alpha error
   if(p2alpha==TRUE){
@@ -191,7 +195,6 @@ get.alpha.error<-function(x,p2alpha=TRUE,output="list"){
 ############################################
   alpha<-get.alpha(x)
   corrected<-get.corrected(x)
-
   
   alphamax<-suppressWarnings(max(as.numeric(c(alpha,corrected,ci)),na.rm=T))
   alphamax[alphamax==-Inf]<-NA
@@ -201,12 +204,16 @@ get.alpha.error<-function(x,p2alpha=TRUE,output="list"){
   if(output=="list") return(list(alpha_error=alpha,corrected_alpha=corrected,alpha_from_CI=ci,alpha_max=alphamax,alpha_min=alphamin))
   if(output=="vector") return(unique(as.numeric(c(alpha,corrected,ci))))
 
-  }
+}
+
 #######################################################
 # definitions of functions to extract alpha  
 get.alpha<-function(x){
+x<-letter.convert(x,greek2text = TRUE)
 # remove corrected alphas
 x<-gsub("corrected alpha error[ \\.0-9=]*","",x)
+# unify alpha
+x<-gsub(" alpha[- ]levels*([^a-z])"," alpha error\\1",x)
 # select lines 
 alpha<-grep("alpha error",x,value=TRUE)
 standard_alpha<-suppressWarnings(as.numeric(gsub("\\\\","",which.term(alpha,c("\\.1","\\.05","\\.01","\\.001"),hits_only=TRUE))))
@@ -222,19 +229,20 @@ alpha<-grep("[~\\+\\^]",alpha,invert=TRUE,value=TRUE)
 # clean up spaces
 alpha<-gsub("  *"," ",alpha)
 # place number in front of alpha error to end if has no number
-if(length(grep("alpha error= [0-9\\.]|alpha error = [\\.0-9]",alpha))==0){
-  alpha<-gsub("([0-9\\.]*) alpha error."," alpha error=\\1 ",alpha)
+if(length(grep("alpha error *= *[0-9\\.]|alpha error *= *[\\.0-9]",alpha))==0){
+  alpha<-gsub("([0-9\\.][0-9\\.]*) alpha error."," alpha error=\\1 ",alpha)
 }
 # remove punctuation at end and '|'
 alpha<-gsub("[[:punct:]]$","",alpha)
 alpha<-gsub("\\(|\\)|[\\:]","",alpha)
-# remove text between alpha error and number if no operatoe
-alpha<-gsub("alpha error .*?([0-9\\.][0-9\\.][0-9\\]*)","alpha error=\\1",alpha)
+# remove text between alpha error and number if no operator
+alpha<-gsub("alpha error [^0-9\\.]*([0-9\\.][0-9\\.][0-9\\]*)","alpha error=\\1",alpha)
 # split before and after "alpha error=0.num*"
 if(length(unlist(alpha))>0){
   alpha<-strsplit2(unlist(alpha),"alpha error[=]0\\.[0-9]|alpha error[=]\\.[0-9]","before")
   alpha<-strsplit2(unlist(alpha),"alpha error[=]0\\.[0-1][0-9][^0-9]|alpha error[=]\\.[0-1][0-9][^0-9]","after")
-  alpha<-strsplit2(unlist(alpha),"alpha error[=]0\\.[0-1][0-9][0-9]|alpha error[=]\\.[0-1][0-9][0-9]","after")
+  alpha<-strsplit2(unlist(alpha),"alpha error[=]0\\.[0-1][0-9][0-9][^0-9]|alpha error[=]\\.[0-1][0-9][0-9][^0-9]","after")
+  alpha<-strsplit(gsub("(alpha error[=]0\\.[0-1][0-9][0-9]*)([^0-9])","\\1SPLIT\\2",unlist(alpha)),"SPLIT")
 }
 alpha<-unlist(alpha)
 # select lines with =< to [0-9\\.]
@@ -271,8 +279,8 @@ if(sum(i)>0) alpha[i]<-NA
 alpha<-gsub("/[\\.0-9]*","",alpha)
 # delete front
 alpha<-gsub(".*[=<]","",alpha)
-# numerise and round
-alpha<-round(suppressWarnings(as.numeric(alpha)),5)
+# numerise
+alpha<-suppressWarnings(as.numeric(alpha))
 # only include 0 < alpha <= 1 and not NA
 alpha<-alpha[alpha>0&alpha<=1]
 alpha<-alpha[!is.na(alpha)]
@@ -292,8 +300,8 @@ get.corrected<-function(x){
     corrected<-gsub(".*[=<]","",corrected)
     # remove non numbers at end
     corrected<-gsub("[^0-9]*$","",corrected)
-    # numerise and round
-    corrected<-round(suppressWarnings(as.numeric(corrected)),5)
+    # numerise
+    corrected<-suppressWarnings(as.numeric(corrected))
     # exclude values < .05
     corrected<-corrected[which(corrected<.05)]
     # only include 0 < alpha <= 1 and not NA
@@ -304,67 +312,33 @@ return(unique(corrected))
 }
 
 ## get alpha from 1-x% Confidence Intervall
-get.ci<-function(x){
-# if line has standard CI but no % -> collapse with line in front
-i1<-grep("[89][095]\\%",x)
-i2<-grep("[^a-z]*ci[^a-rt-z]|[^a-z]*ci$|confidence interval",x)
-# remove indices that appear in both results
-i2<-i2[!is.element(i2,i1)]
-# has % after ci
-i<-i2[is.element(i2,i1-1)]
-if(length(i)>0){
-  x[i]<-paste(x[i],x[i+1],collapse=" ")
-  x<-x[-(i+1)]
-}
-# if has % before ci paste
-i<-i2[is.element(i2-1,i1)]
-if(length(i)>0){
-  x[i-1]<-paste(x[i-1],x[i],collapse=" ")
-  x<-x[-i]
+alphaCI<-function(x){
+  # split at [,;]
+  x<-paste(" ",unlist(strsplit(x,"[,;] | and "))," ")
+  # unify CI
+  x<-gsub("[Cc]onfidence[- ][Ii]ntervals*","CI ",x)
+  x<-gsub("[Cc]onf\\.[- ][Ii]nt\\.","CI ",x)
+  x<-gsub("([^a-z])ci([^a-rt-z])","\\1CI\\2",x)
+  
+  # select lines with CI
+  x<-grep("[- ]CI[^A-z]| CI$",x,value=TRUE)
+  if(length(x)==0) return(NULL)
+  # remove anything between num% and CI
+  x<-gsub("([1-9][0-9\\.]*)[- ]*\\%.*([Cc][Ii])[^A-z].*","\\1% CI ",x)
+  # remove anything until num% CI
+  x<-gsub(".* ([1-9][0-9\\.]*)[- ]*\\%[- ]([Cc][Ii])[^A-z].*","\\1% CI ",x)
+  x<-gsub("([0-9\\%])[- ]*CI","\\1 CI",x)
+  # %->num
+  x<-paste(" ",JATSdecoder::text2num(x)," ")
+  x
+  # remove anything between num and CI
+  x<-gsub("(0\\.[1-9][0-9\\.]*) .*([Cc][Ii])[^A-z].*","\\1 CI ",x)
+  # extract num
+  alpha<-1-suppressWarnings(as.numeric(gsub(".* (0\\.[1-9][0-9\\.]*)[- ]*[Cc][Ii][^A-z].*","\\1",x)))
+  alpha<-alpha[!is.na(alpha)]
+  if(length(alpha)==0) return(NULL)
+  return(unique(alpha))
 }
 
-# if line has CI but no alpha reduce to "num CI
-i1<-unlist(grepl("[0-9]\\%[- ]ci[^a-z]|[0-9]\\%[- ]confidence interval",x))
-x[i1]<-gsub("  *"," ",gsub(".*[\\( ]([\\.0-9]*\\%[- ])ci[^a-z].*|.*[\\( ]([\\.0-9]*\\%[- ])confidence interval.*"," \\1\\2 confidence interval ",x[i1]))
-
-# select lines with CI
-x<-grep("[^a-z]ci[^a-rt-z]|[^a-z]ci$|confidence interval",x,value=TRUE)
-# remove text between % and CI
-x<-gsub("(\\% ).*[^a-z](ci[^a-rt-z]*)|(\\% ).*( confidence interval)","\\1\\2\\3\\4",x)
-# if has number behind CI but none in front change order
-x<-gsub("([^0-9][^\\%]* [^a-z]*)ci[^a-rt-z]* ([0-9\\.]*?\\%)","\\1 \\2 ci",x)
-# correct missing %
-x<-gsub("([^\\.0-9][8-9][0-9])( confidence inter)","\\1%\\2",x)
-x<-gsub("([^\\.0-9][8-9][0-9])( ci[^a-rt-z])","\\1%\\2",x)
-# convert .95 to 95%
-x<-gsub("0*\\.([0-9])( confidence inter)","\\10%\\2",x)
-x<-gsub("0*\\.([0-9])( ci[^a-rt-z])","\\10%\\2",x)
-x<-gsub("0*\\.([0-9][0-9]*)( confidence inter)","\\1%\\2",x)
-x<-gsub("0*\\.([0-9][0-9]*)( ci[^a-rt-z])","\\1%\\2",x)
-# select lines with % or .num
-ci<-grep("[\\%]|\\.[987]",x,value=TRUE)
-# remove space in front of %
-ci<-gsub(" [%]","%",ci)
-# remove text after %
-ci<-gsub("[%].*","%",ci)
-# shorten string
-ci<-substr(ci,nchar(ci)-4,nchar(ci))
-# remove text after .[0-9]
-#ci<-gsub(".*(\\.[0-9]*).*","\\1",ci)
-# remove till first num number 
-ci<-gsub(".*[^0-9\\.\\%]","",ci)
-# remove letters
-ci<-gsub("[a-z\\=]","",ci)
-# remove further punctuation
-ci<-gsub(".*[<>\\{\\[]","",ci)
-# select lines starting with "[7-9]"
-ci<-grep("^[7-9]|^\\.[7-9]",ci,value=TRUE)
-# % to number
-ci<-gsub("[%]","e-02",ci)
-# to alpha (1-CI)
-ci<-round(1-suppressWarnings(as.numeric(ci)),4)
-if(length(ci)==0) ci<-character(0)
-return(unique(ci))
-}
 
 

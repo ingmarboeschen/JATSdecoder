@@ -102,13 +102,24 @@ docx2text<-function(file){
     a<-utils::unzip(file,"word/document.xml")
     x<-readLines(a,warn=FALSE,encoding="UTF-8")
     y<-invisible(x)
+    
+    # remove first technical line
+    if(grepl("<\\?xml",y[1])&nchar(y[1])<60)
+      y<-y[-1]
+    if(length(y)==0) return(NULL)
+    
+    # remove tables
+    y<-paste0(gsub("<w:tbl>.*</w:tbl>","",
+         unlist(strsplit2(y,"<w:tbl>","before"))),collapse=" ")
+    # end of paragraph to space
+    y<-gsub("</w:p>"," ",y)
     # remove HTML
     y<-gsub("</[-\\=a-zA-Z0-9 ,;_\\:\\\\/\\'\"]*>","",y)
     y<-gsub("<[-\\=a-zA-Z,;_\\:\\\\/\\'\"]*>","",y)
     y<-gsub("<[a-z][-\\=a-zA-Z0-9 #\\.,;_\\:\\\\/\\'\"]*>","",y)
     
     # clean up white spaces
-    y<-gsub("^ *|(?<= ) | *$", "", y, perl = TRUE)
+    y<-gsub("^ *|( ) *| *$", "\\1", y, perl = TRUE)
     # remove empty lines
     y<-y[nchar(y)>0]
     y<-letter.convert(y)
@@ -131,29 +142,54 @@ html2text<-function(file
   if(length(grep("xml$|html$|htm$",tolower(file[1])))==1){
     # read HTML
     x<-readLines(file,warn=FALSE,encoding="UTF-8")
-    y<-invisible(x)
     # is JATS coded document?
     if(length(grep("NLM//DTD",x[1:6]))>0){
+      y<-invisible(x)
       y<-JATSdecoder(file[1],output=c("abstract","sections","text","captions"))
       y<-unlist(lapply(y,text2sentences))
       }else{
-    #  w<-1
-    # remove HTML
-    y<-gsub("<sub>"," ",y)
-    y<-gsub("</[-\\=a-zA-Z0-9 ,;_\\:\\\\/\\'\"]*>","",y)
-    y<-gsub("<[-\\=a-zA-Z,;_\\:\\\\/\\'\"]*>","",y)
-    y<-gsub("<[a-z][-\\=a-zA-Z0-9 #\\.,;_\\:\\\\/\\'\"]*>","",y)
-    # clean up white spaces
-    y<-gsub("^ *|(?<= ) | *$", "", y, perl = TRUE)
-    # remove empty lines
-    y<-y[nchar(y)>0]
-    y<-letter.convert(y)
-    y<-paste(y,collapse=" ")
-    y<-gsub("^ *|(?<= ) | *$", "", y, perl = TRUE)
-    # clean up coma and point use
-    y<-gsub(" \\. ", ". ", y)
-    y<-gsub(" , ", ", ", y)
-    y<-gsub(" ; ", "; ", y)
+        y<-invisible(x)
+        y<-paste(y,collapse=" ")
+        # remove tables
+        y<-paste0(gsub("<table.*>.*</table>","",
+                       unlist(strsplit2(y,"<table[- >]","before"))),collapse=" ")
+        # remove scripts/button/style/link
+        y<-paste0(gsub("<scrip[^>]*>.*</script>","",
+                       unlist(strsplit2(y,"<script[- >]","before"))),collapse=" ")
+        y<-paste0(gsub("<style[^>]*>.*</style>","",
+                       unlist(strsplit2(y,"<style[- >]","before"))),collapse=" ")
+        y<-paste0(gsub("<butto[^>]*>.*</button>","",
+                       unlist(strsplit2(y,"<button[- >]","before"))),collapse=" ")
+        y<-paste0(gsub("<link[^>]*>.*</link>|<link [^>]*>","",
+                       unlist(strsplit2(y,"<link[- >]","before"))),collapse=" ")
+        #remove styles
+        y<-gsub(">[\\.@][a-z][^\\{]*\\{[a-z].*\\}\\}",">",y)
+        y<-gsub(">[\\.@][a-z][^\\{]*\\{[a-z][^\\{]*\\}",">",y)
+        
+        #unlist(strsplit(y,"fetc"))[1]
+
+        # replace specific tags
+        y<-gsub("<sub>","_",y)
+        y<-gsub("<sup>","^",y)
+        y<-gsub("</*br/*>"," ",y)
+    
+        # remove all other HTML tags
+        y<-gsub("</*-*[A-z!][^>]*>","",y)
+
+        y<-gsub("</[-\\=a-zA-Z0-9 ,;_\\:\\\\/\\'\"]*>","",y)
+        y<-gsub("<[-\\=a-zA-Z,;_\\:\\\\/\\'\"]*>","",y)
+        y<-gsub("<[a-z][-\\=a-zA-Z0-9 #\\.,;_\\:\\\\/\\'\"]*>","",y)
+        # clean up white spaces
+        y<-gsub("  *", " ", y)
+        y<-gsub("^ *| *$", "", y, perl = TRUE)
+        # remove empty lines
+        y<-y[nchar(y)>0]
+        y<-letter.convert(y)
+        y<-gsub("^ *|(?<= ) | *$", "", y, perl = TRUE)
+        # clean up coma and point use
+        y<-gsub(" \\. ", ". ", y)
+        y<-gsub(" , ", ", ", y)
+        y<-gsub(" ; ", "; ", y)
 }
       }else stop("file is not in html format")
   #if(w==1&warn==TRUE) warning("The file is NISO-JATS coded.\n You might want to use study.character() to extract text and have further options.")

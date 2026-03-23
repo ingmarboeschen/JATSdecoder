@@ -107,14 +107,14 @@ x<-gsub("([0-9])\\^*\\*\\**([^\\*0-9\\.])","\\1\\2",x)
 x<-gsub("([0-9])\\^[A-z[:punct:]][A-z0-9]*","\\1",x)
 
 # capital T to small t
-   if(T2t==TRUE){
+   if(isTRUE(T2t)){
      # need warning for T2t?
      if(length(grep("T",x))>0) warn.T2t<-TRUE
      x<-gsub("T","t",x)  
      }
 
 # capital R to small r
-   if(R2r==TRUE){
+   if(isTRUE(R2r)){
         # need warning for T2t?
      if(length(grep("^R\\(| R \\(|^R\\(| R\\(|^R[<>=]| R[<>=]",x))>0) warn.R2r<-TRUE
      x[grep("^R\\(| R\\(|^R[<>=]| R[<>=]",x)]<-gsub("R","r",x[grep("^R\\(| R\\(|^R[<>=]| R[<>=]",x)])  
@@ -127,6 +127,12 @@ if(length(grep("<<~>>",x))>0) x<-gsub("[^=]*<<~>>[^:=]*: r","r",x)
 # remove t=num in lines with t=no digit and t=num with digit
 x<-gsub("^[tT]=[0-9][0-9]*[,; ]*(.* [tT]=-*[0-9]*\\.[0-9])","\\1",x)
 x<-gsub(" [tT]=[0-9][0-9]*[,; ]*(.* [tT]=-*[0-9]*\\.[0-9])","\\1",x)
+# remove first of two betas in a row, followed by SE
+x<-gsub(" [bB][<=>]-*[\\.0-9][\\.0-9]*,[^,]*( [bB][<=>]-*[\\.0-9][\\.0-9]*,[^,]* SE[<=>])","\\1",x)
+x<-gsub(" [bB]eta[<=>]-*[\\.0-9][\\.0-9]*,[^,]*( [bB]eta[<=>]-*[\\.0-9][\\.0-9]*,[^,]* SE[<=>])","\\1",x)
+# replace codedP-p-codedP -> p-codedP
+x<-gsub(";; p[<=>][<=>]*[\\.0][\\.0-9]*(,[ A-z]* [pP][<=>][<=>]*[\\.0][\\.0-9]*;; p[<=>][<=>]*[\\.0][\\.0-9]*)","\\1",x)
+x<-gsub(";; p[<=>][<=>]*[\\.0][\\.0-9]*(,[ A-z]* [pP]\\(.*\\)[<=>][<=>]*[\\.0][\\.0-9]*;; p[<=>][<=>]*[\\.0][\\.0-9]*)","\\1",x)
 
 
 # remove r= in lines with l=num
@@ -153,6 +159,10 @@ x<-gsub("chi[\\^]*2* */ *df=[0-9]*\\.[0-9]","",x)
 x<-gsub("delta chi[\\^]*2* *=-*[0-9]*\\.[0-9]","",x)
 # remove delta anything=num
 x<-gsub("delta [A-z][A-z]*[\\^2]*[<=>][<=>]*-*[0-9\\.][0-9\\.]*","",x)
+
+# remove anything/anything=num
+x<-gsub(" [A-z][-A-z\\^1-9_]* */ *[A-z][-A-z\\^1-9_]*=-*[0-9\\.][0-9\\.]*,*","",x)
+
 
  # remove percent value in brackets
    x<-gsub(" \\([0-9\\.]*\\%\\)","",x)     
@@ -436,6 +446,9 @@ x<-gsub("([<=>]) ","\\1",x)
 # remove spaces in operator-space-num 
 x<-gsub("([<=>]-) ([\\.0-9])","\\1\\2",x)
 
+# remove stars, -, + and dagger behind of numbers if followed by [,; ]
+x<-gsub("([0-9])[- \\*\\+\\\u2020\u2021]*([,; ])","\\1\\2",x)
+
 # remove first of two beta values followed by SE
 x<-gsub(" [bB]=[-\\.0-9]*, ([bB]=[-\\.0-9]*.* SE=[-\\.0-9]*),"," \\1",x)
 x<-gsub(" [bB]=[-\\.0-9]*, ([bB]eta=[-\\.0-9]*.* SE=[-\\.0-9]*),"," \\1",x)
@@ -492,15 +505,15 @@ if(length(grep("^b[<=>]| b[<=>]",x))>0){
    res[index,"SEbeta"]<-SE
    res[index,"result"]<-y[index]
    temp<-res
-   if(estimateZ==TRUE) res[index,"Zest"]<-beta/SE
+   if(isTRUE(estimateZ)) res[index,"Zest"]<-beta/SE
    if(!identical(temp,res)) Zest<-TRUE
 }
 
 ## get d value
-if(length(grep("^d[<=>]| d[<=>]",x))>0){
-  index<-grep("^d[<=>]| d[<=>]",x)
+if(length(grep("^\\|*d\\|*[<=>]| \\|*d\\|*[<=>]",x))>0){
+  index<-grep("^\\|*d\\|*[<=>]| \\|*d\\|*[<=>]",x)
   # extract
-  d<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* d[<=>]*|^d[<=>]*","",x[index]))))
+  d<-suppressWarnings(as.numeric(gsub("([0-9])[[:punct:]]*[,; ].*","\\1",gsub(".* d[<=>]*|^d[<=>]*","",gsub("\\|*","",x[index])))))
   # add to res
   res[index,"d"]<-d
   res[index,"result"]<-y[index]
@@ -508,23 +521,23 @@ if(length(grep("^d[<=>]| d[<=>]",x))>0){
 }
 
 ## get d and SE if has d and SE, t or Z, than calculate Zest
-if(length(grep("^d[<=>]| d[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-9]|[Zbzt]=",x))>0){
-   index<-grep("^d[<=>]| d[<=>]",x)
+if(length(grep("^\\|*d\\|*[<=>]| \\|*d\\|*[<=>]",x))>0&length(grep(" SE[<=>]|^t\\([0-9]| t\\([0-9]|[Zbzt]=",x))>0){
+   index<-grep("^\\|*d\\|*[<=>]| \\|*d\\|*[<=>]",x)
    # extract
-   d<-suppressWarnings(as.numeric(gsub("[,; ].*","",gsub(".* d[<=>][<=>]*|^d[<=>][<=>]*","",gsub("( d[<=>][<=>]*[\\.0-9][\\.0-9]*)[^0-9].*","\\1",x[index])))))
+   d<-suppressWarnings(as.numeric(gsub("[,; ].*|[[:punct:]]*$","",gsub(".* d[<=>][<=>]*|^d[<=>][<=>]*","",gsub("( d[<=>][<=>]*[\\.0-9][\\.0-9]*)[^0-9\\.].*","\\1",gsub("\\|*","",x[index]))))))
    SE<-suppressWarnings(as.numeric(gsub(".* SE[<=>][<=>]*","",gsub("( SE[<=>][<=>]*[\\.0-9][\\.0-9]*)[^0-9\\.].*","\\1",x[index]))))
    # add to res
    res[index,"d"]<-d
    res[index,"SE"]<-SE
    res[index,"result"]<-y[index]
    temp<-res
-   if(estimateZ==TRUE) res[index,"Zest"]<-d/SE
+   if(isTRUE(estimateZ)) res[index,"Zest"]<-d/SE
    if(!identical(temp,res)) Zest<-TRUE
    
 }
 
 ## if has SE but no beta nor d extract SE
-if(length(grep(" SE[<=>]|^SE[<=>]",x))>0&length(grep("^b[<=>]| b[<=>]",x))==0&length(grep("^d[<=>]| d[<=>]",x))==0){
+if(length(grep(" SE[<=>]|^SE[<=>]",x))>0&length(grep("^b[<=>]| b[<=>]",x))==0&length(grep("^\\|d\\|[<=>]| \\|*d\\|[<=>]",x))==0){
    index<-grep(" SE[<=>]|^SE[<=>]",x)
    
    # extract
@@ -579,7 +592,7 @@ if(length(index>0)){
 }
 
 # copy t to Zest if t-value but no df is detected and Zest wasn't computed before
-if(estimateZ==TRUE){ 
+if(isTRUE(estimateZ)){ 
    temp<-res
    index<-!is.na(res[,"t"])&is.na(res[,"df2"])&is.na(res[,"Zest"])
    res[index,"Zest"]<-res[index,"t"]
@@ -724,6 +737,9 @@ chi2<-gsub("(.*chi[<=>(].*) chi[<=>(].*","\\1",chi2)
 chi2<-gsub("(.*chi[<=>(].*) chi[<=>(].*","\\1",chi2)
 
 chidf<-rep(NA,length(chi2))
+# find df by coding df=
+ind<-grep("df[=]",chi2)
+chidf[ind]<-gsub("[^0-9\\.].*","",gsub(".*df[=]","",chi2[ind]))
 # find df by coding chi(df)
 ind<-grep("chi[(]",chi2)
 chidf[ind]<-gsub("[^0-9\\.].*","",gsub(".*chi[(]","",chi2[ind]))
@@ -733,9 +749,6 @@ if(length(ind)>0) chidf[ind]<-gsub("[^0-9\\.].*|\\).*","",gsub(".*chi[(][Nn]=[0-
 # find df by coding chi(df, N=[0-9])
 ind<-grep("chi[(][0-9]*?[,;] [Nn][=]",chi2)
 if(length(ind)>0) chidf[ind]<-gsub("[^0-9\\.].*|\\).*","",gsub(".*chi[(]","",chi2[ind]))
-# find df by coding df=
-ind<-grep("df[=]",chi2)
-chidf[ind]<-gsub("[^0-9\\.].*","",gsub(".*df[=]","",chi2[ind]))
 
 # remove df's
  chi2<-gsub("\\(df=([1-9])","(\\1",chi2)
@@ -764,16 +777,18 @@ if(length(index)>0){
 r<-x[index]
 # remove bracket in front of r
 r<-gsub("\\(r","r",r)
-# get df if has df in brackets
+
 rdf<-rep(NA,length(r))
+
+# extract df if has df=
+ind<-grep(" df=",r)
+if(length(ind)>0) rdf[ind]<-gsub("[^0-9\\.].*","",gsub(".* df=","",r[ind]))
+
+# overwrite df if has df in brackets
 idf<-grep("[^a-z]r\\([1-9]|^r\\([1-9]",r)
 if(length(idf)>0){
   rdf[idf]<-gsub("[^0-9\\.].*","",unlist(lapply(strsplit(r[idf]," r\\(|^r\\("),"[",2)))
 }
-
-# overwrite df if has df=
-ind<-grep(" df=",r)
-if(length(ind)>0) rdf[ind]<-gsub("[^0-9\\.].*","",gsub(".* df=","",r[ind]))
 
 # remove df in brackets
 r<-gsub("\\([0-9\\.]*?\\)","",r)
@@ -1085,9 +1100,9 @@ index<-which(index&noX&noY)
 
 if(length(index)>0){
   Zval<-x[index]
-  Zval<-gsub(".*[zZ][=]|.*[zZ]\\([0-9]*?\\)[=]","=",Zval)
-  Zval<-gsub(".*[zZ][>]|.*[zZ]\\([0-9]*?\\)[>]",">",Zval)
-  Zval<-gsub(".*[zZ][<]|.*[zZ]\\([0-9]*?\\)[<]","<",Zval)
+  Zval<-gsub("^[zZ][=]|.*[^A-z][zZ][=]|.*[^A-z][zZ]\\([0-9]*\\)[=]","=",Zval)
+  Zval<-gsub("^[zZ][>]|.*[^A-z][zZ][>]|.*[^A-z][zZ]\\([0-9]*?\\)[>]",">",Zval)
+  Zval<-gsub("^[zZ][<]|.*[^A-z][zZ][<]|.*[^A-z][zZ]\\([0-9]*?\\)[<]","<",Zval)
   Zval<-gsub("^([<=>][<=>]*-*[0-9\\.][0-9\\.]*)[^0-9\\.].*","\\1",Zval)
   Zsign<-substr(Zval,1,3)
   Zsign<-gsub("[^<=>].*","",Zsign)
@@ -1176,7 +1191,7 @@ if(is.vector(res)){
 ## recalculate p-value 
 #####################
 if(dim(res)[1]>0){
-if(recalculate.p==TRUE){
+if(isTRUE(recalculate.p)){
 # for undirected tests
 suppressWarnings({
   recalculatedPH<-round(1-stats::pchisq(as.numeric(res[,"H"]),as.numeric(res[,"df1"])),5)
@@ -1327,7 +1342,7 @@ if(ZestT & sum(as.numeric(abs(as.numeric(res[,"Zest"])))>0,na.rm=T)>0) warn.Zest
 
 ## remove columns with only NA if something is left
 if(!is.null(dim(res))){
-if(rm.na.col==TRUE&length(dim(res))==2&dim(res)[1]>0){
+if(isTRUE(rm.na.col)&length(dim(res))==2&dim(res)[1]>0){
    n<-colnames(res)
    n<-n[colSums(is.na(res))!=dim(res)[1]]
    res<-res[,colSums(is.na(res))!=dim(res)[1]]
@@ -1343,7 +1358,7 @@ if(rm.na.col==TRUE&length(dim(res))==2&dim(res)[1]>0){
    
 
 # set to character(0) if result is empty 
-if(rm.na.col==TRUE&is.null(res)) res<-character(0)
+if(isTRUE(rm.na.col) & is.null(res)) res<-character(0)
 
 if(sum(dim(res)==c(0,length(cnames)))==2) res<-character(0)
 
@@ -1372,20 +1387,20 @@ if(!is.null(ncol(res))) if(nrow(res)==0) res<-NULL
 
 ## Warning massages
    report<-NULL
-if(T2t==TRUE&warn.T2t==TRUE) report<-c(report,"- Capital T was converted to small t. Maybe T is not t-distributed.\n")
-if(R2r==TRUE&warn.R2r==TRUE) report<-c(report,"- Capital R was converted to small r. Maybe R is not referring to a correlation.\n")
-if(warn.r==TRUE) report<-c(report,"- One or more detected r-values are out of range for possible correlations [-1, 1].\n")
-if(warn.R2==TRUE) report<-c(report,"- One or more detected R^2-values are out of range for possible coefficients of determination [0, 1].\n")
-if(warn.p==TRUE) report<-c(report,"- One or more detected p-values are out of range for possible p-values [0, 1].\n")
-if(warn.d==TRUE) report<-c(report,"- A rather big effect was detected. One or more |d|-values > 1.\n")
-if(warn.eta==TRUE) report<-c(report,"- A rather big effect was detected. One or more eta^2-values > .3.\n")
-if(warn.multi.p==TRUE) report<-c(report,"- There are one or more results with several recomputable test statistics. Please split the result manually and proceed checking.\n")
-if(warn.Zest==TRUE) report<-c(report,"- Z-value estimation was performed by Z=beta/SE, Z=d/SE or t=Z to recalculate p-values. This estimation is biased in small samples and may be the cause for deviations to the reported p-values.\n")
-if(warn.ZestT==TRUE) report<-c(report,"- Reported t-values with no degrees of freedom were treated as Z-values to recalculate p-values. This estimation is biased in small samples and may be the cause for deviations to the reported p-values.\n")
-if(warn.multi.Zest==TRUE) report<-c(report,"- The recalculation of p-values was not performed on estimated Z-values whenever other standard statistics allow a recomputation (e.g. t-value with df).\n")
+if(isTRUE(T2t) & isTRUE(warn.T2t)) report<-c(report,"- Capital T was converted to small t. Maybe T is not t-distributed.\n")
+if(isTRUE(R2r) & isTRUE(warn.R2r)) report<-c(report,"- Capital R was converted to small r. Maybe R is not referring to a correlation.\n")
+if(isTRUE(warn.r)) report<-c(report,"- One or more detected r-values are out of range for possible correlations [-1, 1].\n")
+if(isTRUE(warn.R2)) report<-c(report,"- One or more detected R^2-values are out of range for possible coefficients of determination [0, 1].\n")
+if(isTRUE(warn.p)) report<-c(report,"- One or more detected p-values are out of range for possible p-values [0, 1].\n")
+if(isTRUE(warn.d)) report<-c(report,"- A rather big effect was detected. One or more |d|-values > 1.\n")
+if(isTRUE(warn.eta)) report<-c(report,"- A rather big effect was detected. One or more eta^2-values > .3.\n")
+if(isTRUE(warn.multi.p)) report<-c(report,"- There are one or more results with several recomputable test statistics. Please split the result manually and proceed checking.\n")
+if(isTRUE(warn.Zest)) report<-c(report,"- Z-value estimation was performed by either Z=beta/SE, Z=d/SE or t=Z. The estimated Z-value is used to recalculate p-values, only if no other part of the result allows a computation of p-value. The estimated Z-value is biased in small samples and may be the cause for deviations to the reported p-values.\n")
+if(isTRUE(warn.ZestT)) report<-c(report,"- Reported t-values with no degrees of freedom were treated as Z-values to recalculate p-values. This estimation is biased in small samples and may be the cause for deviations to the reported p-values.\n")
+if(isTRUE(warn.multi.Zest)) report<-c(report,"- The recalculation of p-values was not performed on estimated Z-values whenever other standard statistics allow a recomputation (e.g. t-value with df).\n")
    
 report[length(report)]<-gsub("\\n$","",report[length(report)])
-if(warnings==TRUE&!is.null(report)) warning(report,call.=FALSE)
+if(isTRUE(warnings) & !is.null(report)) warning(report,call.=FALSE)
    
    # prepare output
    stats<-res
@@ -1397,7 +1412,7 @@ if(length(grep("_op|result",names(stats),invert=TRUE))>0){
 }
 }else stats<-NULL
 
-if(checkP==TRUE) stats<-pCheck(stats,alpha=alpha,criticalDif=criticalDif,warnings=warnings)
+if(isTRUE(checkP)) stats<-pCheck(stats,alpha=alpha,criticalDif=criticalDif,warnings=warnings)
 
 # insert copy of input to column result
 
