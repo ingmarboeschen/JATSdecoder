@@ -596,7 +596,8 @@ if(isTRUE(estimateZ)){
    temp<-res
    index<-!is.na(res[,"t"])&is.na(res[,"df2"])&is.na(res[,"Zest"])
    res[index,"Zest"]<-res[index,"t"]
-   if(!identical(temp,res)) ZestT<-TRUE
+   #if(!identical(temp,res)) ZestT<-TRUE
+   if(length(index)>0) ZestT<-TRUE
 }   
 
 ## get F-value and its df1 and df2
