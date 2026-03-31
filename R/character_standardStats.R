@@ -596,8 +596,8 @@ if(isTRUE(estimateZ)){
    temp<-res
    index<-!is.na(res[,"t"])&is.na(res[,"df2"])&is.na(res[,"Zest"])
    res[index,"Zest"]<-res[index,"t"]
-   #if(!identical(temp,res)) ZestT<-TRUE
-   if(length(index)>0) ZestT<-TRUE
+   if(!identical(temp,res)) ZestT<-TRUE
+   #if(length(index)>0) ZestT<-TRUE
 }   
 
 ## get F-value and its df1 and df2
@@ -1293,7 +1293,7 @@ colnames(res)<-cnames
 }
 
 # only select stats with p value and recomputable p value
-if(stats.mode=="checkable") res<-res[!is.na(res[,"recalculatedP"])&!is.na(res[,"p"]),]
+if(stats.mode=="checkable") res<-res[(!is.na(res[,"recalculatedP"])&!is.na(res[,"p"]))|(!is.na(res[,"recalculatedP"])&!is.na(res[,"codedP"])),]
 if(!is.matrix(res)){
 res<-matrix(res,1)
 colnames(res)<-cnames
