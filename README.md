@@ -69,7 +69,7 @@ The contained functions are listed below. For a detailed description, see the do
 
 ### How to cite JATSdecoder
 ```
-JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar Böschen (2026). R package version 1.2.2
+JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar Böschen (2026). R package version 1.3.0
 ```
 ### Resources
 **Articles:**
@@ -83,6 +83,10 @@ JATSdecoder: A Metadata and Text Extraction and Manipulation Tool Set. Ingmar B�
 - Böschen, I. (2023). Changes in methodological study characteristics in psychology between 2010-2021. PLOS ONE 18(5). https://doi.org/10.1371/journal.pone.0283353. [link to [repo](https://github.com/ingmarboeschen/JATSdecoderEvaluation/tree/main/Study_ChangesInMethodologyInPsychology)]
 
 - Böschen, I. (2024). statcheck is flawed by design and no valid spell checker for statistical results. [https://arxiv.org/abs/2408.07948](https://arxiv.org/abs/2408.07948). [link to [repo](https://github.com/ingmarboeschen/JATSdecoderEvaluation/tree/main/Check_statcheck)]
+
+- Böschen, I. (2026). Extraction of tabulated statistical results with tableParser. [https://arxiv.org/abs/2408.07948](https://arxiv.org/abs/2603.19756). [link to [repo](https://github.com/ingmarboeschen/tableParser)]
+
+
 
 **Evaluation data and code:** 
 
