@@ -104,13 +104,13 @@ x<-gsub("[A-Za-z]chi[a-z]","",x)
 # remove stars behind number
 x<-gsub("([0-9])\\^*\\*\\**([^\\*0-9\\.])","\\1\\2",x)
 # remove superscripted text behind number
-x<-gsub("([0-9])\\^[A-z[:punct:]][A-z0-9]*","\\1",x)
+x<-gsub("([0-9])\\^[A-z[,;\\^']][A-z0-9]*","\\1",x)
 
 # capital T to small t
    if(isTRUE(T2t)){
      # need warning for T2t?
-     if(length(grep("T",x))>0) warn.T2t<-TRUE
-     x<-gsub("T","t",x)  
+     if(length(grep("T[^A-z ]*[<=>]",x))>0) warn.T2t<-TRUE
+     x<-gsub("T([^A-z ]*[<=>])","t\\1",x)  
      }
 
 # capital R to small r
@@ -420,6 +420,7 @@ x<-unlist(strsplit2(x,"[^-\\.0-9][-\\.0-9]*?\\^[-\\.0-9]","before"))
     # clean up
     x<-gsub("  "," ",x)
     x<-gsub(" , ",", ",x)
+    x<-gsub(" \\*([0-9])","*\\1",x)
     x<-gsub(" \\.$|,\\.",".",x)
 }
     return(x)
