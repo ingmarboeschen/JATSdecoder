@@ -26,7 +26,12 @@ if(sum(length(x)>0&nchar(x)>2)>0){
 # letter convert x
 x<-letter.convert(x,greek2text=T)
 
-# correct potencies
+# correct comma to dot in 0,num
+#y<-x
+#x<-gsub("([^0-9])0,([0-9])","\\10.\\2",x)
+#if(sum(x!=y)>0) warning("Some decimal comma(s) have been converted to dots.",call. = FALSE)
+
+# correct space in potencies
 x<-gsub("([0-9]e) *-* *([1-9])","\\1-\\2",x)
 x<-gsub("([0-9]) *\\^ *(-*[1-9])","\\1^\\2",x)
 
